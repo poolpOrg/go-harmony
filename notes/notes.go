@@ -137,7 +137,7 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 	}
 
 	//fmt.Println("distance:", interval.Semitone(), "source:", sourceSemitone, "target:", targetSemitone)
-	distance := targetSemitone - (int(interval.Semitone()) + sourceSemitone)
+	distance := targetSemitone - (int(interval.Semitone()%12) + sourceSemitone)
 	targetAccidentals += -distance
 
 	return &Note{

@@ -126,6 +126,72 @@ func dominantSeventhFlatFive(note *notes.Note) []notes.Note {
 	return chordNotes
 }
 
+func majorNinth(note *notes.Note) []notes.Note {
+	chordNotes := majorSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
+	return chordNotes
+}
+
+func dominantNinth(note *notes.Note) []notes.Note {
+	chordNotes := dominantSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
+	return chordNotes
+}
+
+func dominantMinorNinth(note *notes.Note) []notes.Note {
+	chordNotes := dominantSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MinorNinth))
+	return chordNotes
+}
+
+func minorMajorNinth(note *notes.Note) []notes.Note {
+	chordNotes := minorMajorSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
+	return chordNotes
+}
+
+func minorNinth(note *notes.Note) []notes.Note {
+	chordNotes := minorSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
+	return chordNotes
+}
+
+func augmentedMajorNinth(note *notes.Note) []notes.Note {
+	chordNotes := augmentedMajorSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
+	return chordNotes
+}
+
+func augmentedDominantNinth(note *notes.Note) []notes.Note {
+	chordNotes := augmentedSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
+	return chordNotes
+}
+
+func halfDiminishedNinth(note *notes.Note) []notes.Note {
+	chordNotes := halfDiminishedSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
+	return chordNotes
+}
+
+func halfDiminishedMinorNinth(note *notes.Note) []notes.Note {
+	chordNotes := halfDiminishedSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MinorNinth))
+	return chordNotes
+}
+
+func diminishedNinth(note *notes.Note) []notes.Note {
+	chordNotes := diminishedSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
+	return chordNotes
+}
+
+func diminishedMinorNinth(note *notes.Note) []notes.Note {
+	chordNotes := diminishedSeventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MinorNinth))
+	return chordNotes
+}
+
 func Parse(chord string) (*Chord, error) {
 	if len(chord) == 0 {
 		return nil, fmt.Errorf("empty chord")
@@ -263,6 +329,70 @@ func Parse(chord string) (*Chord, error) {
 	case "7dim5":
 		// dominant seventh flat five
 		chordNotes = dominantSeventhFlatFive(n)
+
+	case "M9":
+		fallthrough
+	case "maj9":
+		// major ninth
+		chordNotes = majorNinth(n)
+
+	case "9":
+		// dominant ninth
+		chordNotes = dominantNinth(n)
+
+	case "7b9":
+		// dominant minor ninth
+		chordNotes = dominantMinorNinth(n)
+
+	case "mM9":
+		fallthrough
+	case "-M9":
+		fallthrough
+	case "minmaj9":
+		// minor-major ninth
+		chordNotes = minorMajorNinth(n)
+
+	case "m9":
+		fallthrough
+	case "-9":
+		fallthrough
+	case "min9":
+		// minor ninth
+		chordNotes = minorNinth(n)
+
+	case "+M9":
+		fallthrough
+	case "augmaj9":
+		// augmented major ninth
+		chordNotes = augmentedMajorNinth(n)
+
+	case "+9":
+		fallthrough
+	case "9#5":
+		fallthrough
+	case "aug9":
+		// augmented dominant ninth
+		chordNotes = augmentedDominantNinth(n)
+
+	case "ø9":
+		// half-diminished ninth
+		chordNotes = halfDiminishedNinth(n)
+
+	case "øb9":
+		// half-diminished ninth
+		chordNotes = halfDiminishedMinorNinth(n)
+
+	case "o9":
+		fallthrough
+	case "dim9":
+		// diminished ninth
+		chordNotes = diminishedNinth(n)
+
+	case "ob9":
+		fallthrough
+	case "dimb9":
+		// diminished ninth
+		chordNotes = diminishedMinorNinth(n)
 
 	default:
 		return nil, fmt.Errorf("unknown chord name: %s", chordName)

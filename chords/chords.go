@@ -192,6 +192,54 @@ func diminishedMinorNinth(note *notes.Note) []notes.Note {
 	return chordNotes
 }
 
+func eleventh(note *notes.Note) []notes.Note {
+	chordNotes := dominantNinth(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
+	return chordNotes
+}
+
+func majorEleventh(note *notes.Note) []notes.Note {
+	chordNotes := majorNinth(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
+	return chordNotes
+}
+
+func minorMajorEleventh(note *notes.Note) []notes.Note {
+	chordNotes := minorMajorNinth(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
+	return chordNotes
+}
+
+func minorEleventh(note *notes.Note) []notes.Note {
+	chordNotes := minorNinth(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
+	return chordNotes
+}
+
+func augmentedMajorEleventh(note *notes.Note) []notes.Note {
+	chordNotes := augmentedMajorNinth(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
+	return chordNotes
+}
+
+func augmentedEleventh(note *notes.Note) []notes.Note {
+	chordNotes := augmentedDominantNinth(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
+	return chordNotes
+}
+
+func halfDiminishedEleventh(note *notes.Note) []notes.Note {
+	chordNotes := halfDiminishedNinth(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
+	return chordNotes
+}
+
+func diminishedEleventh(note *notes.Note) []notes.Note {
+	chordNotes := diminishedNinth(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
+	return chordNotes
+}
+
 func Parse(chord string) (*Chord, error) {
 	if len(chord) == 0 {
 		return nil, fmt.Errorf("empty chord")
@@ -393,6 +441,56 @@ func Parse(chord string) (*Chord, error) {
 	case "dimb9":
 		// diminished ninth
 		chordNotes = diminishedMinorNinth(n)
+
+	case "11":
+		// eleventh
+		chordNotes = eleventh(n)
+
+	case "M11":
+		fallthrough
+	case "maj11":
+		// major eleventh
+		chordNotes = majorEleventh(n)
+
+	case "mM11":
+		fallthrough
+	case "-M11":
+		fallthrough
+	case "minmaj11":
+		// minor-major eleventh
+		chordNotes = minorMajorEleventh(n)
+
+	case "m11":
+		fallthrough
+	case "-11":
+		fallthrough
+	case "min11":
+		// minor eleventh
+		chordNotes = minorEleventh(n)
+
+	case "+M11":
+		fallthrough
+	case "augmaj11":
+		// augmented major eleventh
+		chordNotes = augmentedMajorEleventh(n)
+
+	case "+11":
+		fallthrough
+	case "11#5":
+		fallthrough
+	case "aug11":
+		// augmented eleventh
+		chordNotes = augmentedEleventh(n)
+
+	case "ø11":
+		// half-diminished eleventh
+		chordNotes = halfDiminishedEleventh(n)
+
+	case "o11":
+		fallthrough
+	case "dim11":
+		// diminished ninth
+		chordNotes = diminishedEleventh(n)
 
 	default:
 		return nil, fmt.Errorf("unknown chord name: %s", chordName)

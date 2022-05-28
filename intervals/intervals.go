@@ -27,9 +27,14 @@ var (
 	MinorSeventh      Interval = Interval{name: "7 min", pos: 6, semitone: 10}
 	MajorSeventh      Interval = Interval{name: "7 maj", pos: 6, semitone: 11}
 	Octave            Interval = Interval{name: "8", pos: 7, semitone: 12}
+	AugmentedOctave   Interval = Interval{name: "8 aug", pos: 7, semitone: 13}
 	MinorNinth        Interval = Interval{name: "9 min", pos: 8, semitone: 13}
 	MajorNinth        Interval = Interval{name: "9 maj", pos: 8, semitone: 14}
 	AugmentedNinth    Interval = Interval{name: "9 aug", pos: 8, semitone: 15}
+	MinorTenth        Interval = Interval{name: "10 min", pos: 9, semitone: 15}
+	MajorTenth        Interval = Interval{name: "10 maj", pos: 9, semitone: 16}
+	PerfectEleventh   Interval = Interval{name: "11", pos: 10, semitone: 17}
+	AugmentedEleventh Interval = Interval{name: "11 aug", pos: 10, semitone: 18}
 )
 
 func (interval *Interval) Name() string {

@@ -45,6 +45,13 @@ func diminishedTriad(note *notes.Note) []notes.Note {
 	return chordNotes
 }
 
+func powerChords(note *notes.Note) []notes.Note {
+	chordNotes := make([]notes.Note, 0)
+	chordNotes = append(chordNotes, *note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
+	return chordNotes
+}
+
 func dominantSeventh(note *notes.Note) []notes.Note {
 	chordNotes := make([]notes.Note, 0)
 	chordNotes = append(chordNotes, *note)
@@ -341,6 +348,10 @@ func Parse(chord string) (*Chord, error) {
 	case "mo5":
 		// diminished triad
 		chordNotes = diminishedTriad(n)
+
+	case "5":
+		// power chords, though not chords stricly-speaking
+		chordNotes = powerChords(n)
 
 	case "7":
 		// dominant seventh

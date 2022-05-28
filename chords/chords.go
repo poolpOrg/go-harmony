@@ -589,6 +589,8 @@ func Parse(chord string) (*Chord, error) {
 		// half-diminished thirteenth
 		chordNotes = halfDiminishedThirteenth(n)
 
+		// TODO: add, sus and slash chord inversions
+
 	default:
 		return nil, fmt.Errorf("unknown chord name: %s", chordName)
 	}

@@ -124,21 +124,19 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 	}
 
 	target := naturals[(note.pos+int(interval.Position()))%len(naturals)]
-	//
 	sourceSemitone := note.semitone + note.accidentals
+	if sourceSemitone < 0 {
+		sourceSemitone = (12 + sourceSemitone) % 12
+	}
 
 	targetOctave := note.octave
 	targetSemitone := target.semitone + note.accidentals
 	targetAccidentals := note.accidentals
 	if targetSemitone < note.semitone {
 		targetSemitone += 12
-		targetOctave += 1
 	}
 
-	//
-
-	//
-	//	fmt.Println("distance:", interval.Semitone(), "source:", sourceSemitone, "target:", targetSemitone)
+	//fmt.Println("distance:", interval.Semitone(), "source:", sourceSemitone, "target:", targetSemitone)
 	distance := targetSemitone - (int(interval.Semitone()) + sourceSemitone)
 	targetAccidentals += -distance
 

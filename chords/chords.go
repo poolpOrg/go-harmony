@@ -240,6 +240,48 @@ func diminishedEleventh(note *notes.Note) []notes.Note {
 	return chordNotes
 }
 
+func majorThirteenth(note *notes.Note) []notes.Note {
+	chordNotes := majorEleventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
+	return chordNotes
+}
+
+func thirteenth(note *notes.Note) []notes.Note {
+	chordNotes := eleventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
+	return chordNotes
+}
+
+func minorMajorThirteenth(note *notes.Note) []notes.Note {
+	chordNotes := minorMajorEleventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
+	return chordNotes
+}
+
+func minorThirteenth(note *notes.Note) []notes.Note {
+	chordNotes := minorEleventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
+	return chordNotes
+}
+
+func augmentedMajorThirteenth(note *notes.Note) []notes.Note {
+	chordNotes := augmentedMajorEleventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
+	return chordNotes
+}
+
+func augmentedThirteenth(note *notes.Note) []notes.Note {
+	chordNotes := augmentedEleventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
+	return chordNotes
+}
+
+func halfDiminishedThirteenth(note *notes.Note) []notes.Note {
+	chordNotes := halfDiminishedEleventh(note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
+	return chordNotes
+}
+
 func Parse(chord string) (*Chord, error) {
 	if len(chord) == 0 {
 		return nil, fmt.Errorf("empty chord")
@@ -491,6 +533,50 @@ func Parse(chord string) (*Chord, error) {
 	case "dim11":
 		// diminished ninth
 		chordNotes = diminishedEleventh(n)
+
+	case "M13":
+		fallthrough
+	case "maj13":
+		// major thirteenth
+		chordNotes = majorThirteenth(n)
+
+	case "13":
+		// thirteenth
+		chordNotes = thirteenth(n)
+
+	case "mM13":
+		fallthrough
+	case "-M13":
+		fallthrough
+	case "minmaj13":
+		// minor-major thirteenth
+		chordNotes = minorMajorThirteenth(n)
+
+	case "m13":
+		fallthrough
+	case "-13":
+		fallthrough
+	case "min13":
+		// minor-major thirteenth
+		chordNotes = minorThirteenth(n)
+
+	case "+M13":
+		fallthrough
+	case "augmajM13":
+		// augmented major thirteenth
+		chordNotes = augmentedMajorThirteenth(n)
+
+	case "+13":
+		fallthrough
+	case "13#5":
+		fallthrough
+	case "aug13":
+		// augmented thirteenth
+		chordNotes = augmentedThirteenth(n)
+
+	case "ø13":
+		// half-diminished thirteenth
+		chordNotes = halfDiminishedThirteenth(n)
 
 	default:
 		return nil, fmt.Errorf("unknown chord name: %s", chordName)

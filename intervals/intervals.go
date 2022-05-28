@@ -35,6 +35,11 @@ var (
 	MajorTenth        Interval = Interval{name: "10 maj", pos: 9, semitone: 16}
 	PerfectEleventh   Interval = Interval{name: "11", pos: 10, semitone: 17}
 	AugmentedEleventh Interval = Interval{name: "11 aug", pos: 10, semitone: 18}
+	DiminishedTwelfth Interval = Interval{name: "12 dim", pos: 11, semitone: 18}
+	PerfectTwelfth    Interval = Interval{name: "12", pos: 11, semitone: 19}
+	AugmentedTwelfth  Interval = Interval{name: "12 aug", pos: 11, semitone: 20}
+	MinorThirteenth   Interval = Interval{name: "13 min", pos: 12, semitone: 20}
+	MajorThirteenth   Interval = Interval{name: "13 maj", pos: 12, semitone: 21}
 )
 
 func (interval *Interval) Name() string {

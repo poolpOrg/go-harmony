@@ -175,6 +175,41 @@ func melodicMinorScale(note *notes.Note) *Scale {
 	}
 }
 
+func jazzMinorScale(note *notes.Note) *Scale {
+	scaleNotes := make([]notes.Note, 0)
+	scaleNotes = append(scaleNotes, *note)
+	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
+	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
+	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
+	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
+	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSixth))
+	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSeventh))
+	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
+
+	scaleChords := make([]chords.Chord, 0)
+	chord, _ := chords.Parse(note.Name())
+	scaleChords = append(scaleChords, *chord)
+	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
+	scaleChords = append(scaleChords, *chord)
+	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
+	scaleChords = append(scaleChords, *chord)
+	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
+	scaleChords = append(scaleChords, *chord)
+	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
+	scaleChords = append(scaleChords, *chord)
+	chord, _ = chords.Parse(note.Interval(intervals.MajorSixth).Name())
+	scaleChords = append(scaleChords, *chord)
+	chord, _ = chords.Parse(note.Interval(intervals.MajorSeventh).Name())
+	scaleChords = append(scaleChords, *chord)
+	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
+	scaleChords = append(scaleChords, *chord)
+
+	return &Scale{
+		notes:  scaleNotes,
+		chords: scaleChords,
+	}
+}
+
 func Parse(scale string) (*Scale, error) {
 	if len(scale) == 0 {
 		return nil, fmt.Errorf("empty scale")
@@ -219,6 +254,10 @@ func Parse(scale string) (*Scale, error) {
 	case "melodicMinor":
 		// melodic minor scale
 		return melodicMinorScale(n), nil
+
+	case "jazzMinor":
+		// jazz minor scale
+		return jazzMinorScale(n), nil
 
 	default:
 		return nil, fmt.Errorf("unknown scale name: %s", scaleName)

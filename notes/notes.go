@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/poolpOrg/go-harmony/intervals"
-	"github.com/poolpOrg/go-harmony/tuning"
+	"github.com/poolpOrg/go-harmony/tunings"
 )
 
 type natural struct {
@@ -151,7 +151,7 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 }
 
 func (note *Note) Frequency() float64 {
-	tuning := tuning.NewA440()
+	tuning := tunings.A440
 	semitone := note.semitone + note.accidentals
 	if semitone < 0 {
 		semitone = (12 + semitone) % 12

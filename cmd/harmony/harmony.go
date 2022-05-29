@@ -5,18 +5,31 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/poolpOrg/go-harmony/notes"
+	"github.com/poolpOrg/go-harmony/instruments"
+	"github.com/poolpOrg/go-harmony/tunings"
 )
 
 func main() {
 	flag.Parse()
 
+	instrument := instruments.NewInstrument(tunings.A440)
+
 	for _, name := range flag.Args() {
-		n, err := notes.Parse(name)
+		n, err := instrument.Note(name)
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Println(n, n.Frequency())
+	}
+
+	for _, name := range flag.Args() {
+		c, err := instrument.Chord(name)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, n := range c.Notes() {
+			fmt.Println(n, n.Frequency())
+		}
 	}
 
 	//	for _, note := range "CDEFGAB" {

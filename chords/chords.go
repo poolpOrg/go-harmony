@@ -334,6 +334,22 @@ func addThirteenth(note *notes.Note) []notes.Note {
 	return chordNotes
 }
 
+func susSecond(note *notes.Note) []notes.Note {
+	chordNotes := make([]notes.Note, 0)
+	chordNotes = append(chordNotes, *note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorSecond))
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
+	return chordNotes
+}
+
+func susFourth(note *notes.Note) []notes.Note {
+	chordNotes := make([]notes.Note, 0)
+	chordNotes = append(chordNotes, *note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFourth))
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
+	return chordNotes
+}
+
 func Parse(chord string) (*Chord, error) {
 	if len(chord) == 0 {
 		return nil, fmt.Errorf("empty chord")
@@ -642,7 +658,7 @@ func Parse(chord string) (*Chord, error) {
 		// half-diminished thirteenth
 		chordNotes = halfDiminishedThirteenth(n)
 
-		// TODO: sus and slash chord inversions
+		// TODO: add slash chord inversions
 
 	case "add9":
 		fallthrough
@@ -658,6 +674,12 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "+13":
 		chordNotes = addThirteenth(n)
+
+	case "sus2":
+		chordNotes = susSecond(n)
+
+	case "sus4":
+		chordNotes = susFourth(n)
 
 	default:
 		return nil, fmt.Errorf("unknown chord name: %s", chordName)

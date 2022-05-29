@@ -14,13 +14,15 @@ func main() {
 
 	instrument := instruments.NewInstrument(tunings.A440)
 
-	for _, name := range flag.Args() {
-		n, err := instrument.Note(name)
-		if err != nil {
-			log.Fatal(err)
+	/*
+		for _, name := range flag.Args() {
+			n, err := instrument.C(name)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println(n, n.Frequency())
 		}
-		fmt.Println(n, n.Frequency())
-	}
+	*/
 
 	for _, name := range flag.Args() {
 		c, err := instrument.Chord(name)
@@ -28,7 +30,7 @@ func main() {
 			log.Fatal(err)
 		}
 		for _, n := range c.Notes() {
-			fmt.Println(n, n.Frequency())
+			fmt.Println(n.Name(), n.Frequency())
 		}
 	}
 

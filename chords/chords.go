@@ -52,6 +52,24 @@ func powerChords(note *notes.Note) []notes.Note {
 	return chordNotes
 }
 
+func sixth(note *notes.Note) []notes.Note {
+	chordNotes := make([]notes.Note, 0)
+	chordNotes = append(chordNotes, *note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorSixth))
+	return chordNotes
+}
+
+func minorSixth(note *notes.Note) []notes.Note {
+	chordNotes := make([]notes.Note, 0)
+	chordNotes = append(chordNotes, *note)
+	chordNotes = append(chordNotes, *note.Interval(intervals.MinorThird))
+	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
+	chordNotes = append(chordNotes, *note.Interval(intervals.MajorSixth))
+	return chordNotes
+}
+
 func dominantSeventh(note *notes.Note) []notes.Note {
 	chordNotes := make([]notes.Note, 0)
 	chordNotes = append(chordNotes, *note)
@@ -352,6 +370,20 @@ func Parse(chord string) (*Chord, error) {
 	case "5":
 		// power chords, though not chords stricly-speaking
 		chordNotes = powerChords(n)
+
+	case "M6":
+		fallthrough
+	case "6":
+		// sixth chords
+		chordNotes = sixth(n)
+
+	case "m6":
+		fallthrough
+	case "-6":
+		fallthrough
+	case "min6":
+		// sixth chords
+		chordNotes = minorSixth(n)
 
 	case "7":
 		// dominant seventh

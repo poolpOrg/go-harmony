@@ -5,27 +5,37 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/poolpOrg/go-harmony/scales"
+	"github.com/poolpOrg/go-harmony/notes"
 )
 
 func main() {
 	flag.Parse()
-	//	for _, note := range "CDEFGAB" {
-	for _, scale := range flag.Args() {
-		c, err := scales.Parse(scale)
+
+	for _, name := range flag.Args() {
+		n, err := notes.Parse(name)
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println("chord", c.Name())
-		for _, note := range c.Notes() {
-			fmt.Println(note.Name())
-		}
-		for _, chord := range c.Chords() {
-			fmt.Println(chord.Name(), chord)
-		}
-
+		fmt.Println(n, n.Frequency())
 	}
 
+	//	for _, note := range "CDEFGAB" {
+	/*
+		for _, scale := range flag.Args() {
+			c, err := scales.Parse(scale)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println("scale", c.Name())
+			for _, note := range c.Notes() {
+				fmt.Println(note.Name())
+			}
+			for _, chord := range c.Chords() {
+				fmt.Println(chord.Name(), chord)
+			}
+
+		}
+	*/
 	/*
 
 

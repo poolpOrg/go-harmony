@@ -13,7 +13,6 @@ func main() {
 	flag.Parse()
 
 	instrument := instruments.NewInstrument(tunings.A440)
-
 	/*
 		for _, name := range flag.Args() {
 			n, err := instrument.C(name)
@@ -23,34 +22,33 @@ func main() {
 			fmt.Println(n, n.Frequency())
 		}
 	*/
-
-	for _, name := range flag.Args() {
-		c, err := instrument.Chord(name)
-		if err != nil {
-			log.Fatal(err)
-		}
-		for _, n := range c.Notes() {
-			fmt.Println(n.Name(), n.Frequency())
-		}
-	}
-
-	//	for _, note := range "CDEFGAB" {
 	/*
-		for _, scale := range flag.Args() {
-			c, err := scales.Parse(scale)
+		for _, name := range flag.Args() {
+			c, err := instrument.Chord(name)
 			if err != nil {
 				log.Fatal(err)
 			}
-			fmt.Println("scale", c.Name())
-			for _, note := range c.Notes() {
-				fmt.Println(note.Name())
+			for _, n := range c.Notes() {
+				fmt.Println(n.Name(), n.Frequency())
 			}
-			for _, chord := range c.Chords() {
-				fmt.Println(chord.Name(), chord)
-			}
-
 		}
 	*/
+	//	for _, note := range "CDEFGAB" {
+
+	for _, scale := range flag.Args() {
+		c, err := instrument.Scale(scale)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println("scale", c.Name())
+		for _, note := range c.Notes() {
+			fmt.Println(note.Name())
+		}
+		//for _, chord := range c.Chords() {
+		//	fmt.Println(chord.Name(), chord.Notes())
+		//}
+
+	}
 	/*
 
 

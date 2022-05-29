@@ -3,6 +3,7 @@ package instruments
 import (
 	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/notes"
+	"github.com/poolpOrg/go-harmony/scales"
 	"github.com/poolpOrg/go-harmony/tunings"
 )
 
@@ -26,4 +27,12 @@ func (instrument *Instrument) Chord(name string) (chords.Chord, error) {
 		return chords.Chord{}, err
 	}
 	return *chord, nil
+}
+
+func (instrument *Instrument) Scale(name string) (scales.Scale, error) {
+	scale, err := scales.Parse(name)
+	if err != nil {
+		return scales.Scale{}, err
+	}
+	return *scale, nil
 }

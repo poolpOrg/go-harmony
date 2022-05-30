@@ -41,12 +41,12 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Println("scale", c.Name())
-		for _, note := range c.Notes() {
-			fmt.Println(note.Name())
-		}
-		//		for _, chord := range c.Chords() {
-		//			fmt.Println(chord.Name(), chord.Notes())
+		//		for _, note := range c.Notes() {
+		//			fmt.Println(note.Name())
 		//		}
+		for _, chord := range c.Chords() {
+			fmt.Println(chord.Name(), chord.Notes())
+		}
 
 	}
 

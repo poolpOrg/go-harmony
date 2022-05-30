@@ -3,6 +3,7 @@ package scales
 import (
 	"fmt"
 
+	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/intervals"
 	"github.com/poolpOrg/go-harmony/notes"
 )
@@ -298,6 +299,18 @@ func (scale *Scale) Notes() []notes.Note {
 	ret := make([]notes.Note, 0)
 	for _, interval := range scale.structure {
 		ret = append(ret, *scale.root.Interval(interval))
+	}
+	return ret
+}
+
+// TODO: add build chord from notes in chords/chords.go first
+func (scale *Scale) Chords() []chords.Chord {
+	ret := make([]chords.Chord, 0)
+	for _, interval := range scale.structure {
+		n := scale.root.Interval(interval)
+
+		fmt.Println(n.Name(), n, interval)
+		//		ret = append(ret, *scale.root.Interval(interval))
 	}
 	return ret
 }

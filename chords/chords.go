@@ -8,10 +8,54 @@ import (
 )
 
 type chord struct {
-	name  string
-	notes []notes.Note
+	name      string
+	structure []intervals.Interval
+	notes     []notes.Note
 }
 type Chord chord
+
+var MajorTriad = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorThird,
+	intervals.PerfectFifth,
+}
+
+var MinorTriad = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorThird,
+	intervals.PerfectFifth,
+}
+
+var AugmentedTriad = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorThird,
+	intervals.AugmentedFifth,
+}
+
+var DiminishedTriad = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorThird,
+	intervals.DiminishedFifth,
+}
+
+var PowerChord = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.DiminishedFifth,
+}
+
+var Sixth = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorThird,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+}
+
+var MinorSixth = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorThird,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+}
 
 func majorTriad(note *notes.Note) []notes.Note {
 	chordNotes := make([]notes.Note, 0)

@@ -21,6 +21,18 @@ func (instrument *Instrument) Note(name string) (notes.Note, error) {
 	return *note, nil
 }
 
+func (instrument *Instrument) Notes(noteNames ...string) (chords.Chord, error) {
+	noteSequence := make([]notes.Note, 0)
+	for _, noteName := range noteNames {
+		note, err := notes.Parse(noteName)
+		if err != nil {
+			return chords.Chord{}, err
+		}
+		noteSequence = append(noteSequence, *note)
+	}
+	return chords.FromNotes(noteSequence), nil
+}
+
 func (instrument *Instrument) Chord(name string) (chords.Chord, error) {
 	chord, err := chords.Parse(name)
 	if err != nil {

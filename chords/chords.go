@@ -7,163 +7,323 @@ import (
 	"github.com/poolpOrg/go-harmony/notes"
 )
 
+type Structure []intervals.Interval
+
 type chord struct {
-	name      string
 	root      notes.Note
-	structure []intervals.Interval
+	structure Structure
 }
 type Chord chord
 
-var MajorTriad = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorThird,
-	intervals.PerfectFifth,
+var (
+	MajorTriad Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorThird,
+		intervals.PerfectFifth,
+	}
+
+	MinorTriad Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MinorThird,
+		intervals.PerfectFifth,
+	}
+
+	AugmentedTriad Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorThird,
+		intervals.AugmentedFifth,
+	}
+
+	DiminishedTriad Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MinorThird,
+		intervals.DiminishedFifth,
+	}
+
+	PowerChord Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.PerfectFifth,
+	}
+
+	Sixth Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorThird,
+		intervals.PerfectFifth,
+		intervals.MajorSixth,
+	}
+
+	MinorSixth Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MinorThird,
+		intervals.PerfectFifth,
+		intervals.MajorSixth,
+	}
+
+	DominantSeventh Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorThird,
+		intervals.PerfectFifth,
+		intervals.MinorSeventh,
+	}
+
+	MajorSeventh Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorThird,
+		intervals.PerfectFifth,
+		intervals.MajorSeventh,
+	}
+
+	MinorMajorSeventh Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MinorThird,
+		intervals.PerfectFifth,
+		intervals.MajorSeventh,
+	}
+
+	MinorSeventh Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MinorThird,
+		intervals.PerfectFifth,
+		intervals.MinorSeventh,
+	}
+
+	AugmentedMajorSeventh Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorThird,
+		intervals.AugmentedFifth,
+		intervals.MajorSeventh,
+	}
+
+	AugmentedSeventh Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorThird,
+		intervals.AugmentedFifth,
+		intervals.MinorSeventh,
+	}
+
+	HalfDiminishedSeventh Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MinorThird,
+		intervals.DiminishedFifth,
+		intervals.MinorSeventh,
+	}
+
+	DiminishedSeventh Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MinorThird,
+		intervals.DiminishedFifth,
+		intervals.DiminishedSeventh,
+	}
+
+	DominantSeventhFlatFive Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorThird,
+		intervals.DiminishedFifth,
+		intervals.MinorSeventh,
+	}
+
+	MajorNinth               Structure = append(MajorSeventh, intervals.MajorNinth)
+	DominantNinth            Structure = append(DominantSeventh, intervals.MajorNinth)
+	DominantMinorNinth       Structure = append(DominantSeventh, intervals.MinorNinth)
+	MinorMajorNinth          Structure = append(MinorMajorSeventh, intervals.MajorNinth)
+	MinorNinth               Structure = append(MinorSeventh, intervals.MajorNinth)
+	AugmentedMajorNinth      Structure = append(AugmentedMajorSeventh, intervals.MajorNinth)
+	AugmentedDominantNinth   Structure = append(AugmentedSeventh, intervals.MajorNinth)
+	HalfDiminishedNinth      Structure = append(HalfDiminishedSeventh, intervals.MajorNinth)
+	HalfDiminishedMinorNinth Structure = append(HalfDiminishedSeventh, intervals.MinorNinth)
+	DiminishedNinth          Structure = append(DiminishedSeventh, intervals.MajorNinth)
+	DiminishedMinorNinth     Structure = append(DiminishedSeventh, intervals.MinorNinth)
+
+	Eleventh           Structure = append(DominantNinth, intervals.PerfectEleventh)
+	MajorEleventh      Structure = append(MajorNinth, intervals.PerfectEleventh)
+	MinorMajorEleventh Structure = append(MinorMajorNinth, intervals.PerfectEleventh)
+	MinorEleventh      Structure = append(MinorNinth, intervals.PerfectEleventh)
+
+	AugmentedMajorEleventh Structure = append(AugmentedMajorNinth, intervals.PerfectEleventh)
+	AugmentedEleventh      Structure = append(AugmentedDominantNinth, intervals.PerfectEleventh)
+	HalfDiminishedEleventh Structure = append(HalfDiminishedNinth, intervals.PerfectEleventh)
+	DiminishedEleventh     Structure = append(DiminishedNinth, intervals.PerfectEleventh)
+
+	MajorThirteenth          Structure = append(MajorEleventh, intervals.MajorThirteenth)
+	Thirteenth               Structure = append(Eleventh, intervals.MajorThirteenth)
+	MinorMajorThirteenth     Structure = append(MinorMajorEleventh, intervals.MajorThirteenth)
+	MinorThirteenth          Structure = append(MinorEleventh, intervals.MajorThirteenth)
+	AugmentedMajorThirteenth Structure = append(AugmentedMajorEleventh, intervals.MajorThirteenth)
+	AugmentedThirteenth      Structure = append(AugmentedEleventh, intervals.MajorThirteenth)
+	HalfDiminishedThirteenth Structure = append(HalfDiminishedEleventh, intervals.MajorThirteenth)
+
+	AddNinth      Structure = append(MajorTriad, intervals.MajorNinth)
+	AddEleventh   Structure = append(MajorTriad, intervals.PerfectEleventh)
+	AddThirteenth Structure = append(MajorTriad, intervals.MajorThirteenth)
+
+	SusSecond Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorSecond,
+		intervals.PerfectFifth,
+	}
+
+	SusFourth Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.PerfectFourth,
+		intervals.PerfectFifth,
+	}
+)
+
+func (structure Structure) Equals(target Structure) bool {
+	if len(structure) != len(target) {
+		return false
+	}
+	for i := 0; i < len(structure); i++ {
+		if structure[i] != target[i] {
+			return false
+		}
+	}
+	return true
 }
 
-var MinorTriad = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MinorThird,
-	intervals.PerfectFifth,
-}
+func (structure Structure) Name() string {
+	if structure.Equals(MajorTriad) {
+		return "maj"
+	}
+	if structure.Equals(MinorTriad) {
+		return "min"
+	}
+	if structure.Equals(AugmentedTriad) {
+		return "aug"
+	}
+	if structure.Equals(DiminishedTriad) {
+		return "dim"
+	}
+	if structure.Equals(PowerChord) {
+		return "5"
+	}
+	if structure.Equals(Sixth) {
+		return "6"
+	}
+	if structure.Equals(MinorSixth) {
+		return "min6"
+	}
+	if structure.Equals(DominantSeventh) {
+		return "7"
+	}
+	if structure.Equals(MajorSeventh) {
+		return "maj7"
+	}
+	if structure.Equals(MinorMajorSeventh) {
+		return "-M7"
+	}
+	if structure.Equals(MinorSeventh) {
+		return "min7"
+	}
+	if structure.Equals(AugmentedMajorSeventh) {
+		return "+M7"
+	}
+	if structure.Equals(AugmentedSeventh) {
+		return "aug7"
+	}
+	if structure.Equals(HalfDiminishedSeventh) {
+		return "m7b5"
+	}
+	if structure.Equals(DiminishedSeventh) {
+		return "dim7"
+	}
+	if structure.Equals(DominantSeventhFlatFive) {
+		return "7dim5"
+	}
 
-var AugmentedTriad = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorThird,
-	intervals.AugmentedFifth,
-}
+	if structure.Equals(MajorNinth) {
+		return "maj9"
+	}
+	if structure.Equals(DominantNinth) {
+		return "9"
+	}
+	if structure.Equals(DominantMinorNinth) {
+		return "7b9"
+	}
+	if structure.Equals(MinorMajorNinth) {
+		return "-M9"
+	}
+	if structure.Equals(MinorNinth) {
+		return "min9"
+	}
+	if structure.Equals(AugmentedMajorNinth) {
+		return "+M9"
+	}
+	if structure.Equals(AugmentedDominantNinth) {
+		return "aug9"
+	}
+	if structure.Equals(HalfDiminishedNinth) {
+		return "øb9"
+	}
+	if structure.Equals(DiminishedNinth) {
+		return "dim9"
+	}
+	if structure.Equals(DiminishedMinorNinth) {
+		return "dimb9"
+	}
 
-var DiminishedTriad = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MinorThird,
-	intervals.DiminishedFifth,
-}
+	if structure.Equals(Eleventh) {
+		return "11"
+	}
+	if structure.Equals(MajorEleventh) {
+		return "maj11"
+	}
+	if structure.Equals(MinorMajorEleventh) {
+		return "-M11"
+	}
+	if structure.Equals(MinorEleventh) {
+		return "min11"
+	}
+	if structure.Equals(AugmentedMajorEleventh) {
+		return "+M11"
+	}
+	if structure.Equals(AugmentedEleventh) {
+		return "aug11"
+	}
+	if structure.Equals(HalfDiminishedEleventh) {
+		return "ø11"
+	}
+	if structure.Equals(DiminishedEleventh) {
+		return "dim11"
+	}
 
-var PowerChord = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.PerfectFifth,
-}
+	if structure.Equals(MajorThirteenth) {
+		return "maj13"
+	}
+	if structure.Equals(Thirteenth) {
+		return "13"
+	}
+	if structure.Equals(MinorMajorThirteenth) {
+		return "-M13"
+	}
+	if structure.Equals(AugmentedMajorThirteenth) {
+		return "+M13"
+	}
+	if structure.Equals(AugmentedThirteenth) {
+		return "aug13"
+	}
+	if structure.Equals(HalfDiminishedThirteenth) {
+		return "ø13"
+	}
 
-var Sixth = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorThird,
-	intervals.PerfectFifth,
-	intervals.MajorSixth,
-}
+	if structure.Equals(AddNinth) {
+		return "add9"
+	}
+	if structure.Equals(AddEleventh) {
+		return "add11"
+	}
+	if structure.Equals(AddThirteenth) {
+		return "add13"
+	}
 
-var MinorSixth = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MinorThird,
-	intervals.PerfectFifth,
-	intervals.MajorSixth,
-}
+	if structure.Equals(SusSecond) {
+		return "sus2"
+	}
+	if structure.Equals(SusFourth) {
+		return "sus4"
+	}
 
-var DominantSeventh = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorThird,
-	intervals.PerfectFifth,
-	intervals.MinorSeventh,
-}
-
-var MajorSeventh = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorThird,
-	intervals.PerfectFifth,
-	intervals.MajorSeventh,
-}
-
-var MinorMajorSeventh = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MinorThird,
-	intervals.PerfectFifth,
-	intervals.MajorSeventh,
-}
-
-var MinorSeventh = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MinorThird,
-	intervals.PerfectFifth,
-	intervals.MinorSeventh,
-}
-
-var AugmentedMajorSeventh = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorThird,
-	intervals.AugmentedFifth,
-	intervals.MajorSeventh,
-}
-
-var AugmentedSeventh = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorThird,
-	intervals.AugmentedFifth,
-	intervals.MinorSeventh,
-}
-
-var HalfDiminishedSeventh = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MinorThird,
-	intervals.DiminishedFifth,
-	intervals.MinorSeventh,
-}
-
-var DiminishedSeventh = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MinorThird,
-	intervals.DiminishedFifth,
-	intervals.DiminishedSeventh,
-}
-
-var DominantSeventhFlatFive = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorThird,
-	intervals.DiminishedFifth,
-	intervals.MinorSeventh,
-}
-
-var MajorNinth = append(MajorSeventh, intervals.MajorNinth)
-var DominantNinth = append(DominantSeventh, intervals.MajorNinth)
-var DominantMinorNinth = append(DominantSeventh, intervals.MinorNinth)
-var MinorMajorNinth = append(MinorMajorSeventh, intervals.MajorNinth)
-var MinorNinth = append(MinorSeventh, intervals.MajorNinth)
-var AugmentedMajorNinth = append(AugmentedMajorSeventh, intervals.MajorNinth)
-var AugmentedDominantNinth = append(AugmentedSeventh, intervals.MajorNinth)
-var HalfDiminishedNinth = append(HalfDiminishedSeventh, intervals.MajorNinth)
-var HalfDiminishedMinorNinth = append(HalfDiminishedSeventh, intervals.MinorNinth)
-var DiminishedNinth = append(DiminishedSeventh, intervals.MajorNinth)
-var DiminishedMinorNinth = append(DiminishedSeventh, intervals.MinorNinth)
-
-var Eleventh = append(DominantNinth, intervals.PerfectEleventh)
-var MajorEleventh = append(MajorNinth, intervals.PerfectEleventh)
-var MinorMajorEleventh = append(MinorMajorNinth, intervals.PerfectEleventh)
-var MinorEleventh = append(MinorNinth, intervals.PerfectEleventh)
-
-var AugmentedMajorEleventh = append(AugmentedMajorNinth, intervals.PerfectEleventh)
-var AugmentedEleventh = append(AugmentedDominantNinth, intervals.PerfectEleventh)
-var HalfDiminishedEleventh = append(HalfDiminishedNinth, intervals.PerfectEleventh)
-var DiminishedEleventh = append(DiminishedNinth, intervals.PerfectEleventh)
-
-var MajorThirteenth = append(MajorEleventh, intervals.MajorThirteenth)
-var Thirteenth = append(Eleventh, intervals.MajorThirteenth)
-var MinorMajorThirteenth = append(MinorMajorEleventh, intervals.MajorThirteenth)
-var MinorThirteenth = append(MinorEleventh, intervals.MajorThirteenth)
-var AugmentedMajorThirteenth = append(AugmentedMajorEleventh, intervals.MajorThirteenth)
-var AugmentedThirteenth = append(AugmentedEleventh, intervals.MajorThirteenth)
-var HalfDiminishedThirteenth = append(HalfDiminishedEleventh, intervals.MajorThirteenth)
-
-var AddNinth = append(MajorTriad, intervals.MajorNinth)
-var AddEleventh = append(MajorTriad, intervals.PerfectEleventh)
-var AddThirteenth = append(MajorTriad, intervals.MajorThirteenth)
-
-var SusSecond = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorSecond,
-	intervals.PerfectFifth,
-}
-
-var SusFourth = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.PerfectFourth,
-	intervals.PerfectFifth,
+	return ""
 }
 
 func Parse(chord string) (*Chord, error) {
@@ -188,7 +348,7 @@ func Parse(chord string) (*Chord, error) {
 		return nil, err
 	}
 
-	var structure []intervals.Interval
+	var structure Structure
 	switch chordName {
 	case "":
 		fallthrough
@@ -509,7 +669,13 @@ func Parse(chord string) (*Chord, error) {
 
 func (chord *Chord) Name() string {
 	// TODO: construct chord name by analyzing intervals
-	return chord.root.Name()
+	name := chord.root.Name()
+	structureName := chord.structure.Name()
+	if structureName == "" {
+		panic("unknown structure name")
+	}
+	name += structureName
+	return name
 }
 
 func (chord *Chord) Notes() []notes.Note {
@@ -518,4 +684,29 @@ func (chord *Chord) Notes() []notes.Note {
 		ret = append(ret, *chord.root.Interval(interval))
 	}
 	return ret
+}
+
+func FromNotes(notes []notes.Note) Chord {
+	structure := Structure{}
+
+	root := notes[0]
+	structure = append(structure, intervals.PerfectUnison)
+	for _, note := range notes[1:] {
+		targetPosition := note.Position()
+		if targetPosition < root.Position() {
+			targetPosition += 7
+		}
+
+		targetSemitone := note.Semitone()
+		if targetSemitone < root.Semitone() {
+			targetSemitone += 12
+		}
+
+		structure = append(structure, intervals.New(targetPosition, targetSemitone))
+	}
+
+	return Chord{
+		root:      notes[0],
+		structure: structure,
+	}
 }

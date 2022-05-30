@@ -150,6 +150,14 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 	}
 }
 
+func (note *Note) Position() uint {
+	return uint(note.pos)
+}
+
+func (note *Note) Semitone() uint {
+	return uint(note.semitone + note.accidentals)
+}
+
 func (note *Note) Frequency() float64 {
 	tuning := tunings.A440
 	semitone := note.semitone + note.accidentals

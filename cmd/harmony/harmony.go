@@ -13,9 +13,15 @@ func main() {
 	flag.Parse()
 
 	instrument := instruments.NewInstrument(tunings.A440)
+	chord, err := instrument.Notes(flag.Args()...)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(chord.Name(), chord)
+
 	/*
 		for _, name := range flag.Args() {
-			n, err := instrument.C(name)
+			n, err := instrument.Note(name)
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -35,20 +41,21 @@ func main() {
 	*/
 	//	for _, note := range "CDEFGAB" {
 
-	for _, scale := range flag.Args() {
-		c, err := instrument.Scale(scale)
-		if err != nil {
-			log.Fatal(err)
+	/*
+		for _, scale := range flag.Args() {
+			c, err := instrument.Scale(scale)
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Println("scale", c.Name())
+			//		for _, note := range c.Notes() {
+			//			fmt.Println(note.Name())
+			//		}
+			for _, chord := range c.Chords() {
+				fmt.Println(chord.Name(), chord.Notes())
+			}
 		}
-		fmt.Println("scale", c.Name())
-		//		for _, note := range c.Notes() {
-		//			fmt.Println(note.Name())
-		//		}
-		for _, chord := range c.Chords() {
-			fmt.Println(chord.Name(), chord.Notes())
-		}
-
-	}
+	*/
 
 	/*
 

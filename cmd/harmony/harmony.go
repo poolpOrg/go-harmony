@@ -4,66 +4,66 @@ import (
 	"flag"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/poolpOrg/go-harmony/instruments"
 	"github.com/poolpOrg/go-harmony/tunings"
 )
 
 func main() {
+	var opt_note string
+	var opt_chord string
+	var opt_scale string
+	var opt_notes string
+
+	flag.StringVar(&opt_note, "note", "", "note")
+	flag.StringVar(&opt_chord, "chord", "", "chord")
+	flag.StringVar(&opt_scale, "scale", "", "scale")
+	flag.StringVar(&opt_notes, "notes", "", "notes")
+
 	flag.Parse()
 
 	instrument := instruments.NewInstrument(tunings.A440)
-	chord, err := instrument.Notes(flag.Args()...)
-	if err != nil {
-		log.Fatal(err)
+
+	if opt_note != "" {
+		n, err := instrument.Note(opt_note)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(n.Name(), n.Frequency())
 	}
-	fmt.Println(chord.Name(), chord)
 
-	/*
-		for _, name := range flag.Args() {
-			n, err := instrument.Note(name)
-			if err != nil {
-				log.Fatal(err)
-			}
-			fmt.Println(n, n.Frequency())
+	if opt_chord != "" {
+		c, err := instrument.Chord(opt_chord)
+		if err != nil {
+			log.Fatal(err)
 		}
-	*/
-	/*
-		for _, name := range flag.Args() {
-			c, err := instrument.Chord(name)
-			if err != nil {
-				log.Fatal(err)
-			}
-			for _, n := range c.Notes() {
-				fmt.Println(n.Name(), n.Frequency())
-			}
+		fmt.Println(c.Name())
+		for _, n := range c.Notes() {
+			fmt.Println("  ", n.Name(), n.Frequency())
 		}
-	*/
-	//	for _, note := range "CDEFGAB" {
+	}
 
-	/*
-		for _, scale := range flag.Args() {
-			c, err := instrument.Scale(scale)
-			if err != nil {
-				log.Fatal(err)
-			}
-			fmt.Println("scale", c.Name())
-			//		for _, note := range c.Notes() {
-			//			fmt.Println(note.Name())
-			//		}
-			for _, chord := range c.Chords() {
-				fmt.Println(chord.Name(), chord.Notes())
-			}
+	if opt_scale != "" {
+		s, err := instrument.Scale(opt_scale)
+		if err != nil {
+			log.Fatal(err)
 		}
-	*/
+		fmt.Println(s.Name())
+		for _, n := range s.Notes() {
+			fmt.Println("  ", n.Name(), n.Frequency())
+			// plug here chord construction for this degree
+		}
+	}
 
-	/*
-
-
-		fmt.Println("7 dim", n.Interval(intervals.DiminishedSeventh).Name())
-		fmt.Println("7 min", n.Interval(intervals.MinorSeventh).Name())
-		fmt.Println("7 maj", n.Interval(intervals.MajorSeventh).Name())
-
-		fmt.Println("octave", n.Interval(intervals.Octave).Name())
-	*/
+	if opt_notes != "" {
+		c, err := instrument.Notes(strings.Split(opt_notes, ",")...)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(c.Name())
+		for _, n := range c.Notes() {
+			fmt.Println("  ", n.Name(), n.Frequency())
+		}
+	}
 }

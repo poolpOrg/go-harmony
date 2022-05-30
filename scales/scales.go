@@ -3,531 +3,188 @@ package scales
 import (
 	"fmt"
 
-	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/intervals"
 	"github.com/poolpOrg/go-harmony/notes"
 )
 
 type scale struct {
-	notes  []notes.Note
-	chords []chords.Chord
+	root      notes.Note
+	structure []intervals.Interval
 }
 type Scale scale
 
-func ionian(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
+type Degree uint
 
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
+var (
+	Tonic       Degree = 0
+	Supertonic  Degree = 1
+	Mediant     Degree = 2
+	Subdominant Degree = 3
+	Dominant    Degree = 4
+	Submediant  Degree = 5
+	LeadingTone Degree = 6
+)
 
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var Ionian = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MajorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+	intervals.MajorSeventh,
+	intervals.Octave,
 }
 
-func dorian(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var Dorian = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MinorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+	intervals.MinorSeventh,
+	intervals.Octave,
 }
 
-func phrygian(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var Phrygian = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorSecond,
+	intervals.MinorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MinorSixth,
+	intervals.MinorSeventh,
+	intervals.Octave,
 }
 
-func lydian(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.AugmentedFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.AugmentedFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var Lydian = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MajorThird,
+	intervals.AugmentedFourth,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+	intervals.MajorSeventh,
+	intervals.Octave,
 }
 
-func mixolydian(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var Mixolydian = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MajorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+	intervals.MinorSeventh,
+	intervals.Octave,
 }
 
-func aeolian(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var Aeolian = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MinorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MinorSixth,
+	intervals.MinorSeventh,
+	intervals.Octave,
 }
 
-func locrian(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.DiminishedFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.DiminishedFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var Locrian = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorSecond,
+	intervals.MinorThird,
+	intervals.PerfectFourth,
+	intervals.DiminishedFifth,
+	intervals.MinorSixth,
+	intervals.MinorSeventh,
+	intervals.Octave,
 }
 
-func harmonicMinorScale(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var HarmonicMinor = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MinorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MinorSixth,
+	intervals.MajorSeventh,
+	intervals.Octave,
 }
 
-func melodicMinorScale(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note)
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var MelodicMinor = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MinorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+	intervals.MajorSeventh,
+	intervals.Octave,
+	intervals.MinorSeventh,
+	intervals.MinorSixth,
+	intervals.PerfectFifth,
+	intervals.PerfectFourth,
+	intervals.MinorThird,
+	intervals.MajorSecond,
+	intervals.PerfectUnison,
 }
 
-func jazzMinorScale(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var JazzMinor = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MinorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+	intervals.MajorSeventh,
+	intervals.Octave,
 }
 
-func majorPentatonicScale(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var MajorPentatonic = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MajorThird,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+	intervals.Octave,
 }
 
-func egyptianPentatonicScale(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var EgyptianPentatonic = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MinorSeventh,
+	intervals.Octave,
 }
 
-func bluesMinorScale(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var BluesMinor = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorThird,
+	intervals.PerfectFourth,
+	intervals.MinorSixth,
+	intervals.MinorSeventh,
+	intervals.Octave,
 }
 
-func bluesMajorScale(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSecond))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MajorSixth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSecond).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MajorSixth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var BluesMajor = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MajorSixth,
+	intervals.Octave,
 }
 
-func minorPentatonicScale(note *notes.Note) *Scale {
-	scaleNotes := make([]notes.Note, 0)
-	scaleNotes = append(scaleNotes, *note)
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorThird))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFourth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.PerfectFifth))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.MinorSeventh))
-	scaleNotes = append(scaleNotes, *note.Interval(intervals.Octave))
-
-	scaleChords := make([]chords.Chord, 0)
-	chord, _ := chords.Parse(note.Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorThird).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFourth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.PerfectFifth).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.MinorSeventh).Name())
-	scaleChords = append(scaleChords, *chord)
-	chord, _ = chords.Parse(note.Interval(intervals.Octave).Name())
-	scaleChords = append(scaleChords, *chord)
-
-	return &Scale{
-		notes:  scaleNotes,
-		chords: scaleChords,
-	}
+var MinorPentatonic = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MinorSeventh,
+	intervals.Octave,
 }
 
 func Parse(scale string) (*Scale, error) {
@@ -552,6 +209,7 @@ func Parse(scale string) (*Scale, error) {
 		return nil, err
 	}
 
+	var structure []intervals.Interval
 	switch scaleName {
 	case "":
 		fallthrough
@@ -561,23 +219,23 @@ func Parse(scale string) (*Scale, error) {
 		fallthrough
 	case "maj":
 		// major scale, ionian mode
-		return ionian(n), nil
+		structure = Ionian
 
 	case "dorian":
 		// dorian mode
-		return dorian(n), nil
+		structure = Dorian
 
 	case "phrygian":
 		// phrygian mode
-		return phrygian(n), nil
+		structure = Phrygian
 
 	case "lydian":
 		// lydian mode
-		return lydian(n), nil
+		structure = Lydian
 
 	case "mixolydian":
 		// mixolydian mode
-		return mixolydian(n), nil
+		structure = Mixolydian
 
 	case "aeolian":
 		fallthrough
@@ -585,57 +243,61 @@ func Parse(scale string) (*Scale, error) {
 		fallthrough
 	case "min":
 		// natural minor scale, or aeolian
-		return aeolian(n), nil
+		structure = Aeolian
 
 	case "locrian":
-		return locrian(n), nil
+		structure = Locrian
 
 	case "harmonicMinor":
 		// harmonic minor scale
-		return harmonicMinorScale(n), nil
+		structure = HarmonicMinor
 
 	case "melodicMinor":
 		// melodic minor scale
-		return melodicMinorScale(n), nil
+		structure = MelodicMinor
 
 	case "jazzMinor":
 		// jazz minor scale
-		return jazzMinorScale(n), nil
+		structure = JazzMinor
 
 	case "majorPentatonic":
 		// major pentatonic scale
-		return majorPentatonicScale(n), nil
+		structure = MajorPentatonic
 
 	case "egyptian":
 		// egyptian pentatonic scale
-		return egyptianPentatonicScale(n), nil
+		structure = EgyptianPentatonic
 
 	case "BluesMinor":
 		// blues minor pentatonic scale
-		return bluesMinorScale(n), nil
+		structure = BluesMinor
 
 	case "BluesMajor":
 		// blues major pentatonic scale
-		return bluesMajorScale(n), nil
+		structure = BluesMajor
 
 	case "minorPentatonic":
 		// minor pentatonic scale
-		return minorPentatonicScale(n), nil
+		structure = MinorPentatonic
 
 	default:
 		return nil, fmt.Errorf("unknown scale name: %s", scaleName)
 
 	}
+	return &Scale{
+		root:      *n,
+		structure: structure,
+	}, nil
 }
 
 func (scale *Scale) Name() string {
-	return scale.notes[0].Name()
+	return scale.root.Name()
 }
 
 func (scale *Scale) Notes() []notes.Note {
-	return scale.notes
-}
-
-func (scale *Scale) Chords() []chords.Chord {
-	return scale.chords
+	ret := make([]notes.Note, 0)
+	for _, interval := range scale.structure {
+		ret = append(ret, *scale.root.Interval(interval))
+	}
+	return ret
 }

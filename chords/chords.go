@@ -686,12 +686,13 @@ func Parse(chord string) (*Chord, error) {
 	}
 
 	return &Chord{
-		name:  chord,
+		name:  chordName,
 		notes: chordNotes,
 	}, nil
 }
 
 func (chord *Chord) Name() string {
+	// TODO: construct chord name by analyzing intervals
 	return chord.notes[0].Name()
 }
 

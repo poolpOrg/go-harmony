@@ -56,6 +56,11 @@ func main() {
 			fmt.Println("  ", n.Name(), n.Frequency())
 			// plug here chord construction for this degree
 		}
+
+		for _, c := range s.Triads() {
+			fmt.Println("  ", c.Name())
+		}
+
 	}
 
 	if opt_notes != "" {

@@ -9,8 +9,8 @@ import (
 
 type chord struct {
 	name      string
+	root      notes.Note
 	structure []intervals.Interval
-	notes     []notes.Note
 }
 type Chord chord
 
@@ -40,7 +40,7 @@ var DiminishedTriad = []intervals.Interval{
 
 var PowerChord = []intervals.Interval{
 	intervals.PerfectUnison,
-	intervals.DiminishedFifth,
+	intervals.PerfectFifth,
 }
 
 var Sixth = []intervals.Interval{
@@ -57,341 +57,113 @@ var MinorSixth = []intervals.Interval{
 	intervals.MajorSixth,
 }
 
-func majorTriad(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	return chordNotes
+var DominantSeventh = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorThird,
+	intervals.PerfectFifth,
+	intervals.MinorSeventh,
 }
 
-func minorTriad(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	return chordNotes
+var MajorSeventh = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorThird,
+	intervals.PerfectFifth,
+	intervals.MajorSeventh,
 }
 
-func augmentedTriad(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.AugmentedFifth))
-	return chordNotes
+var MinorMajorSeventh = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorThird,
+	intervals.PerfectFifth,
+	intervals.MajorSeventh,
 }
 
-func diminishedTriad(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.DiminishedFifth))
-	return chordNotes
+var MinorSeventh = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorThird,
+	intervals.PerfectFifth,
+	intervals.MinorSeventh,
 }
 
-func powerChords(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	return chordNotes
+var AugmentedMajorSeventh = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorThird,
+	intervals.AugmentedFifth,
+	intervals.MajorSeventh,
 }
 
-func sixth(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorSixth))
-	return chordNotes
+var AugmentedSeventh = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorThird,
+	intervals.AugmentedFifth,
+	intervals.MinorSeventh,
 }
 
-func minorSixth(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorSixth))
-	return chordNotes
+var HalfDiminishedSeventh = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorThird,
+	intervals.DiminishedFifth,
+	intervals.MinorSeventh,
 }
 
-func dominantSeventh(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorSeventh))
-	return chordNotes
+var DiminishedSeventh = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MinorThird,
+	intervals.DiminishedFifth,
+	intervals.DiminishedSeventh,
 }
 
-func majorSeventh(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorSeventh))
-	return chordNotes
+var DominantSeventhFlatFive = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorThird,
+	intervals.DiminishedFifth,
+	intervals.MinorSeventh,
 }
 
-func minorMajorSeventh(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorSeventh))
-	return chordNotes
+var MajorNinth = append(MajorSeventh, intervals.MajorNinth)
+var DominantNinth = append(DominantSeventh, intervals.MajorNinth)
+var DominantMinorNinth = append(DominantSeventh, intervals.MinorNinth)
+var MinorMajorNinth = append(MinorMajorSeventh, intervals.MajorNinth)
+var MinorNinth = append(MinorSeventh, intervals.MajorNinth)
+var AugmentedMajorNinth = append(AugmentedMajorSeventh, intervals.MajorNinth)
+var AugmentedDominantNinth = append(AugmentedSeventh, intervals.MajorNinth)
+var HalfDiminishedNinth = append(HalfDiminishedSeventh, intervals.MajorNinth)
+var HalfDiminishedMinorNinth = append(HalfDiminishedSeventh, intervals.MinorNinth)
+var DiminishedNinth = append(DiminishedSeventh, intervals.MajorNinth)
+var DiminishedMinorNinth = append(DiminishedSeventh, intervals.MinorNinth)
+
+var Eleventh = append(DominantNinth, intervals.PerfectEleventh)
+var MajorEleventh = append(MajorNinth, intervals.PerfectEleventh)
+var MinorMajorEleventh = append(MinorMajorNinth, intervals.PerfectEleventh)
+var MinorEleventh = append(MinorNinth, intervals.PerfectEleventh)
+
+var AugmentedMajorEleventh = append(AugmentedMajorNinth, intervals.PerfectEleventh)
+var AugmentedEleventh = append(AugmentedDominantNinth, intervals.PerfectEleventh)
+var HalfDiminishedEleventh = append(HalfDiminishedNinth, intervals.PerfectEleventh)
+var DiminishedEleventh = append(DiminishedNinth, intervals.PerfectEleventh)
+
+var MajorThirteenth = append(MajorEleventh, intervals.MajorThirteenth)
+var Thirteenth = append(Eleventh, intervals.MajorThirteenth)
+var MinorMajorThirteenth = append(MinorMajorEleventh, intervals.MajorThirteenth)
+var MinorThirteenth = append(MinorEleventh, intervals.MajorThirteenth)
+var AugmentedMajorThirteenth = append(AugmentedMajorEleventh, intervals.MajorThirteenth)
+var AugmentedThirteenth = append(AugmentedEleventh, intervals.MajorThirteenth)
+var HalfDiminishedThirteenth = append(HalfDiminishedEleventh, intervals.MajorThirteenth)
+
+var AddNinth = append(MajorTriad, intervals.MajorNinth)
+var AddEleventh = append(MajorTriad, intervals.PerfectEleventh)
+var AddThirteenth = append(MajorTriad, intervals.MajorThirteenth)
+
+var SusSecond = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.PerfectFifth,
 }
 
-func minorSeventh(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorSeventh))
-	return chordNotes
-}
-
-func augmentedMajorSeventh(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.AugmentedFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorSeventh))
-	return chordNotes
-}
-
-func augmentedSeventh(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.AugmentedFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorSeventh))
-	return chordNotes
-}
-
-func halfDiminishedSeventh(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.DiminishedFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorSeventh))
-	return chordNotes
-}
-
-func diminishedSeventh(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.DiminishedFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.DiminishedSeventh))
-	return chordNotes
-}
-
-func dominantSeventhFlatFive(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.DiminishedFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorSeventh))
-	return chordNotes
-}
-
-func majorNinth(note *notes.Note) []notes.Note {
-	chordNotes := majorSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
-	return chordNotes
-}
-
-func dominantNinth(note *notes.Note) []notes.Note {
-	chordNotes := dominantSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
-	return chordNotes
-}
-
-func dominantMinorNinth(note *notes.Note) []notes.Note {
-	chordNotes := dominantSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorNinth))
-	return chordNotes
-}
-
-func minorMajorNinth(note *notes.Note) []notes.Note {
-	chordNotes := minorMajorSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
-	return chordNotes
-}
-
-func minorNinth(note *notes.Note) []notes.Note {
-	chordNotes := minorSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
-	return chordNotes
-}
-
-func augmentedMajorNinth(note *notes.Note) []notes.Note {
-	chordNotes := augmentedMajorSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
-	return chordNotes
-}
-
-func augmentedDominantNinth(note *notes.Note) []notes.Note {
-	chordNotes := augmentedSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
-	return chordNotes
-}
-
-func halfDiminishedNinth(note *notes.Note) []notes.Note {
-	chordNotes := halfDiminishedSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
-	return chordNotes
-}
-
-func halfDiminishedMinorNinth(note *notes.Note) []notes.Note {
-	chordNotes := halfDiminishedSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorNinth))
-	return chordNotes
-}
-
-func diminishedNinth(note *notes.Note) []notes.Note {
-	chordNotes := diminishedSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
-	return chordNotes
-}
-
-func diminishedMinorNinth(note *notes.Note) []notes.Note {
-	chordNotes := diminishedSeventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MinorNinth))
-	return chordNotes
-}
-
-func eleventh(note *notes.Note) []notes.Note {
-	chordNotes := dominantNinth(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
-	return chordNotes
-}
-
-func majorEleventh(note *notes.Note) []notes.Note {
-	chordNotes := majorNinth(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
-	return chordNotes
-}
-
-func minorMajorEleventh(note *notes.Note) []notes.Note {
-	chordNotes := minorMajorNinth(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
-	return chordNotes
-}
-
-func minorEleventh(note *notes.Note) []notes.Note {
-	chordNotes := minorNinth(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
-	return chordNotes
-}
-
-func augmentedMajorEleventh(note *notes.Note) []notes.Note {
-	chordNotes := augmentedMajorNinth(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
-	return chordNotes
-}
-
-func augmentedEleventh(note *notes.Note) []notes.Note {
-	chordNotes := augmentedDominantNinth(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
-	return chordNotes
-}
-
-func halfDiminishedEleventh(note *notes.Note) []notes.Note {
-	chordNotes := halfDiminishedNinth(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
-	return chordNotes
-}
-
-func diminishedEleventh(note *notes.Note) []notes.Note {
-	chordNotes := diminishedNinth(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
-	return chordNotes
-}
-
-func majorThirteenth(note *notes.Note) []notes.Note {
-	chordNotes := majorEleventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
-	return chordNotes
-}
-
-func thirteenth(note *notes.Note) []notes.Note {
-	chordNotes := eleventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
-	return chordNotes
-}
-
-func minorMajorThirteenth(note *notes.Note) []notes.Note {
-	chordNotes := minorMajorEleventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
-	return chordNotes
-}
-
-func minorThirteenth(note *notes.Note) []notes.Note {
-	chordNotes := minorEleventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
-	return chordNotes
-}
-
-func augmentedMajorThirteenth(note *notes.Note) []notes.Note {
-	chordNotes := augmentedMajorEleventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
-	return chordNotes
-}
-
-func augmentedThirteenth(note *notes.Note) []notes.Note {
-	chordNotes := augmentedEleventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
-	return chordNotes
-}
-
-func halfDiminishedThirteenth(note *notes.Note) []notes.Note {
-	chordNotes := halfDiminishedEleventh(note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
-	return chordNotes
-}
-
-func addNinth(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorNinth))
-	return chordNotes
-}
-
-func addEleventh(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectEleventh))
-	return chordNotes
-}
-
-func addThirteenth(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThird))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorThirteenth))
-	return chordNotes
-}
-
-func susSecond(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.MajorSecond))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	return chordNotes
-}
-
-func susFourth(note *notes.Note) []notes.Note {
-	chordNotes := make([]notes.Note, 0)
-	chordNotes = append(chordNotes, *note)
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFourth))
-	chordNotes = append(chordNotes, *note.Interval(intervals.PerfectFifth))
-	return chordNotes
+var SusFourth = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
 }
 
 func Parse(chord string) (*Chord, error) {
@@ -416,7 +188,7 @@ func Parse(chord string) (*Chord, error) {
 		return nil, err
 	}
 
-	var chordNotes []notes.Note
+	var structure []intervals.Interval
 	switch chordName {
 	case "":
 		fallthrough
@@ -424,7 +196,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "maj":
 		// major triad
-		chordNotes = majorTriad(n)
+		structure = MajorTriad
 
 	case "-":
 		fallthrough
@@ -432,7 +204,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "min":
 		// minor triad
-		chordNotes = minorTriad(n)
+		structure = MinorTriad
 
 	case "+":
 		fallthrough
@@ -442,7 +214,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "M+5":
 		// augmented triad
-		chordNotes = augmentedTriad(n)
+		structure = AugmentedTriad
 
 	case "o":
 		fallthrough
@@ -452,17 +224,17 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "mo5":
 		// diminished triad
-		chordNotes = diminishedTriad(n)
+		structure = DiminishedTriad
 
 	case "5":
 		// power chords, though not chords stricly-speaking
-		chordNotes = powerChords(n)
+		structure = PowerChord
 
 	case "M6":
 		fallthrough
 	case "6":
 		// sixth chords
-		chordNotes = sixth(n)
+		structure = Sixth
 
 	case "m6":
 		fallthrough
@@ -470,11 +242,11 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "min6":
 		// sixth chords
-		chordNotes = minorSixth(n)
+		structure = MinorSixth
 
 	case "7":
 		// dominant seventh
-		chordNotes = dominantSeventh(n)
+		structure = DominantSeventh
 
 	case "M7":
 		fallthrough
@@ -482,7 +254,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "maj7":
 		// major seventh
-		chordNotes = majorSeventh(n)
+		structure = MajorSeventh
 
 	case "mM7":
 		fallthrough
@@ -492,7 +264,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "minmaj7":
 		// minor-major seventh
-		chordNotes = minorMajorSeventh(n)
+		structure = MinorMajorSeventh
 
 	case "m7":
 		fallthrough
@@ -500,7 +272,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "min7":
 		// minor seventh
-		chordNotes = minorSeventh(n)
+		structure = MinorSeventh
 
 	case "+M7":
 		fallthrough
@@ -510,7 +282,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "M7+5":
 		// augmented-major seventh
-		chordNotes = augmentedMajorSeventh(n)
+		structure = AugmentedMajorSeventh
 
 	case "+7":
 		fallthrough
@@ -520,7 +292,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "7+5":
 		// augmented seventh
-		chordNotes = augmentedSeventh(n)
+		structure = AugmentedSeventh
 
 	case "ø":
 		fallthrough
@@ -536,33 +308,33 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "-7o5":
 		// half-diminished seventh
-		chordNotes = halfDiminishedSeventh(n)
+		structure = HalfDiminishedSeventh
 
 	case "o7":
 		fallthrough
 	case "dim7":
 		// diminished seventh
-		chordNotes = diminishedSeventh(n)
+		structure = DiminishedSeventh
 
 	case "7b5":
 		fallthrough
 	case "7dim5":
 		// dominant seventh flat five
-		chordNotes = dominantSeventhFlatFive(n)
+		structure = DominantSeventhFlatFive
 
 	case "M9":
 		fallthrough
 	case "maj9":
 		// major ninth
-		chordNotes = majorNinth(n)
+		structure = MajorNinth
 
 	case "9":
 		// dominant ninth
-		chordNotes = dominantNinth(n)
+		structure = DominantNinth
 
 	case "7b9":
 		// dominant minor ninth
-		chordNotes = dominantMinorNinth(n)
+		structure = DominantMinorNinth
 
 	case "mM9":
 		fallthrough
@@ -570,7 +342,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "minmaj9":
 		// minor-major ninth
-		chordNotes = minorMajorNinth(n)
+		structure = MinorMajorNinth
 
 	case "m9":
 		fallthrough
@@ -578,49 +350,49 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "min9":
 		// minor ninth
-		chordNotes = minorNinth(n)
+		structure = MinorNinth
 
 	case "+M9":
 		fallthrough
 	case "augmaj9":
 		// augmented major ninth
-		chordNotes = augmentedMajorNinth(n)
+		structure = AugmentedMajorNinth
 
 	case "9#5":
 		fallthrough
 	case "aug9":
 		// augmented dominant ninth
-		chordNotes = augmentedDominantNinth(n)
+		structure = AugmentedDominantNinth
 
 	case "ø9":
 		// half-diminished ninth
-		chordNotes = halfDiminishedNinth(n)
+		structure = HalfDiminishedNinth
 
 	case "øb9":
 		// half-diminished ninth
-		chordNotes = halfDiminishedMinorNinth(n)
+		structure = HalfDiminishedMinorNinth
 
 	case "o9":
 		fallthrough
 	case "dim9":
 		// diminished ninth
-		chordNotes = diminishedNinth(n)
+		structure = DiminishedNinth
 
 	case "ob9":
 		fallthrough
 	case "dimb9":
 		// diminished ninth
-		chordNotes = diminishedMinorNinth(n)
+		structure = DiminishedMinorNinth
 
 	case "11":
 		// eleventh
-		chordNotes = eleventh(n)
+		structure = Eleventh
 
 	case "M11":
 		fallthrough
 	case "maj11":
 		// major eleventh
-		chordNotes = majorEleventh(n)
+		structure = MajorEleventh
 
 	case "mM11":
 		fallthrough
@@ -628,7 +400,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "minmaj11":
 		// minor-major eleventh
-		chordNotes = minorMajorEleventh(n)
+		structure = MinorMajorEleventh
 
 	case "m11":
 		fallthrough
@@ -636,39 +408,39 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "min11":
 		// minor eleventh
-		chordNotes = minorEleventh(n)
+		structure = MinorEleventh
 
 	case "+M11":
 		fallthrough
 	case "augmaj11":
 		// augmented major eleventh
-		chordNotes = augmentedMajorEleventh(n)
+		structure = AugmentedMajorEleventh
 
 	case "11#5":
 		fallthrough
 	case "aug11":
 		// augmented eleventh
-		chordNotes = augmentedEleventh(n)
+		structure = AugmentedEleventh
 
 	case "ø11":
 		// half-diminished eleventh
-		chordNotes = halfDiminishedEleventh(n)
+		structure = HalfDiminishedEleventh
 
 	case "o11":
 		fallthrough
 	case "dim11":
 		// diminished ninth
-		chordNotes = diminishedEleventh(n)
+		structure = DiminishedEleventh
 
 	case "M13":
 		fallthrough
 	case "maj13":
 		// major thirteenth
-		chordNotes = majorThirteenth(n)
+		structure = MajorThirteenth
 
 	case "13":
 		// thirteenth
-		chordNotes = thirteenth(n)
+		structure = Thirteenth
 
 	case "mM13":
 		fallthrough
@@ -676,7 +448,7 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "minmaj13":
 		// minor-major thirteenth
-		chordNotes = minorMajorThirteenth(n)
+		structure = MinorMajorThirteenth
 
 	case "m13":
 		fallthrough
@@ -684,62 +456,66 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "min13":
 		// minor-major thirteenth
-		chordNotes = minorThirteenth(n)
+		structure = MinorThirteenth
 
 	case "+M13":
 		fallthrough
 	case "augmajM13":
 		// augmented major thirteenth
-		chordNotes = augmentedMajorThirteenth(n)
+		structure = AugmentedMajorThirteenth
 
 	case "13#5":
 		fallthrough
 	case "aug13":
 		// augmented thirteenth
-		chordNotes = augmentedThirteenth(n)
+		structure = AugmentedThirteenth
 
 	case "ø13":
 		// half-diminished thirteenth
-		chordNotes = halfDiminishedThirteenth(n)
+		structure = HalfDiminishedThirteenth
 
 		// TODO: add slash chord inversions
 
 	case "add9":
 		fallthrough
 	case "+9":
-		chordNotes = addNinth(n)
+		structure = AddNinth
 
 	case "add11":
 		fallthrough
 	case "+11":
-		chordNotes = addEleventh(n)
+		structure = AddEleventh
 
 	case "add13":
 		fallthrough
 	case "+13":
-		chordNotes = addThirteenth(n)
+		structure = AddThirteenth
 
 	case "sus2":
-		chordNotes = susSecond(n)
+		structure = SusSecond
 
 	case "sus4":
-		chordNotes = susFourth(n)
+		structure = SusFourth
 
 	default:
 		return nil, fmt.Errorf("unknown chord name: %s", chordName)
 	}
 
 	return &Chord{
-		name:  chordName,
-		notes: chordNotes,
+		root:      *n,
+		structure: structure,
 	}, nil
 }
 
 func (chord *Chord) Name() string {
 	// TODO: construct chord name by analyzing intervals
-	return chord.notes[0].Name()
+	return chord.root.Name()
 }
 
 func (chord *Chord) Notes() []notes.Note {
-	return chord.notes
+	ret := make([]notes.Note, 0)
+	for _, interval := range chord.structure {
+		ret = append(ret, *chord.root.Interval(interval))
+	}
+	return ret
 }

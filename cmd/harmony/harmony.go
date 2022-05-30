@@ -57,7 +57,13 @@ func main() {
 			// plug here chord construction for this degree
 		}
 
+		fmt.Println("Triads:")
 		for _, c := range s.Triads() {
+			fmt.Println("  ", c.Name())
+		}
+
+		fmt.Println("Sevenths:")
+		for _, c := range s.Sevenths() {
 			fmt.Println("  ", c.Name())
 		}
 

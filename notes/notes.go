@@ -41,9 +41,10 @@ func Parse(note string) (*Note, error) {
 
 	var octave uint8
 	var accidentals string
-	indexOctave := strings.Index(note, "^")
-	if indexOctave != -1 {
-		value, err := strconv.ParseUint(note[indexOctave+1:], 10, 8)
+
+	r := rune(note[len(note)-1])
+	if r >= '0' && r <= '9' {
+		value, err := strconv.ParseUint(note[len(note)-1:], 10, 8)
 		if err != nil {
 			return nil, err
 		}
@@ -51,7 +52,7 @@ func Parse(note string) (*Note, error) {
 			return nil, fmt.Errorf("bad octave (%d): should be 0 <= n <= 8)", value)
 		}
 		octave = uint8(value)
-		accidentals = note[1:indexOctave]
+		accidentals = note[1 : len(note)-1]
 	} else {
 		octave = uint8(4)
 		accidentals = note[1:]

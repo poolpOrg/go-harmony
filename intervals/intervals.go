@@ -46,8 +46,8 @@ func New(pos uint, semitone uint) Interval {
 
 }
 
-func (interval *Interval) Name() string {
-	switch *interval {
+func (interval Interval) Name() string {
+	switch interval {
 	case PerfectUnison:
 		return "1"
 	case AugmentedUnison:

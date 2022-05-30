@@ -1,7 +1,10 @@
 package instruments
 
 import (
+	"fmt"
+
 	"github.com/poolpOrg/go-harmony/chords"
+	"github.com/poolpOrg/go-harmony/intervals"
 	"github.com/poolpOrg/go-harmony/notes"
 	"github.com/poolpOrg/go-harmony/scales"
 	"github.com/poolpOrg/go-harmony/tunings"
@@ -47,4 +50,30 @@ func (instrument *Instrument) Scale(name string) (scales.Scale, error) {
 		return scales.Scale{}, err
 	}
 	return *scale, nil
+}
+
+func (instrument *Instrument) Distances(noteNames ...string) ([]intervals.Interval, error) {
+	noteSequence := make([]notes.Note, 0)
+	for _, noteName := range noteNames {
+		note, err := notes.Parse(noteName)
+		if err != nil {
+			return nil, err
+		}
+		noteSequence = append(noteSequence, *note)
+	}
+	fmt.Println(noteSequence)
+
+	intervalsSequence := make([]intervals.Interval, 0)
+	for offset, noteName := range noteNames {
+		note, err := notes.Parse(noteName)
+		if err != nil {
+			return nil, err
+		}
+		if offset == 0 {
+			intervalsSequence = append(intervalsSequence, intervals.PerfectUnison)
+		} else {
+			intervalsSequence = append(intervalsSequence, noteSequence[offset-1].Distance(*note))
+		}
+	}
+	return intervalsSequence, nil
 }

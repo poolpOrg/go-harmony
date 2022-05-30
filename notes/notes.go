@@ -151,6 +151,20 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 	}
 }
 
+func (note *Note) Distance(target Note) intervals.Interval {
+	targetPosition := target.Position()
+	if targetPosition < note.Position() {
+		targetPosition += 7
+	}
+
+	targetSemitone := target.Semitone()
+	if targetSemitone < note.Semitone() {
+		targetSemitone += 12
+	}
+
+	return intervals.New(targetPosition-note.Position(), targetSemitone-note.Semitone())
+}
+
 func (note *Note) Position() uint {
 	return uint(note.pos)
 }

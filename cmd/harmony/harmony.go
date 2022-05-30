@@ -15,11 +15,13 @@ func main() {
 	var opt_chord string
 	var opt_scale string
 	var opt_notes string
+	var opt_distance string
 
 	flag.StringVar(&opt_note, "note", "", "note")
 	flag.StringVar(&opt_chord, "chord", "", "chord")
 	flag.StringVar(&opt_scale, "scale", "", "scale")
 	flag.StringVar(&opt_notes, "notes", "", "notes")
+	flag.StringVar(&opt_distance, "distance", "", "distance")
 
 	flag.Parse()
 
@@ -40,7 +42,7 @@ func main() {
 		}
 		fmt.Println(c.Name())
 		for _, n := range c.Notes() {
-			fmt.Println("  ", n.Name(), n.Frequency())
+			fmt.Printf("%8s: %2s %.02f\n", c.Notes()[0].Distance(n).Name(), n.Name(), n.Frequency())
 		}
 	}
 
@@ -66,4 +68,15 @@ func main() {
 			fmt.Println("  ", n.Name(), n.Frequency())
 		}
 	}
+
+	if opt_distance != "" {
+		c, err := instrument.Distances(strings.Split(opt_distance, ",")...)
+		if err != nil {
+			log.Fatal(err)
+		}
+		for _, n := range c {
+			fmt.Println("  ", n.Name())
+		}
+	}
+
 }

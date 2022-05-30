@@ -702,7 +702,7 @@ func FromNotes(notes []notes.Note) Chord {
 			targetSemitone += 12
 		}
 
-		structure = append(structure, intervals.New(targetPosition, targetSemitone))
+		structure = append(structure, intervals.New(targetPosition-root.Position(), targetSemitone-root.Semitone()))
 	}
 
 	return Chord{

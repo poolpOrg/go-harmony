@@ -677,6 +677,9 @@ func Parse(chord string) (*Chord, error) {
 	}
 
 	if inversion != "" {
+		if inversion == n.Name() {
+			return nil, fmt.Errorf("inversion note %s is root of chord: %s", inversion, c.Name())
+		}
 		n2, err := notes.Parse(inversion)
 		if err != nil {
 			return nil, err
@@ -689,7 +692,7 @@ func Parse(chord string) (*Chord, error) {
 			}
 		}
 		if !found {
-			return nil, fmt.Errorf("inversion note %s not found in chord: %s", inversion, chordName)
+			return nil, fmt.Errorf("inversion note %s not found in chord: %s", inversion, c.Name())
 		}
 	}
 

@@ -42,7 +42,7 @@ func main() {
 		}
 		fmt.Println(c.Name())
 		for _, n := range c.Notes() {
-			fmt.Printf("%8s: %2s %.02f\n", c.Notes()[0].Distance(n).Name(), n.Name(), n.Frequency())
+			fmt.Printf("%8s: %3s %.02f\n", c.Root().Distance(n).Name(), n.Name(), n.Frequency())
 		}
 	}
 

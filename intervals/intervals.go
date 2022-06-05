@@ -115,10 +115,10 @@ func (interval Interval) Name() string {
 	}
 }
 
-func (interval *Interval) Position() uint {
+func (interval Interval) Position() uint {
 	return interval.pos
 }
 
-func (interval *Interval) Semitone() uint {
+func (interval Interval) Semitone() uint {
 	return interval.semitone
 }

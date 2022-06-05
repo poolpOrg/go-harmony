@@ -2,6 +2,7 @@ package chords
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/poolpOrg/go-harmony/intervals"
 	"github.com/poolpOrg/go-harmony/notes"
@@ -12,6 +13,7 @@ type Structure []intervals.Interval
 type chord struct {
 	root      notes.Note
 	structure Structure
+	bass      intervals.Interval
 }
 type Chord chord
 
@@ -348,6 +350,13 @@ func Parse(chord string) (*Chord, error) {
 		return nil, err
 	}
 
+	inversion := ""
+	inversionIndex := strings.Index(chordName, "/")
+	if inversionIndex != -1 {
+		inversion = chordName[inversionIndex+1:]
+		chordName = chordName[:inversionIndex]
+	}
+
 	var structure Structure
 	switch chordName {
 	case "":
@@ -661,10 +670,30 @@ func Parse(chord string) (*Chord, error) {
 		return nil, fmt.Errorf("unknown chord name: %s", chordName)
 	}
 
-	return &Chord{
+	c := &Chord{
 		root:      *n,
 		structure: structure,
-	}, nil
+		bass:      structure[0],
+	}
+
+	if inversion != "" {
+		n2, err := notes.Parse(inversion)
+		if err != nil {
+			return nil, err
+		}
+		found := false
+		for offset, interval := range c.structure {
+			if *n.Interval(interval) == *n2 {
+				c.bass = structure[offset]
+				found = true
+			}
+		}
+		if !found {
+			return nil, fmt.Errorf("inversion note %s not found in chord: %s", inversion, chordName)
+		}
+	}
+
+	return c, nil
 }
 
 func (chord *Chord) Name() string {
@@ -675,13 +704,25 @@ func (chord *Chord) Name() string {
 		panic("unknown structure name")
 	}
 	name += structureName
+	if chord.bass != intervals.PerfectUnison {
+		name += "/" + chord.root.Interval(chord.bass).Name()
+	}
 	return name
+}
+
+func (chord *Chord) Root() *notes.Note {
+	return &chord.root
 }
 
 func (chord *Chord) Notes() []notes.Note {
 	ret := make([]notes.Note, 0)
+	if chord.bass != intervals.PerfectUnison {
+		ret = append(ret, *chord.root.Interval(chord.bass))
+	}
 	for _, interval := range chord.structure {
-		ret = append(ret, *chord.root.Interval(interval))
+		if chord.bass != interval {
+			ret = append(ret, *chord.root.Interval(interval))
+		}
 	}
 	return ret
 }

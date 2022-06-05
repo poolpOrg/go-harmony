@@ -716,9 +716,7 @@ func (chord *Chord) Root() *notes.Note {
 
 func (chord *Chord) Notes() []notes.Note {
 	ret := make([]notes.Note, 0)
-	if chord.bass != intervals.PerfectUnison {
-		ret = append(ret, *chord.root.Interval(chord.bass))
-	}
+	ret = append(ret, *chord.root.Interval(chord.bass))
 	for _, interval := range chord.structure {
 		if chord.bass != interval {
 			ret = append(ret, *chord.root.Interval(interval))

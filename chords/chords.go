@@ -684,9 +684,10 @@ func Parse(chord string) (*Chord, error) {
 		if err != nil {
 			return nil, err
 		}
+
 		found := false
 		for offset, interval := range c.structure {
-			if *n.Interval(interval) == *n2 {
+			if n.Interval(interval).Name() == n2.Name() {
 				c.bass = structure[offset]
 				found = true
 			}

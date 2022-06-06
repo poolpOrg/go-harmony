@@ -186,3 +186,7 @@ func (note *Note) Frequency() float64 {
 	}
 	return tuning.Frequency(uint(semitone), uint(note.octave))
 }
+
+func (note *Note) Inharmonic(target Note) bool {
+	return note.semitone%12 == target.semitone%12
+}

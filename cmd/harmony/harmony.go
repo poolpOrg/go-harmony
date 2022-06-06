@@ -22,7 +22,6 @@ func main() {
 	flag.StringVar(&opt_scale, "scale", "", "scale")
 	flag.StringVar(&opt_notes, "notes", "", "notes")
 	flag.StringVar(&opt_distance, "distance", "", "distance")
-
 	flag.Parse()
 
 	instrument := instruments.NewInstrument(tunings.A440)
@@ -89,5 +88,4 @@ func main() {
 			fmt.Println("  ", n.Name())
 		}
 	}
-
 }

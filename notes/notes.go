@@ -195,3 +195,25 @@ func (note *Note) Inharmonic(target Note) bool {
 func (note *Note) Octave() uint8 {
 	return note.octave
 }
+
+func (note *Note) Previous() *Note {
+	n := *note.Interval(intervals.MajorSeventh)
+	return &n
+}
+
+func (note *Note) Next() *Note {
+	n := *note.Interval(intervals.MinorSecond)
+	return &n
+}
+
+func (note *Note) Lower() *Note {
+	n := *note
+	n.accidentals -= 1
+	return &n
+}
+
+func (note *Note) Raise() *Note {
+	n := *note
+	n.accidentals += 1
+	return &n
+}

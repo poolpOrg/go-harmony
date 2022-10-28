@@ -33,7 +33,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(n.Name(), n.Frequency(), n.Position(), n.Semitone())
+		fmt.Println(n.Name(), n.Frequency(), "=", n.Previous().Raise().Name(), n.Next().Lower().Name())
 	}
 
 	if opt_chord != "" {
@@ -128,8 +128,9 @@ func main() {
 				offset = 6
 				break
 			}
-			fmt.Println("\t", s.Triads()[offset].Name())
+			fmt.Println(prog, "\t", s.Triads()[offset].Name())
 		}
+		fmt.Println()
 
 		fmt.Println("Sevenths:")
 		for _, prog := range strings.Split(progression, ",") {
@@ -157,8 +158,8 @@ func main() {
 				offset = 6
 				break
 			}
-			fmt.Println("\t", s.Sevenths()[offset].Name())
+			fmt.Println(prog, "\t", s.Sevenths()[offset].Name())
 		}
-
 	}
+
 }

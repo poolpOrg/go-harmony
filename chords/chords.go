@@ -471,6 +471,8 @@ func Parse(chord string) (*Chord, error) {
 		fallthrough
 	case "m7b5":
 		fallthrough
+	case "m7(b5)":
+		fallthrough
 	case "m7o5":
 		fallthrough
 	case "-7b5":

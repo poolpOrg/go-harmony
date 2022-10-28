@@ -16,12 +16,14 @@ func main() {
 	var opt_scale string
 	var opt_notes string
 	var opt_distance string
+	var opt_progression string
 
 	flag.StringVar(&opt_note, "note", "", "note")
 	flag.StringVar(&opt_chord, "chord", "", "chord")
 	flag.StringVar(&opt_scale, "scale", "", "scale")
 	flag.StringVar(&opt_notes, "notes", "", "notes")
 	flag.StringVar(&opt_distance, "distance", "", "distance")
+	flag.StringVar(&opt_progression, "progression", "", "progression")
 	flag.Parse()
 
 	instrument := instruments.NewInstrument(tunings.A440)
@@ -87,5 +89,76 @@ func main() {
 		for _, n := range c {
 			fmt.Println("  ", n.Name())
 		}
+	}
+
+	if opt_progression != "" {
+		tmp := strings.Split(opt_progression, ":")
+
+		chord := tmp[0]
+		progression := tmp[1]
+
+		s, err := instrument.Scale(chord)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		fmt.Println("Triads:")
+		for _, prog := range strings.Split(progression, ",") {
+			offset := 0
+			switch prog {
+			case "I":
+				offset = 0
+				break
+			case "II":
+				offset = 1
+				break
+			case "III":
+				offset = 2
+				break
+			case "IV":
+				offset = 3
+				break
+			case "V":
+				offset = 4
+				break
+			case "VI":
+				offset = 5
+				break
+			case "VII":
+				offset = 6
+				break
+			}
+			fmt.Println("\t", s.Triads()[offset].Name())
+		}
+
+		fmt.Println("Sevenths:")
+		for _, prog := range strings.Split(progression, ",") {
+			offset := 0
+			switch prog {
+			case "I":
+				offset = 0
+				break
+			case "II":
+				offset = 1
+				break
+			case "III":
+				offset = 2
+				break
+			case "IV":
+				offset = 3
+				break
+			case "V":
+				offset = 4
+				break
+			case "VI":
+				offset = 5
+				break
+			case "VII":
+				offset = 6
+				break
+			}
+			fmt.Println("\t", s.Sevenths()[offset].Name())
+		}
+
 	}
 }

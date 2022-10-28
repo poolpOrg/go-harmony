@@ -1,8 +1,6 @@
 package instruments
 
 import (
-	"fmt"
-
 	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/intervals"
 	"github.com/poolpOrg/go-harmony/notes"
@@ -61,7 +59,6 @@ func (instrument *Instrument) Distances(noteNames ...string) ([]intervals.Interv
 		}
 		noteSequence = append(noteSequence, *note)
 	}
-	fmt.Println(noteSequence)
 
 	intervalsSequence := make([]intervals.Interval, 0)
 	for offset, noteName := range noteNames {

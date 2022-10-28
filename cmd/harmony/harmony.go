@@ -31,7 +31,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(n.Name(), n.Frequency())
+		fmt.Println(n.Name(), n.Frequency(), n.Position(), n.Semitone())
 	}
 
 	if opt_chord != "" {

@@ -127,9 +127,6 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 
 	target := naturals[(note.pos+int(interval.Position()))%len(naturals)]
 	sourceSemitone := note.semitone + note.accidentals
-	if sourceSemitone < 0 {
-		sourceSemitone = (12 + sourceSemitone) % 12
-	}
 
 	targetOctave := note.octave + uint8(interval.Semitone()/12)
 	targetSemitone := target.semitone + note.accidentals
@@ -165,30 +162,34 @@ func (note *Note) Distance(target Note) intervals.Interval {
 	targetSemitone -= note.Semitone()
 
 	targetPosition += (uint(target.octave) - uint(note.octave)) * 7
-	targetSemitone += (uint(target.octave) - uint(note.octave)) * 12
+	targetSemitone += (int(target.octave) - int(note.octave)) * 12
 
-	return intervals.New(targetPosition, targetSemitone)
+	return intervals.New(targetPosition, uint(targetSemitone))
 }
 
 func (note *Note) Position() uint {
 	return uint(note.pos)
 }
 
-func (note *Note) Semitone() uint {
-	return uint(note.semitone + note.accidentals)
+func (note *Note) Semitone() int {
+	return note.semitone + note.accidentals
 }
 
 func (note *Note) Frequency() float64 {
 	tuning := tunings.A440
-	semitone := note.semitone + note.accidentals
+	octave := note.octave
+	semitone := note.Semitone()
 	if semitone < 0 {
 		semitone = (12 + semitone) % 12
+		if octave != 0 {
+			octave -= 1
+		}
 	}
-	return tuning.Frequency(uint(semitone), uint(note.octave))
+	return tuning.Frequency(uint(semitone), uint(octave))
 }
 
 func (note *Note) Inharmonic(target Note) bool {
-	return note.semitone%12 == target.semitone%12
+	return note.Semitone()%12 == target.Semitone()%12
 }
 
 func (note *Note) Octave() uint8 {

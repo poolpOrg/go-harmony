@@ -128,14 +128,14 @@ var (
 		intervals.PerfectUnison,
 		intervals.MajorSecond,
 		intervals.PerfectFifth,
-		intervals.MajorSeventh,
+		intervals.MinorSeventh,
 	}
 
 	DominantSeventhSus4 Structure = Structure{
 		intervals.PerfectUnison,
 		intervals.PerfectFourth,
 		intervals.PerfectFifth,
-		intervals.MajorSeventh,
+		intervals.MinorSeventh,
 	}
 
 	MajorNinth               Structure = append(MajorSeventh, intervals.MajorNinth)

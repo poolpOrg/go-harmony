@@ -138,6 +138,20 @@ var (
 		intervals.MinorSeventh,
 	}
 
+	MajorSeventhSus2 Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorSecond,
+		intervals.PerfectFifth,
+		intervals.MajorSeventh,
+	}
+
+	MajorSeventhSus4 Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.PerfectFourth,
+		intervals.PerfectFifth,
+		intervals.MajorSeventh,
+	}
+
 	MajorNinth               Structure = append(MajorSeventh, intervals.MajorNinth)
 	DominantNinth            Structure = append(DominantSeventh, intervals.MajorNinth)
 	DominantMinorNinth       Structure = append(DominantSeventh, intervals.MinorNinth)
@@ -251,6 +265,13 @@ func (structure Structure) Name() string {
 	}
 	if structure.Equals(DominantSeventhSus4) {
 		return "7sus4"
+	}
+
+	if structure.Equals(MajorSeventhSus2) {
+		return "maj7sus2"
+	}
+	if structure.Equals(MajorSeventhSus4) {
+		return "maj7sus4"
 	}
 
 	if structure.Equals(MajorNinth) {
@@ -520,6 +541,14 @@ func Parse(chord string) (*Chord, error) {
 	case "7sus4":
 		// dominant seventh sus 4
 		structure = DominantSeventhSus4
+
+	case "maj7sus2":
+		// dominant seventh sus 2
+		structure = MajorSeventhSus2
+
+	case "maj7sus4":
+		// dominant seventh sus 4
+		structure = MajorSeventhSus4
 
 	case "M9":
 		fallthrough

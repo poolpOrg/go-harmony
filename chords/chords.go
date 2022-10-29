@@ -124,28 +124,28 @@ var (
 		intervals.MinorSeventh,
 	}
 
-	DominantSeventhSus2 Structure = Structure{
+	DominantSeventhSusSecond Structure = Structure{
 		intervals.PerfectUnison,
 		intervals.MajorSecond,
 		intervals.PerfectFifth,
 		intervals.MinorSeventh,
 	}
 
-	DominantSeventhSus4 Structure = Structure{
+	DominantSeventhSusFourth Structure = Structure{
 		intervals.PerfectUnison,
 		intervals.PerfectFourth,
 		intervals.PerfectFifth,
 		intervals.MinorSeventh,
 	}
 
-	MajorSeventhSus2 Structure = Structure{
+	MajorSeventhSusSecond Structure = Structure{
 		intervals.PerfectUnison,
 		intervals.MajorSecond,
 		intervals.PerfectFifth,
 		intervals.MajorSeventh,
 	}
 
-	MajorSeventhSus4 Structure = Structure{
+	MajorSeventhSusFourth Structure = Structure{
 		intervals.PerfectUnison,
 		intervals.PerfectFourth,
 		intervals.PerfectFifth,
@@ -194,6 +194,13 @@ var (
 
 	SusFourth Structure = Structure{
 		intervals.PerfectUnison,
+		intervals.PerfectFourth,
+		intervals.PerfectFifth,
+	}
+
+	SusSecondSusFourth Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorSecond,
 		intervals.PerfectFourth,
 		intervals.PerfectFifth,
 	}
@@ -260,17 +267,17 @@ func (structure Structure) Name() string {
 	if structure.Equals(DominantSeventhFlatFive) {
 		return "7dim5"
 	}
-	if structure.Equals(DominantSeventhSus2) {
+	if structure.Equals(DominantSeventhSusSecond) {
 		return "7sus2"
 	}
-	if structure.Equals(DominantSeventhSus4) {
+	if structure.Equals(DominantSeventhSusFourth) {
 		return "7sus4"
 	}
 
-	if structure.Equals(MajorSeventhSus2) {
+	if structure.Equals(MajorSeventhSusSecond) {
 		return "maj7sus2"
 	}
-	if structure.Equals(MajorSeventhSus4) {
+	if structure.Equals(MajorSeventhSusFourth) {
 		return "maj7sus4"
 	}
 
@@ -364,6 +371,9 @@ func (structure Structure) Name() string {
 	}
 	if structure.Equals(SusFourth) {
 		return "sus4"
+	}
+	if structure.Equals(SusSecondSusFourth) {
+		return "sus2sus4"
 	}
 
 	return ""
@@ -536,19 +546,19 @@ func Parse(chord string) (*Chord, error) {
 
 	case "7sus2":
 		// dominant seventh sus 2
-		structure = DominantSeventhSus2
+		structure = DominantSeventhSusSecond
 
 	case "7sus4":
 		// dominant seventh sus 4
-		structure = DominantSeventhSus4
+		structure = DominantSeventhSusFourth
 
 	case "maj7sus2":
 		// dominant seventh sus 2
-		structure = MajorSeventhSus2
+		structure = MajorSeventhSusSecond
 
 	case "maj7sus4":
 		// dominant seventh sus 4
-		structure = MajorSeventhSus4
+		structure = MajorSeventhSusFourth
 
 	case "M9":
 		fallthrough
@@ -724,6 +734,9 @@ func Parse(chord string) (*Chord, error) {
 
 	case "sus4":
 		structure = SusFourth
+
+	case "sus2sus4":
+		structure = SusSecondSusFourth
 
 	default:
 		return nil, fmt.Errorf("unknown chord name: %s", chordName)

@@ -124,6 +124,20 @@ var (
 		intervals.MinorSeventh,
 	}
 
+	DominantSeventhSus2 Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorSecond,
+		intervals.PerfectFifth,
+		intervals.MajorSeventh,
+	}
+
+	DominantSeventhSus4 Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.PerfectFourth,
+		intervals.PerfectFifth,
+		intervals.MajorSeventh,
+	}
+
 	MajorNinth               Structure = append(MajorSeventh, intervals.MajorNinth)
 	DominantNinth            Structure = append(DominantSeventh, intervals.MajorNinth)
 	DominantMinorNinth       Structure = append(DominantSeventh, intervals.MinorNinth)
@@ -231,6 +245,12 @@ func (structure Structure) Name() string {
 	}
 	if structure.Equals(DominantSeventhFlatFive) {
 		return "7dim5"
+	}
+	if structure.Equals(DominantSeventhSus2) {
+		return "7sus2"
+	}
+	if structure.Equals(DominantSeventhSus4) {
+		return "7sus4"
 	}
 
 	if structure.Equals(MajorNinth) {
@@ -493,6 +513,14 @@ func Parse(chord string) (*Chord, error) {
 		// dominant seventh flat five
 		structure = DominantSeventhFlatFive
 
+	case "7sus2":
+		// dominant seventh sus 2
+		structure = DominantSeventhSus2
+
+	case "7sus4":
+		// dominant seventh sus 4
+		structure = DominantSeventhSus4
+
 	case "M9":
 		fallthrough
 	case "maj9":
@@ -725,7 +753,13 @@ func (chord *Chord) Notes() []notes.Note {
 	ret = append(ret, *chord.root.Interval(chord.bass))
 	for _, interval := range chord.structure {
 		if chord.bass != interval {
-			ret = append(ret, *chord.root.Interval(interval))
+			n := *chord.root.Interval(interval)
+			//XXX - need to fix distance computation to account for octave boundaries first
+			//if chord.root.Name() == "B" {
+			//	n = *n.Interval(intervals.Octave)
+			//	fmt.Println(n)
+			//}
+			ret = append(ret, n)
 		}
 	}
 	return ret

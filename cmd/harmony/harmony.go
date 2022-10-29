@@ -33,7 +33,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(n.Name(), n.Frequency(), "=", n.Previous().Raise().Name(), n.Next().Lower().Name())
+		fmt.Println(n.Name(), n.Octave(), n.Frequency())
 	}
 
 	if opt_chord != "" {
@@ -43,7 +43,7 @@ func main() {
 		}
 		fmt.Println(c.Name())
 		for _, n := range c.Notes() {
-			fmt.Printf("%8s: %3s %.02f\n", c.Root().Distance(n).Name(), n.Name(), n.Frequency())
+			fmt.Printf("%8s: %3s %d %.02f\n", c.Root().Distance(n).Name(), n.Name(), n.Octave(), n.Frequency())
 		}
 	}
 

@@ -198,11 +198,17 @@ func (note *Note) Octave() uint8 {
 
 func (note *Note) Previous() *Note {
 	n := *note.Interval(intervals.MajorSeventh)
+	if note.name == "C" {
+		n.octave -= 1
+	}
 	return &n
 }
 
 func (note *Note) Next() *Note {
 	n := *note.Interval(intervals.MinorSecond)
+	if note.name == "B" {
+		n.octave += 1
+	}
 	return &n
 }
 

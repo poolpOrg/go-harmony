@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/poolpOrg/go-harmony/instruments"
+	"github.com/poolpOrg/go-harmony/scales"
 	"github.com/poolpOrg/go-harmony/tunings"
 )
 
@@ -44,6 +45,30 @@ func main() {
 		fmt.Println(c.Name())
 		for _, n := range c.Notes() {
 			fmt.Printf("%8s: %3s %d %.02f\n", c.Root().Distance(n).Name(), n.Name(), n.Octave(), n.Frequency())
+		}
+
+		scales := scales.FromChord(c)
+		for _, scale := range scales {
+			for _, scaleNote := range scale.Notes() {
+				found := false
+				for _, chordNote := range c.Notes() {
+					//\033[1;36m%s\033[0m"
+					if chordNote.Inharmonic(scaleNote) {
+						fmt.Printf("\033[1;31m%s\033[0m\t", chordNote.Name())
+						found = true
+						break
+					}
+				}
+				if !found {
+					fmt.Printf("%s\t", scaleNote.Name())
+				}
+			}
+			if len(scale.Notes()) < 8 {
+				for i := 0; i < 8-len(scale.Notes()); i++ {
+					fmt.Printf("\t")
+				}
+			}
+			fmt.Println(scale.Name())
 		}
 	}
 

@@ -212,6 +212,41 @@ func (note *Note) Next() *Note {
 	return &n
 }
 
+func (note *Note) NextChromatic() *Note {
+	var err error
+	var n *Note
+	switch note.Name() {
+	case "C":
+		n, err = Parse("C#")
+	case "C#":
+		n, err = Parse("D")
+	case "D":
+		n, err = Parse("D#")
+	case "D#":
+		n, err = Parse("E")
+	case "E":
+		n, err = Parse("F")
+	case "F":
+		n, err = Parse("F#")
+	case "F#":
+		n, err = Parse("G")
+	case "G":
+		n, err = Parse("G#")
+	case "G#":
+		n, err = Parse("A")
+	case "A":
+		n, err = Parse("A#")
+	case "A#":
+		n, err = Parse("B")
+	case "B":
+		n, err = Parse("C")
+	}
+	if err != nil {
+		panic(err)
+	}
+	return n
+}
+
 func (note *Note) Lower() *Note {
 	n := *note
 	n.accidentals -= 1

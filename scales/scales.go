@@ -188,6 +188,24 @@ var MinorPentatonic = []intervals.Interval{
 	intervals.Octave,
 }
 
+var scales = map[string][]intervals.Interval{
+	"ionian":              Ionian,
+	"dorian":              Dorian,
+	"phyrigian":           Phrygian,
+	"lydian":              Lydian,
+	"mixolydian":          Mixolydian,
+	"aeolian":             Aeolian,
+	"locrian":             Locrian,
+	"harmonic minor":      HarmonicMinor,
+	"melodic minor":       MelodicMinor,
+	"jazz minor":          JazzMinor,
+	"major pentatonic":    MajorPentatonic,
+	"egyptian pentatonic": EgyptianPentatonic,
+	"blues minor":         BluesMinor,
+	"blues major":         BluesMajor,
+	"minor pentatonic":    MinorPentatonic,
+}
+
 func Parse(scale string) (*Scale, error) {
 	if len(scale) == 0 {
 		return nil, fmt.Errorf("empty scale")
@@ -292,7 +310,20 @@ func Parse(scale string) (*Scale, error) {
 }
 
 func (scale *Scale) Name() string {
-	return scale.root.Name()
+	for name, structure := range scales {
+		if len(structure) != len(scale.structure) {
+			continue
+		}
+
+		for i := 0; i < len(structure); i++ {
+			if structure[i] != scale.structure[i] {
+				continue
+			}
+		}
+		return name
+	}
+
+	return ""
 }
 
 func (scale *Scale) Notes() []notes.Note {
@@ -339,4 +370,36 @@ func (scale *Scale) Seventh(degree Degree) chords.Chord {
 	// XXX - fix for melodic minor
 	scaleNotes := scale.Notes()[0 : len(scale.Notes())-1]
 	return chords.FromNotes([]notes.Note{scaleNotes[degree], scaleNotes[(int(degree)+2)%len(scaleNotes)], scaleNotes[(int(degree)+4)%len(scaleNotes)], scaleNotes[(int(degree)+6)%len(scaleNotes)]})
+}
+
+func FromChord(chord chords.Chord) []Scale {
+	ret := make([]Scale, 0)
+	for scaleName := range scales {
+		root := *chord.Root()
+
+		scale := &Scale{
+			root:      root,
+			structure: scales[scaleName],
+		}
+
+		count := 0
+		for _, chordNote := range chord.Notes() {
+			found := false
+			for _, scaleNote := range scale.Notes() {
+				if chordNote.Inharmonic(scaleNote) {
+					found = true
+					count++
+					break
+				}
+			}
+			if !found {
+				break
+			}
+		}
+
+		if count > 1 {
+			ret = append(ret, *scale)
+		}
+	}
+	return ret
 }

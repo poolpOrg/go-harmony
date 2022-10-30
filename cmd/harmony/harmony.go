@@ -85,15 +85,53 @@ func main() {
 			fmt.Println("  ", n.Name(), n.Frequency())
 			// plug here chord construction for this degree
 		}
+		fmt.Println()
 
 		fmt.Println("Triads:")
-		for _, c := range s.Triads() {
-			fmt.Println("  ", c.Name())
+		for degree, c := range s.Triads() {
+			switch degree {
+			case int(scales.Tonic):
+				fallthrough
+			case int(scales.Mediant):
+				fallthrough
+			case int(scales.Submediant):
+				fmt.Printf("\tT  ")
+
+			case int(scales.Supertonic):
+				fallthrough
+			case int(scales.Subdominant):
+				fmt.Printf("\tSD ")
+
+			case int(scales.Dominant):
+				fallthrough
+			case int(scales.LeadingTone):
+				fmt.Printf("\tD  ")
+			}
+			fmt.Println(c.Name())
 		}
+		fmt.Println()
 
 		fmt.Println("Sevenths:")
-		for _, c := range s.Sevenths() {
-			fmt.Println("  ", c.Name())
+		for degree, c := range s.Sevenths() {
+			switch degree {
+			case int(scales.Tonic):
+				fallthrough
+			case int(scales.Mediant):
+				fallthrough
+			case int(scales.Submediant):
+				fmt.Printf("\tT  ")
+
+			case int(scales.Supertonic):
+				fallthrough
+			case int(scales.Subdominant):
+				fmt.Printf("\tSD ")
+
+			case int(scales.Dominant):
+				fallthrough
+			case int(scales.LeadingTone):
+				fmt.Printf("\tD  ")
+			}
+			fmt.Println(c.Name())
 		}
 
 	}

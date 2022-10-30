@@ -2,6 +2,7 @@ package scales
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/intervals"
@@ -377,6 +378,19 @@ func (scale *Scale) Seventh(degree Degree) chords.Chord {
 	return chords.FromNotes([]notes.Note{scaleNotes[degree], scaleNotes[(int(degree)+2)%len(scaleNotes)], scaleNotes[(int(degree)+4)%len(scaleNotes)], scaleNotes[(int(degree)+6)%len(scaleNotes)]})
 }
 
+func (scale *Scale) NotesInChord(chord chords.Chord) int {
+	count := 0
+	for _, chordNote := range chord.Notes() {
+		for _, scaleNote := range scale.Notes() {
+			if chordNote.Inharmonic(scaleNote) {
+				count++
+				break
+			}
+		}
+	}
+	return count
+}
+
 func FromChord(chord chords.Chord) []Scale {
 	ret := make([]Scale, 0)
 	for scaleName := range scales {
@@ -401,5 +415,14 @@ func FromChord(chord chords.Chord) []Scale {
 			ret = append(ret, *scale)
 		}
 	}
+
+	sort.SliceStable(ret, func(i, j int) bool {
+		if ret[i].NotesInChord(chord) == ret[j].NotesInChord(chord) {
+			return ret[i].Name() < ret[j].Name()
+		} else {
+			return ret[i].NotesInChord(chord) > ret[j].NotesInChord(chord)
+		}
+	})
+
 	return ret
 }

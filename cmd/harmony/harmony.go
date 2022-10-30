@@ -46,16 +46,17 @@ func main() {
 		for _, n := range c.Notes() {
 			fmt.Printf("%8s: %3s %d %.02f\n", c.Root().Distance(n).Name(), n.Name(), n.Octave(), n.Frequency())
 		}
+		fmt.Println()
 
 		scales := scales.FromChord(c)
-		fmt.Println(len(scales))
 		for _, scale := range scales {
+			fmt.Printf("%20s (%d)\t", scale.Name(), scale.NotesInChord(c))
 			for _, scaleNote := range scale.Notes() {
 				found := false
 				for _, chordNote := range c.Notes() {
 					//\033[1;36m%s\033[0m"
 					if chordNote.Inharmonic(scaleNote) {
-						fmt.Printf("\033[1;31m%s\033[0m\t", chordNote.Name())
+						fmt.Printf("\033[1;32m%s\033[0m\t", chordNote.Name())
 						found = true
 						break
 					}
@@ -64,12 +65,7 @@ func main() {
 					fmt.Printf("%s\t", scaleNote.Name())
 				}
 			}
-			if len(scale.Notes()) < 8 {
-				for i := 0; i < 8-len(scale.Notes()); i++ {
-					fmt.Printf("\t")
-				}
-			}
-			fmt.Println(scale.Name())
+			fmt.Println()
 		}
 	}
 

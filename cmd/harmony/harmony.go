@@ -48,6 +48,12 @@ func main() {
 		}
 		fmt.Println()
 
+		fmt.Println("relative", c.Relative().Name())
+		for _, n := range c.Relative().Notes() {
+			fmt.Printf("%8s: %3s %d %.02f\n", c.Relative().Root().Distance(n).Name(), n.Name(), n.Octave(), n.Frequency())
+		}
+		fmt.Println()
+
 		scales := scales.FromChord(c)
 		for _, scale := range scales {
 			fmt.Printf("%20s (%d)\t", scale.Name(), scale.NotesInChord(c))

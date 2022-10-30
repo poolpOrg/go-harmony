@@ -831,3 +831,27 @@ func FromNotes(notes []notes.Note) Chord {
 		structure: structure,
 	}
 }
+
+func (chord *Chord) Relative() *Chord {
+	structure := make([]intervals.Interval, len(chord.structure))
+	copy(structure, chord.structure)
+	if structure[1] == intervals.MinorThird {
+		structure[1] = intervals.MajorThird
+		ret := &Chord{
+			root:      *chord.root.Interval(intervals.MinorThird),
+			structure: structure,
+			bass:      structure[0],
+		}
+		return ret
+
+	} else if structure[1] == intervals.MajorThird {
+		structure[1] = intervals.MinorThird
+		ret := &Chord{
+			root:      *chord.root.Interval(intervals.MajorSixth),
+			structure: structure,
+			bass:      structure[0],
+		}
+		return ret
+	}
+	return nil
+}

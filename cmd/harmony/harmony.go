@@ -48,6 +48,7 @@ func main() {
 		}
 
 		scales := scales.FromChord(c)
+		fmt.Println(len(scales))
 		for _, scale := range scales {
 			for _, scaleNote := range scale.Notes() {
 				found := false

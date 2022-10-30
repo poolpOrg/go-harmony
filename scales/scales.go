@@ -315,10 +315,15 @@ func (scale *Scale) Name() string {
 			continue
 		}
 
+		found := true
 		for i := 0; i < len(structure); i++ {
 			if structure[i] != scale.structure[i] {
-				continue
+				found = false
+				break
 			}
+		}
+		if !found {
+			continue
 		}
 		return name
 	}
@@ -384,16 +389,11 @@ func FromChord(chord chords.Chord) []Scale {
 
 		count := 0
 		for _, chordNote := range chord.Notes() {
-			found := false
 			for _, scaleNote := range scale.Notes() {
 				if chordNote.Inharmonic(scaleNote) {
-					found = true
 					count++
 					break
 				}
-			}
-			if !found {
-				break
 			}
 		}
 

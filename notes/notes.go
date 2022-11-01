@@ -118,6 +118,16 @@ func (note *Note) Name() string {
 	}
 }
 
+func (note *Note) OctaveName() string {
+	if note.accidentals == 0 {
+		return fmt.Sprintf("%s%d", note.name, note.Octave())
+	} else if note.accidentals < 0 {
+		return fmt.Sprintf("%s%d", note.name+strings.Repeat("b", -note.accidentals), note.Octave())
+	} else {
+		return fmt.Sprintf("%s%d", note.name+strings.Repeat("#", note.accidentals), note.Octave())
+	}
+}
+
 func (note *Note) Interval(interval intervals.Interval) *Note {
 	if interval.Semitone()%12 == 0 {
 		targetNote := *&note

@@ -35,7 +35,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(n.Name(), n.Octave(), n.Frequency())
+		fmt.Println(n.OctaveName(), "=", n.Frequency())
 
 		fmt.Println()
 		structures := chords.Structures()

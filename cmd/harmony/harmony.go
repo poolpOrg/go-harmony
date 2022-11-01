@@ -6,6 +6,7 @@ import (
 	"log"
 	"strings"
 
+	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/instruments"
 	"github.com/poolpOrg/go-harmony/scales"
 	"github.com/poolpOrg/go-harmony/tunings"
@@ -35,6 +36,18 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Println(n.Name(), n.Octave(), n.Frequency())
+
+		fmt.Println()
+		structures := chords.Structures()
+		chordsList := make([]string, 0)
+		for _, structure := range structures {
+			nc, err := chords.Parse(fmt.Sprintf("%s%s", n.Name(), structure.Name()))
+			if err != nil {
+				panic(err)
+			}
+			chordsList = append(chordsList, nc.Name())
+		}
+		fmt.Println(strings.Join(chordsList, ", "))
 	}
 
 	if opt_chord != "" {

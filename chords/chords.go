@@ -42,6 +42,12 @@ var (
 		intervals.DiminishedFifth,
 	}
 
+	FlatFifthTriad Structure = Structure{
+		intervals.PerfectUnison,
+		intervals.MajorThird,
+		intervals.DiminishedFifth,
+	}
+
 	PowerChord Structure = Structure{
 		intervals.PerfectUnison,
 		intervals.PerfectFifth,
@@ -206,6 +212,74 @@ var (
 	}
 )
 
+func Structures() []Structure {
+	ret := make([]Structure, 0)
+
+	ret = append(ret, MajorTriad)
+	ret = append(ret, MinorTriad)
+	ret = append(ret, AugmentedTriad)
+	ret = append(ret, DiminishedTriad)
+	ret = append(ret, FlatFifthTriad)
+
+	ret = append(ret, PowerChord)
+
+	ret = append(ret, Sixth)
+	ret = append(ret, MinorSixth)
+
+	ret = append(ret, DominantSeventh)
+	ret = append(ret, MajorSeventh)
+	ret = append(ret, MinorMajorSeventh)
+	ret = append(ret, MinorSeventh)
+	ret = append(ret, AugmentedMajorSeventh)
+	ret = append(ret, AugmentedSeventh)
+	ret = append(ret, HalfDiminishedSeventh)
+	ret = append(ret, DiminishedSeventh)
+	ret = append(ret, DominantSeventhFlatFive)
+	ret = append(ret, DominantSeventhSusSecond)
+	ret = append(ret, DominantSeventhSusFourth)
+	ret = append(ret, MajorSeventhSusSecond)
+	ret = append(ret, MajorSeventhSusFourth)
+
+	ret = append(ret, MajorNinth)
+	ret = append(ret, DominantNinth)
+	ret = append(ret, DominantMinorNinth)
+	ret = append(ret, MinorMajorNinth)
+	ret = append(ret, MinorNinth)
+	ret = append(ret, AugmentedMajorNinth)
+	ret = append(ret, AugmentedDominantNinth)
+	ret = append(ret, HalfDiminishedNinth)
+	ret = append(ret, HalfDiminishedMinorNinth)
+	ret = append(ret, DiminishedNinth)
+	ret = append(ret, DiminishedMinorNinth)
+
+	ret = append(ret, MajorEleventh)
+	ret = append(ret, Eleventh)
+	ret = append(ret, MinorMajorEleventh)
+	ret = append(ret, MinorEleventh)
+	ret = append(ret, AugmentedMajorEleventh)
+	ret = append(ret, AugmentedEleventh)
+	ret = append(ret, HalfDiminishedEleventh)
+	ret = append(ret, DiminishedEleventh)
+
+	ret = append(ret, MajorThirteenth)
+	ret = append(ret, Thirteenth)
+	ret = append(ret, MinorMajorThirteenth)
+	ret = append(ret, MinorThirteenth)
+	ret = append(ret, AugmentedMajorThirteenth)
+	ret = append(ret, AugmentedThirteenth)
+	ret = append(ret, HalfDiminishedThirteenth)
+
+	ret = append(ret, AddNinth)
+	ret = append(ret, AddEleventh)
+	ret = append(ret, AddThirteenth)
+
+	ret = append(ret, SusSecond)
+	ret = append(ret, SusFourth)
+	ret = append(ret, SusSecondSusFourth)
+
+	return ret
+}
+
 func (structure Structure) Equals(target Structure) bool {
 	if len(structure) != len(target) {
 		return false
@@ -230,6 +304,9 @@ func (structure Structure) Name() string {
 	}
 	if structure.Equals(DiminishedTriad) {
 		return "dim"
+	}
+	if structure.Equals(FlatFifthTriad) {
+		return "b5"
 	}
 	if structure.Equals(PowerChord) {
 		return "5"
@@ -303,6 +380,9 @@ func (structure Structure) Name() string {
 		return "aug9"
 	}
 	if structure.Equals(HalfDiminishedNinth) {
+		return "ø9"
+	}
+	if structure.Equals(HalfDiminishedMinorNinth) {
 		return "øb9"
 	}
 	if structure.Equals(DiminishedNinth) {
@@ -445,6 +525,10 @@ func Parse(chord string) (*Chord, error) {
 	case "mo5":
 		// diminished triad
 		structure = DiminishedTriad
+
+	case "b5":
+		// major third, flat fifth
+		structure = FlatFifthTriad
 
 	case "5":
 		// power chords, though not chords stricly-speaking

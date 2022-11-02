@@ -1,5 +1,9 @@
 package intervals
 
+import (
+	"fmt"
+)
+
 type interval struct {
 	pos      uint
 	semitone uint
@@ -121,4 +125,74 @@ func (interval Interval) Position() uint {
 
 func (interval Interval) Semitone() uint {
 	return interval.semitone
+}
+
+func Parse(intervalName string) (*Interval, error) {
+	switch intervalName {
+	case "1":
+		return &PerfectUnison, nil
+	case "1aug":
+		return &AugmentedUnison, nil
+	case "2min":
+		return &MinorSecond, nil
+	case "2maj":
+		return &MajorSecond, nil
+	case "2aug":
+		return &AugmentedSecond, nil
+	case "3min":
+		return &MinorThird, nil
+	case "3maj":
+		return &MajorThird, nil
+	case "4":
+		return &PerfectFourth, nil
+	case "4aug":
+		return &AugmentedFourth, nil
+	case "5dim":
+		return &DiminishedFifth, nil
+	case "5":
+		return &PerfectFifth, nil
+	case "5aug":
+		return &AugmentedFifth, nil
+	case "6min":
+		return &MinorSixth, nil
+	case "6maj":
+		return &MajorSixth, nil
+	case "7dim":
+		return &DiminishedSeventh, nil
+	case "7min":
+		return &MinorSeventh, nil
+	case "7maj":
+		return &MajorSeventh, nil
+	case "8":
+		return &Octave, nil
+	case "8aug":
+		return &AugmentedOctave, nil
+	case "9min":
+		return &MinorNinth, nil
+	case "9maj":
+		return &MajorNinth, nil
+	case "9aug":
+		return &AugmentedNinth, nil
+	case "10min":
+		return &MinorTenth, nil
+	case "10maj":
+		return &MajorTenth, nil
+	case "11":
+		return &PerfectEleventh, nil
+	case "11aug":
+		return &AugmentedEleventh, nil
+	case "12dim":
+		return &DiminishedTwelfth, nil
+	case "12":
+		return &PerfectTwelfth, nil
+	case "12aug":
+		return &AugmentedTwelfth, nil
+	case "13min":
+		return &MinorThirteenth, nil
+	case "13maj":
+		return &MajorThirteenth, nil
+
+	default:
+		return nil, fmt.Errorf("unknown interval name: %s", intervalName)
+	}
 }

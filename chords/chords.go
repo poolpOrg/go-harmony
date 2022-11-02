@@ -13,7 +13,7 @@ type Structure []intervals.Interval
 type chord struct {
 	root      notes.Note
 	structure Structure
-	bass      intervals.Interval
+	bass      notes.Note
 }
 type Chord chord
 
@@ -829,7 +829,7 @@ func Parse(chord string) (*Chord, error) {
 	c := &Chord{
 		root:      *n,
 		structure: structure,
-		bass:      structure[0],
+		bass:      *n,
 	}
 
 	if inversion != "" {
@@ -842,15 +842,16 @@ func Parse(chord string) (*Chord, error) {
 		}
 
 		found := false
-		for offset, interval := range c.structure {
+		for _, interval := range c.structure {
 			if n.Interval(interval).Name() == n2.Name() {
-				c.bass = structure[offset]
 				found = true
 			}
 		}
 		if !found {
 			return nil, fmt.Errorf("inversion note %s not found in chord: %s", inversion, c.Name())
 		}
+		c.bass = *n2
+		c.root.SetOctave(n2.Octave())
 	}
 
 	return c, nil
@@ -864,8 +865,8 @@ func (chord *Chord) Name() string {
 		panic("unknown structure name")
 	}
 	name += structureName
-	if chord.bass != intervals.PerfectUnison {
-		name += "/" + chord.root.Interval(chord.bass).Name()
+	if chord.bass != chord.root {
+		name += "/" + chord.bass.Name()
 	}
 	return name
 }
@@ -876,18 +877,34 @@ func (chord *Chord) Root() *notes.Note {
 
 func (chord *Chord) Notes() []notes.Note {
 	ret := make([]notes.Note, 0)
-	ret = append(ret, *chord.root.Interval(chord.bass))
+	ret = append(ret, chord.bass)
+	prev := chord.bass
+
+	beginOffset := 0
 	for _, interval := range chord.structure {
-		if chord.bass != interval {
-			n := *chord.root.Interval(interval)
-			//XXX - need to fix distance computation to account for octave boundaries first
-			//if chord.root.Name() == "B" {
-			//	n = *n.Interval(intervals.Octave)
-			//	fmt.Println(n)
-			//}
+		n := *chord.root.Interval(interval)
+		if n.Name() == chord.bass.Name() {
+			break
+		}
+		beginOffset++
+	}
+
+	for offset := beginOffset + 1; offset%len(chord.structure) != beginOffset; offset++ {
+		interval := chord.structure[offset%len(chord.structure)]
+		n := *chord.root.Interval(interval)
+		if n.Name() != chord.bass.Name() {
+
+			if n.Octave() < prev.Octave() {
+				n = *n.Interval(intervals.Octave)
+			} else if n.Position() < prev.Position() && n.Octave() <= prev.Octave() {
+				n = *n.Interval(intervals.Octave)
+			}
+
 			ret = append(ret, n)
+			prev = n
 		}
 	}
+
 	return ret
 }
 
@@ -921,19 +938,23 @@ func (chord *Chord) Relative() *Chord {
 	copy(structure, chord.structure)
 	if structure[1] == intervals.MinorThird {
 		structure[1] = intervals.MajorThird
+		root := *chord.root.Interval(intervals.MinorThird)
+		root.SetOctave(chord.bass.Octave())
 		ret := &Chord{
-			root:      *chord.root.Interval(intervals.MinorThird),
+			root:      root,
 			structure: structure,
-			bass:      structure[0],
+			bass:      root,
 		}
 		return ret
 
 	} else if structure[1] == intervals.MajorThird {
 		structure[1] = intervals.MinorThird
+		root := *chord.root.Interval(intervals.MajorSixth)
+		root.SetOctave(chord.bass.Octave())
 		ret := &Chord{
-			root:      *chord.root.Interval(intervals.MajorSixth),
+			root:      root,
 			structure: structure,
-			bass:      structure[0],
+			bass:      root,
 		}
 		return ret
 	}

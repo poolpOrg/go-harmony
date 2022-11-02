@@ -8,6 +8,7 @@ import (
 
 	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/instruments"
+	"github.com/poolpOrg/go-harmony/intervals"
 	"github.com/poolpOrg/go-harmony/scales"
 	"github.com/poolpOrg/go-harmony/tunings"
 )
@@ -19,6 +20,7 @@ func main() {
 	var opt_notes string
 	var opt_distance string
 	var opt_progression string
+	var opt_interval string
 
 	flag.StringVar(&opt_note, "note", "", "note")
 	flag.StringVar(&opt_chord, "chord", "", "chord")
@@ -26,6 +28,7 @@ func main() {
 	flag.StringVar(&opt_notes, "notes", "", "notes")
 	flag.StringVar(&opt_distance, "distance", "", "distance")
 	flag.StringVar(&opt_progression, "progression", "", "progression")
+	flag.StringVar(&opt_interval, "interval", "", "interval")
 	flag.Parse()
 
 	instrument := instruments.NewInstrument(tunings.A440)
@@ -86,6 +89,7 @@ func main() {
 			}
 			fmt.Println()
 		}
+
 	}
 
 	if opt_scale != "" {
@@ -239,6 +243,14 @@ func main() {
 			}
 			fmt.Println(prog, "\t", s.Sevenths()[offset].Name())
 		}
+	}
+
+	if opt_interval != "" {
+		interval, err := intervals.Parse(opt_interval)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Println(interval.Name(), interval)
 	}
 
 }

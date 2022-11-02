@@ -78,12 +78,15 @@ func main() {
 		}
 		fmt.Println()
 
-		fmt.Printf("%-20s", fmt.Sprintf("relative %s:", c.Relative().Name()))
-		for _, n := range c.Relative().Notes() {
-			fmt.Printf("%8s: %-3s", c.Relative().Root().Distance(n).Name(), n.Name())
+		if c.Relative() != nil {
+
+			fmt.Printf("%-20s", fmt.Sprintf("relative %s:", c.Relative().Name()))
+			for _, n := range c.Relative().Notes() {
+				fmt.Printf("%8s: %-3s", c.Relative().Root().Distance(n).Name(), n.Name())
+			}
+			fmt.Println()
+			fmt.Println()
 		}
-		fmt.Println()
-		fmt.Println()
 
 		scales := scales.FromChord(c)
 		for _, scale := range scales {
@@ -112,59 +115,50 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(s.Name())
-		for _, n := range s.Notes() {
-			fmt.Println("  ", n.Name(), n.Frequency())
-			// plug here chord construction for this degree
+
+		colors := []string{
+			"\033[1;32m%16s\033[0m",
+			"\033[1;33m%16s\033[0m",
+			"\033[1;32m%16s\033[0m",
+			"\033[1;33m%16s\033[0m",
+			"\033[1;31m%16s\033[0m",
+			"\033[1;32m%16s\033[0m",
+			"\033[1;31m%16s\033[0m",
+		}
+
+		roman := []string{"(T) I", "(SD) II", "(T) III", "(SD) IV", "(D) V", "(T) VI", "(D) VII"}
+		fmt.Printf("%20s", strings.Repeat(" ", 20))
+		for offset, n := range roman {
+			fmt.Printf(colors[offset], n)
 		}
 		fmt.Println()
 
-		fmt.Println("Triads:")
-		for degree, c := range s.Triads() {
-			switch degree {
-			case int(scales.Tonic):
-				fallthrough
-			case int(scales.Mediant):
-				fallthrough
-			case int(scales.Submediant):
-				fmt.Printf("\tT  ")
-
-			case int(scales.Supertonic):
-				fallthrough
-			case int(scales.Subdominant):
-				fmt.Printf("\tSD ")
-
-			case int(scales.Dominant):
-				fallthrough
-			case int(scales.LeadingTone):
-				fmt.Printf("\tD  ")
-			}
-			fmt.Println(c.Name())
+		fmt.Printf("%-20s", s.Name()+":")
+		notes := s.Notes()
+		for offset, n := range notes[0 : len(notes)-1] {
+			fmt.Printf(colors[offset], n.Name())
 		}
 		fmt.Println()
 
-		fmt.Println("Sevenths:")
-		for degree, c := range s.Sevenths() {
-			switch degree {
-			case int(scales.Tonic):
-				fallthrough
-			case int(scales.Mediant):
-				fallthrough
-			case int(scales.Submediant):
-				fmt.Printf("\tT  ")
+		fmt.Printf("%-20s", "Triads:")
+		for offset, c := range s.Triads() {
+			/*
 
-			case int(scales.Supertonic):
-				fallthrough
-			case int(scales.Subdominant):
-				fmt.Printf("\tSD ")
-
-			case int(scales.Dominant):
-				fallthrough
-			case int(scales.LeadingTone):
-				fmt.Printf("\tD  ")
-			}
-			fmt.Println(c.Name())
+				case int(scales.Dominant):
+					fallthrough
+				case int(scales.LeadingTone):
+					fmt.Printf("\tD  ")
+				}
+			*/
+			fmt.Printf(colors[offset], c.Name())
 		}
+		fmt.Println()
+
+		fmt.Printf("%-20s", "Sevenths:")
+		for offset, c := range s.Sevenths() {
+			fmt.Printf(colors[offset], c.Name())
+		}
+		fmt.Println()
 
 	}
 

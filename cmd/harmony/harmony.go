@@ -64,6 +64,18 @@ func main() {
 		}
 		fmt.Println()
 
+		for i := 1; i < len(c.Notes()); i++ {
+			inversion, err := chords.Parse(fmt.Sprintf("%s/%s", c.Name(), c.Notes()[i].Name()))
+			if err != nil {
+				panic(err)
+			}
+			fmt.Println(i, "inversion")
+			for _, n := range inversion.Notes() {
+				fmt.Printf("%8s: %3s %d %.02f\n", c.Root().Distance(n).Name(), n.Name(), n.Octave(), n.Frequency())
+			}
+			fmt.Println()
+		}
+
 		fmt.Println("relative", c.Relative().Name())
 		for _, n := range c.Relative().Notes() {
 			fmt.Printf("%8s: %3s %d %.02f\n", c.Relative().Root().Distance(n).Name(), n.Name(), n.Octave(), n.Frequency())

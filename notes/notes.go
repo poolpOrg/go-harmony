@@ -153,6 +153,8 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 
 	distance := targetSemitone - (int(interval.Semitone()%12) + sourceSemitone)
 	targetAccidentals += -distance
+	//	targetOctave += uint8(targetAccidentals / 12)
+	targetAccidentals = targetAccidentals % 12
 
 	return &Note{
 		name:        target.name,

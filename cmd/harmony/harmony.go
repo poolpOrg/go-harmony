@@ -133,33 +133,34 @@ func main() {
 		}
 		fmt.Println()
 
-		fmt.Printf("%-20s", s.Name()+":")
 		notes := s.Notes()
+		fmt.Printf("%-20s", notes[0].Name()+" "+s.Name()+" scale:")
 		for offset, n := range notes[0 : len(notes)-1] {
 			fmt.Printf(colors[offset], n.Name())
 		}
 		fmt.Println()
 
-		fmt.Printf("%-20s", "Triads:")
-		for offset, c := range s.Triads() {
-			/*
+		if len(s.Notes()) >= 7 {
+			fmt.Printf("%-20s", "diatonic triads:")
+			for offset, c := range s.Triads() {
+				/*
 
-				case int(scales.Dominant):
-					fallthrough
-				case int(scales.LeadingTone):
-					fmt.Printf("\tD  ")
-				}
-			*/
-			fmt.Printf(colors[offset], c.Name())
+					case int(scales.Dominant):
+						fallthrough
+					case int(scales.LeadingTone):
+						fmt.Printf("\tD  ")
+					}
+				*/
+				fmt.Printf(colors[offset], c.Name())
+			}
+			fmt.Println()
+
+			fmt.Printf("%-20s", "diatonic sevenths:")
+			for offset, c := range s.Sevenths() {
+				fmt.Printf(colors[offset], c.Name())
+			}
+			fmt.Println()
 		}
-		fmt.Println()
-
-		fmt.Printf("%-20s", "Sevenths:")
-		for offset, c := range s.Sevenths() {
-			fmt.Printf(colors[offset], c.Name())
-		}
-		fmt.Println()
-
 	}
 
 	if opt_notes != "" {

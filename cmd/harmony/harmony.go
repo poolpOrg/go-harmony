@@ -58,10 +58,11 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(c.Name())
+		fmt.Printf("%-20s", c.Name()+":")
 		for _, n := range c.Notes() {
-			fmt.Printf("%8s: %3s %d %.02f\n", c.Root().Distance(n).Name(), n.Name(), n.Octave(), n.Frequency())
+			fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.Name())
 		}
+		fmt.Println()
 		fmt.Println()
 
 		for i := 1; i < len(c.Notes()); i++ {
@@ -69,17 +70,19 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			fmt.Println(i, "inversion")
+			fmt.Printf("%-20s", fmt.Sprintf("%d inversion:", i))
 			for _, n := range inversion.Notes() {
-				fmt.Printf("%8s: %3s %d %.02f\n", c.Root().Distance(n).Name(), n.Name(), n.Octave(), n.Frequency())
+				fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.Name())
 			}
 			fmt.Println()
 		}
+		fmt.Println()
 
-		fmt.Println("relative", c.Relative().Name())
+		fmt.Printf("%-20s", fmt.Sprintf("relative %s:", c.Relative().Name()))
 		for _, n := range c.Relative().Notes() {
-			fmt.Printf("%8s: %3s %d %.02f\n", c.Relative().Root().Distance(n).Name(), n.Name(), n.Octave(), n.Frequency())
+			fmt.Printf("%8s: %-3s", c.Relative().Root().Distance(n).Name(), n.Name())
 		}
+		fmt.Println()
 		fmt.Println()
 
 		scales := scales.FromChord(c)

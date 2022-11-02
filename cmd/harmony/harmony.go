@@ -65,18 +65,20 @@ func main() {
 		fmt.Println()
 		fmt.Println()
 
-		for i := 1; i < len(c.Notes()); i++ {
-			inversion, err := chords.Parse(fmt.Sprintf("%s/%s", c.Name(), c.Notes()[i].Name()))
-			if err != nil {
-				panic(err)
-			}
-			fmt.Printf("%-20s", fmt.Sprintf("%d inversion:", i))
-			for _, n := range inversion.Notes() {
-				fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.Name())
+		if !strings.Contains(c.Name(), "/") {
+			for i := 1; i < len(c.Notes()); i++ {
+				inversion, err := chords.Parse(fmt.Sprintf("%s/%s", c.Name(), c.Notes()[i].Name()))
+				if err != nil {
+					panic(err)
+				}
+				fmt.Printf("%-20s", fmt.Sprintf("%d inversion:", i))
+				for _, n := range inversion.Notes() {
+					fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.OctaveName())
+				}
+				fmt.Println()
 			}
 			fmt.Println()
 		}
-		fmt.Println()
 
 		if c.Relative() != nil {
 
@@ -143,14 +145,6 @@ func main() {
 		if len(s.Notes()) >= 7 {
 			fmt.Printf("%-20s", "diatonic triads:")
 			for offset, c := range s.Triads() {
-				/*
-
-					case int(scales.Dominant):
-						fallthrough
-					case int(scales.LeadingTone):
-						fmt.Printf("\tD  ")
-					}
-				*/
 				fmt.Printf(colors[offset], c.Name())
 			}
 			fmt.Println()

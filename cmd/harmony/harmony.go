@@ -60,7 +60,7 @@ func main() {
 		}
 		fmt.Printf("%-20s", c.Name()+":")
 		for _, n := range c.Notes() {
-			fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.Name())
+			fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.OctaveName())
 		}
 		fmt.Println()
 		fmt.Println()
@@ -73,7 +73,7 @@ func main() {
 				}
 				fmt.Printf("%-20s", fmt.Sprintf("%d inversion:", i))
 				for _, n := range inversion.Notes() {
-					fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.Name())
+					fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.OctaveName())
 				}
 				fmt.Println()
 			}

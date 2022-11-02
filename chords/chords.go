@@ -841,6 +841,10 @@ func Parse(chord string) (*Chord, error) {
 			return nil, err
 		}
 
+		if inversion != n2.OctaveName() {
+			n2.SetOctave(n.Octave() - 1)
+		}
+
 		found := false
 		for _, interval := range c.structure {
 			if n.Interval(interval).Name() == n2.Name() {
@@ -851,7 +855,7 @@ func Parse(chord string) (*Chord, error) {
 			return nil, fmt.Errorf("inversion note %s not found in chord: %s", inversion, c.Name())
 		}
 		c.bass = *n2
-		c.root.SetOctave(n2.Octave())
+		//		c.root.SetOctave(n2.Octave())
 	}
 
 	return c, nil
@@ -879,6 +883,7 @@ func (chord *Chord) Notes() []notes.Note {
 	ret := make([]notes.Note, 0)
 	ret = append(ret, chord.bass)
 	prev := chord.bass
+	currOctave := chord.bass.Octave()
 
 	beginOffset := 0
 	for _, interval := range chord.structure {
@@ -892,17 +897,14 @@ func (chord *Chord) Notes() []notes.Note {
 	for offset := beginOffset + 1; offset%len(chord.structure) != beginOffset; offset++ {
 		interval := chord.structure[offset%len(chord.structure)]
 		n := *chord.root.Interval(interval)
-		if n.Name() != chord.bass.Name() {
 
-			if n.Octave() < prev.Octave() {
-				n = *n.Interval(intervals.Octave)
-			} else if n.Position() < prev.Position() && n.Octave() <= prev.Octave() {
-				n = *n.Interval(intervals.Octave)
-			}
-
-			ret = append(ret, n)
-			prev = n
+		if n.Position() < prev.Position() {
+			currOctave++
 		}
+
+		n.SetOctave(currOctave)
+		ret = append(ret, n)
+		prev = n
 	}
 
 	return ret

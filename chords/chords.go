@@ -865,7 +865,7 @@ func (chord *Chord) Name() string {
 		panic("unknown structure name")
 	}
 	name += structureName
-	if chord.bass != chord.root {
+	if chord.bass.Name() != chord.root.Name() {
 		name += "/" + chord.bass.Name()
 	}
 	return name
@@ -930,6 +930,7 @@ func FromNotes(notes []notes.Note) Chord {
 	return Chord{
 		root:      notes[0],
 		structure: structure,
+		bass:      notes[0],
 	}
 }
 

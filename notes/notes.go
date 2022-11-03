@@ -129,7 +129,6 @@ func (note *Note) OctaveName() string {
 }
 
 func (note *Note) Interval(interval intervals.Interval) *Note {
-
 	// interval aligned on an octave
 	if interval.Semitone()%12 == 0 {
 		targetNote := *note
@@ -166,25 +165,29 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 }
 
 func (note *Note) Distance(target Note) intervals.Interval {
-	targetPosition := target.Position()
-	if targetPosition < note.Position() {
-		targetPosition += 7
+	var origin Note
+	var destination Note
+
+	offset1 := note.octave*12 + uint8(note.Semitone())
+	offset2 := target.octave*12 + uint8(target.Semitone())
+	if offset1 < offset2 {
+		origin = *note
+		destination = target
+	} else {
+		origin = target
+		destination = *note
 	}
 
-	targetSemitone := target.Semitone()
-	if targetSemitone < note.Semitone() {
+	targetPosition := destination.Position()
+	targetSemitone := destination.Semitone()
+
+	targetPosition -= origin.Position()
+	targetSemitone -= origin.Semitone()
+
+	if target.Octave() > note.Octave() {
+		targetPosition += 7
 		targetSemitone += 12
 	}
-
-	targetPosition -= note.Position()
-	targetSemitone -= note.Semitone()
-
-	//targetPosition += (uint(target.octave) - uint(note.octave)) * 7
-	//targetSemitone += (int(target.octave) - int(note.octave)) * 12
-
-	//if target.pos < note.pos {
-	//	targetSemitone += 12
-	//}
 
 	return intervals.New(targetPosition, uint(targetSemitone))
 }

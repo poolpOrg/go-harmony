@@ -19,6 +19,7 @@ var (
 	AugmentedSecond   Interval = Interval{pos: 1, semitone: 3}
 	MinorThird        Interval = Interval{pos: 2, semitone: 3}
 	MajorThird        Interval = Interval{pos: 2, semitone: 4}
+	DiminishedFourth  Interval = Interval{pos: 3, semitone: 4}
 	PerfectFourth     Interval = Interval{pos: 3, semitone: 5}
 	AugmentedFourth   Interval = Interval{pos: 3, semitone: 6}
 	DiminishedFifth   Interval = Interval{pos: 4, semitone: 6}
@@ -26,6 +27,7 @@ var (
 	AugmentedFifth    Interval = Interval{pos: 4, semitone: 8}
 	MinorSixth        Interval = Interval{pos: 5, semitone: 8}
 	MajorSixth        Interval = Interval{pos: 5, semitone: 9}
+	AugmentedSixth    Interval = Interval{pos: 5, semitone: 10}
 	DiminishedSeventh Interval = Interval{pos: 6, semitone: 9}
 	MinorSeventh      Interval = Interval{pos: 6, semitone: 10}
 	MajorSeventh      Interval = Interval{pos: 6, semitone: 11}
@@ -66,6 +68,8 @@ func (interval Interval) Name() string {
 		return "3min"
 	case MajorThird:
 		return "3maj"
+	case DiminishedFourth:
+		return "4dim"
 	case PerfectFourth:
 		return "4"
 	case AugmentedFourth:
@@ -80,6 +84,8 @@ func (interval Interval) Name() string {
 		return "6min"
 	case MajorSixth:
 		return "6maj"
+	case AugmentedSixth:
+		return "6aug"
 	case DiminishedSeventh:
 		return "7dim"
 	case MinorSeventh:
@@ -127,6 +133,10 @@ func (interval Interval) Semitone() uint {
 	return interval.semitone
 }
 
+func (interval Interval) Relative() Interval {
+	return Interval{pos: 7 - interval.pos, semitone: 12 - interval.semitone}
+}
+
 func Parse(intervalName string) (*Interval, error) {
 	switch intervalName {
 	case "1":
@@ -143,6 +153,8 @@ func Parse(intervalName string) (*Interval, error) {
 		return &MinorThird, nil
 	case "3maj":
 		return &MajorThird, nil
+	case "4dim":
+		return &DiminishedFourth, nil
 	case "4":
 		return &PerfectFourth, nil
 	case "4aug":
@@ -157,6 +169,8 @@ func Parse(intervalName string) (*Interval, error) {
 		return &MinorSixth, nil
 	case "6maj":
 		return &MajorSixth, nil
+	case "6aug":
+		return &AugmentedSixth, nil
 	case "7dim":
 		return &DiminishedSeventh, nil
 	case "7min":

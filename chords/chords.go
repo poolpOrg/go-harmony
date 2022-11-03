@@ -2,6 +2,7 @@ package chords
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 
 	"github.com/poolpOrg/go-harmony/intervals"
@@ -292,6 +293,81 @@ func (structure Structure) Equals(target Structure) bool {
 	return true
 }
 
+func (structure Structure) Equivalent(target Structure) bool {
+	originSemitones := make(map[uint8]bool)
+	targetSemitones := make(map[uint8]bool)
+	originSemitonesStructure := make([]uint8, 0)
+	targetSemitonesStructure := make([]uint8, 0)
+
+	for _, interval := range structure {
+		wrapped := uint8(interval.Semitone()) % 12
+		if _, exists := originSemitones[wrapped]; !exists {
+			originSemitones[wrapped] = true
+			originSemitonesStructure = append(originSemitonesStructure, wrapped)
+		}
+	}
+
+	for _, interval := range target {
+		wrapped := uint8(interval.Semitone()) % 12
+		if _, exists := targetSemitones[wrapped]; !exists {
+			targetSemitones[wrapped] = true
+			targetSemitonesStructure = append(targetSemitonesStructure, wrapped)
+		}
+	}
+
+	if len(originSemitonesStructure) != len(targetSemitonesStructure) {
+		return false
+	}
+
+	sort.SliceStable(originSemitonesStructure, func(i, j int) bool {
+		return originSemitonesStructure[i] < originSemitonesStructure[j]
+	})
+
+	sort.SliceStable(targetSemitonesStructure, func(i, j int) bool {
+		return targetSemitonesStructure[i] < targetSemitonesStructure[j]
+	})
+
+	for i, _ := range originSemitonesStructure {
+		if originSemitonesStructure[i] != targetSemitonesStructure[i] {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (structure Structure) Inversion(target Structure) *intervals.Interval {
+	if len(structure) != len(target) {
+		return nil
+	}
+
+	if structure.Equals(target) {
+		return &intervals.PerfectUnison
+	}
+
+	c, err := Parse("C")
+	if err != nil {
+		panic(err)
+	}
+	c.structure = structure
+
+	for i := 1; i < len(c.Notes()); i++ {
+		inversion, err := Parse(fmt.Sprintf("%s/%s", c.Name(), c.Notes()[i].OctaveName()))
+		if err != nil {
+			panic(err)
+		}
+		substructure := Structure{}
+		for j := 0; j < len(inversion.Notes()); j++ {
+			substructure = append(substructure, inversion.bass.Distance(inversion.Notes()[j]))
+		}
+		if substructure.Equivalent(target) {
+			return &c.structure[i]
+		}
+	}
+
+	return nil
+}
+
 func (structure Structure) Name() string {
 	if structure.Equals(MajorTriad) {
 		return "maj"
@@ -306,7 +382,7 @@ func (structure Structure) Name() string {
 		return "dim"
 	}
 	if structure.Equals(FlatFifthTriad) {
-		return "b5"
+		return "(b5)"
 	}
 	if structure.Equals(PowerChord) {
 		return "5"
@@ -526,7 +602,7 @@ func Parse(chord string) (*Chord, error) {
 		// diminished triad
 		structure = DiminishedTriad
 
-	case "b5":
+	case "(b5)":
 		// major third, flat fifth
 		structure = FlatFifthTriad
 
@@ -862,6 +938,10 @@ func (chord *Chord) Name() string {
 	name := chord.root.Name()
 	structureName := chord.structure.Name()
 	if structureName == "" {
+		for _, interval := range chord.structure {
+			fmt.Println(interval.Name())
+		}
+
 		panic("unknown structure name")
 	}
 	name += structureName
@@ -908,29 +988,43 @@ func (chord *Chord) Notes() []notes.Note {
 	return ret
 }
 
+func (chord *Chord) Structure() []intervals.Interval {
+	return chord.structure
+}
+
 func FromNotes(notes []notes.Note) Chord {
-	structure := Structure{}
+	// sort notes by ascending order
+	sort.SliceStable(notes, func(i, j int) bool {
+		return notes[i].Octave()*12+uint8(notes[i].Semitone()) < notes[j].Octave()*12+uint8(notes[j].Semitone())
+	})
 
+	chordStructure := Structure{}
 	root := notes[0]
-	structure = append(structure, intervals.PerfectUnison)
+	bass := root
+	chordStructure = append(chordStructure, intervals.PerfectUnison)
 	for _, note := range notes[1:] {
-		targetPosition := note.Position()
-		if targetPosition < root.Position() {
-			targetPosition += 7
+		chordStructure = append(chordStructure, intervals.New(root.Distance(note).Position(), root.Distance(note).Semitone()))
+	}
+
+	structures := Structures()
+
+	for _, refStructure := range structures {
+		if !chordStructure.Equivalent(refStructure) {
+			inversion := refStructure.Inversion(chordStructure)
+			if inversion == nil {
+				continue
+			}
+			root = *root.Interval(inversion.Relative())
 		}
 
-		targetSemitone := note.Semitone()
-		if targetSemitone < root.Semitone() {
-			targetSemitone += 12
-		}
-
-		structure = append(structure, intervals.New(targetPosition-root.Position(), uint(targetSemitone-root.Semitone())))
+		chordStructure = refStructure
+		break
 	}
 
 	return Chord{
-		root:      notes[0],
-		structure: structure,
-		bass:      notes[0],
+		root:      root,
+		structure: chordStructure,
+		bass:      bass,
 	}
 }
 

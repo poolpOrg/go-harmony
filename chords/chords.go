@@ -995,6 +995,10 @@ func (chord *Chord) Structure() []intervals.Interval {
 	return chord.structure
 }
 
+func (chord *Chord) SetRoot(root notes.Note) {
+	chord.root = root
+}
+
 func FromNotes(notes []notes.Note) Chord {
 	// sort notes by ascending order
 	sort.SliceStable(notes, func(i, j int) bool {

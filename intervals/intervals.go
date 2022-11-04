@@ -17,6 +17,7 @@ var (
 	MinorSecond       Interval = Interval{pos: 1, semitone: 1}
 	MajorSecond       Interval = Interval{pos: 1, semitone: 2}
 	AugmentedSecond   Interval = Interval{pos: 1, semitone: 3}
+	DiminishedThird   Interval = Interval{pos: 2, semitone: 2}
 	MinorThird        Interval = Interval{pos: 2, semitone: 3}
 	MajorThird        Interval = Interval{pos: 2, semitone: 4}
 	DiminishedFourth  Interval = Interval{pos: 3, semitone: 4}
@@ -25,12 +26,14 @@ var (
 	DiminishedFifth   Interval = Interval{pos: 4, semitone: 6}
 	PerfectFifth      Interval = Interval{pos: 4, semitone: 7}
 	AugmentedFifth    Interval = Interval{pos: 4, semitone: 8}
+	DiminishedSixth   Interval = Interval{pos: 5, semitone: 7}
 	MinorSixth        Interval = Interval{pos: 5, semitone: 8}
 	MajorSixth        Interval = Interval{pos: 5, semitone: 9}
 	AugmentedSixth    Interval = Interval{pos: 5, semitone: 10}
 	DiminishedSeventh Interval = Interval{pos: 6, semitone: 9}
 	MinorSeventh      Interval = Interval{pos: 6, semitone: 10}
 	MajorSeventh      Interval = Interval{pos: 6, semitone: 11}
+	DiminishedOctave  Interval = Interval{pos: 7, semitone: 11}
 	Octave            Interval = Interval{pos: 7, semitone: 12}
 	AugmentedOctave   Interval = Interval{pos: 7, semitone: 13}
 	MinorNinth        Interval = Interval{pos: 8, semitone: 13}
@@ -46,6 +49,61 @@ var (
 	MinorThirteenth   Interval = Interval{pos: 12, semitone: 20}
 	MajorThirteenth   Interval = Interval{pos: 12, semitone: 21}
 )
+
+func Intervals() []Interval {
+	ret := make([]Interval, 0)
+
+	ret = append(ret, PerfectUnison)
+	ret = append(ret, AugmentedUnison)
+
+	ret = append(ret, MinorSecond)
+	ret = append(ret, MajorSecond)
+	ret = append(ret, AugmentedSecond)
+
+	ret = append(ret, DiminishedThird)
+	ret = append(ret, MinorThird)
+	ret = append(ret, MajorThird)
+
+	ret = append(ret, DiminishedFourth)
+	ret = append(ret, PerfectFourth)
+	ret = append(ret, AugmentedFourth)
+
+	ret = append(ret, DiminishedFifth)
+	ret = append(ret, PerfectFifth)
+	ret = append(ret, AugmentedFifth)
+
+	ret = append(ret, DiminishedSixth)
+	ret = append(ret, MinorSixth)
+	ret = append(ret, MajorSixth)
+	ret = append(ret, AugmentedSixth)
+
+	ret = append(ret, DiminishedSeventh)
+	ret = append(ret, MinorSeventh)
+	ret = append(ret, MajorSeventh)
+
+	ret = append(ret, DiminishedOctave)
+	ret = append(ret, Octave)
+	ret = append(ret, AugmentedOctave)
+
+	ret = append(ret, MinorNinth)
+	ret = append(ret, MajorNinth)
+	ret = append(ret, AugmentedNinth)
+
+	ret = append(ret, MinorTenth)
+	ret = append(ret, MajorTenth)
+
+	ret = append(ret, PerfectEleventh)
+	ret = append(ret, AugmentedEleventh)
+
+	ret = append(ret, DiminishedTwelfth)
+	ret = append(ret, PerfectTwelfth)
+	ret = append(ret, AugmentedTwelfth)
+
+	ret = append(ret, MinorThirteenth)
+	ret = append(ret, MajorThirteenth)
+
+	return ret
+}
 
 func New(pos uint, semitone uint) Interval {
 	return Interval{pos: pos, semitone: semitone}
@@ -64,6 +122,8 @@ func (interval Interval) Name() string {
 		return "2maj"
 	case AugmentedSecond:
 		return "2aug"
+	case DiminishedThird:
+		return "3dim"
 	case MinorThird:
 		return "3min"
 	case MajorThird:
@@ -80,6 +140,8 @@ func (interval Interval) Name() string {
 		return "5"
 	case AugmentedFifth:
 		return "5aug"
+	case DiminishedSixth:
+		return "6dim"
 	case MinorSixth:
 		return "6min"
 	case MajorSixth:
@@ -92,6 +154,8 @@ func (interval Interval) Name() string {
 		return "7min"
 	case MajorSeventh:
 		return "7maj"
+	case DiminishedOctave:
+		return "8dim"
 	case Octave:
 		return "8"
 	case AugmentedOctave:
@@ -121,6 +185,7 @@ func (interval Interval) Name() string {
 	case MajorThirteenth:
 		return "13maj"
 	default:
+		fmt.Println(interval)
 		panic("unknown interval")
 	}
 }
@@ -149,6 +214,8 @@ func Parse(intervalName string) (*Interval, error) {
 		return &MajorSecond, nil
 	case "2aug":
 		return &AugmentedSecond, nil
+	case "3dim":
+		return &DiminishedThird, nil
 	case "3min":
 		return &MinorThird, nil
 	case "3maj":
@@ -165,6 +232,8 @@ func Parse(intervalName string) (*Interval, error) {
 		return &PerfectFifth, nil
 	case "5aug":
 		return &AugmentedFifth, nil
+	case "6dim":
+		return &DiminishedSixth, nil
 	case "6min":
 		return &MinorSixth, nil
 	case "6maj":
@@ -177,6 +246,8 @@ func Parse(intervalName string) (*Interval, error) {
 		return &MinorSeventh, nil
 	case "7maj":
 		return &MajorSeventh, nil
+	case "8dim":
+		return &DiminishedOctave, nil
 	case "8":
 		return &Octave, nil
 	case "8aug":

@@ -14,7 +14,7 @@ type Structure []intervals.Interval
 type chord struct {
 	root      notes.Note
 	structure Structure
-	bass      notes.Note
+	inversion intervals.Interval
 }
 type Chord chord
 
@@ -352,13 +352,14 @@ func (structure Structure) Inversion(target Structure) *intervals.Interval {
 	c.structure = structure
 
 	for i := 1; i < len(c.Notes()); i++ {
-		inversion, err := Parse(fmt.Sprintf("%s/%s", c.Name(), c.Notes()[i].OctaveName()))
+		inversionChord, err := Parse(fmt.Sprintf("%s/%s", c.Name(), c.Notes()[i].OctaveName()))
 		if err != nil {
 			panic(err)
 		}
 		substructure := Structure{}
-		for j := 0; j < len(inversion.Notes()); j++ {
-			substructure = append(substructure, inversion.bass.Distance(inversion.Notes()[j]))
+		inversionNote := inversionChord.root.Interval(inversionChord.inversion)
+		for j := 0; j < len(inversionChord.Notes()); j++ {
+			substructure = append(substructure, inversionNote.Distance(inversionChord.Notes()[j]))
 		}
 		if substructure.Equivalent(target) {
 			return &c.structure[i]
@@ -905,7 +906,7 @@ func Parse(chord string) (*Chord, error) {
 	c := &Chord{
 		root:      *n,
 		structure: structure,
-		bass:      *n,
+		inversion: intervals.PerfectUnison,
 	}
 
 	if inversion != "" {
@@ -921,12 +922,12 @@ func Parse(chord string) (*Chord, error) {
 		for _, interval := range c.structure {
 			if n.Interval(interval).Name() == n2.Name() {
 				found = true
+				c.inversion = interval
 			}
 		}
 		if !found {
 			return nil, fmt.Errorf("inversion note %s not found in chord: %s", inversion, c.Name())
 		}
-		c.bass = *n2
 		c.root.SetOctave(n2.Octave())
 	}
 
@@ -938,15 +939,15 @@ func (chord *Chord) Name() string {
 	name := chord.root.Name()
 	structureName := chord.structure.Name()
 	if structureName == "" {
-		for _, interval := range chord.structure {
-			fmt.Println(interval.Name())
+		structureName = " ("
+		for _, interval := range chord.structure[1:] {
+			structureName += interval.Name() + ":" + chord.root.Interval(interval).Name() + ","
 		}
-
-		panic("unknown structure name")
+		structureName += ")"
 	}
 	name += structureName
-	if chord.bass.Name() != chord.root.Name() {
-		name += "/" + chord.bass.Name()
+	if chord.inversion != intervals.PerfectUnison {
+		name += "/" + chord.root.Interval(chord.inversion).Name()
 	}
 	return name
 }
@@ -956,31 +957,33 @@ func (chord *Chord) Root() *notes.Note {
 }
 
 func (chord *Chord) Notes() []notes.Note {
-	ret := make([]notes.Note, 0)
-	ret = append(ret, chord.bass)
-	prev := chord.bass
 
-	beginOffset := 0
-	for _, interval := range chord.structure {
-		n := *chord.root.Interval(interval)
-		if n.Name() == chord.bass.Name() {
-			break
-		}
-		beginOffset++
+	ret := make([]notes.Note, 0)
+	ret = append(ret, *chord.root.Interval(chord.inversion))
+
+	prev := &ret[0]
+
+	if chord.inversion != intervals.PerfectUnison && prev.Octave() > chord.root.Octave() {
+		prev.SetOctave(chord.root.Octave())
 	}
 
-	for offset := beginOffset + 1; offset%len(chord.structure) != beginOffset; offset++ {
+	var begin int
+	for begin = 0; begin < len(chord.structure); begin++ {
+		if chord.structure[begin] == chord.inversion {
+			break
+		}
+	}
+
+	for offset := begin + 1; offset%len(chord.structure) != begin; offset++ {
 		interval := chord.structure[offset%len(chord.structure)]
-		n := *chord.root.Interval(interval)
-		if n.Name() != chord.bass.Name() {
-
+		n := chord.root.Interval(interval)
+		if n.Name() != chord.root.Interval(chord.inversion).Name() {
 			if n.Octave() < prev.Octave() {
-				n = *n.Interval(intervals.Octave)
+				n = n.Interval(intervals.Octave)
 			} else if n.Position() < prev.Position() && n.Octave() <= prev.Octave() {
-				n = *n.Interval(intervals.Octave)
+				n = n.Interval(intervals.Octave)
 			}
-
-			ret = append(ret, n)
+			ret = append(ret, *n)
 			prev = n
 		}
 	}
@@ -998,25 +1001,35 @@ func FromNotes(notes []notes.Note) Chord {
 		return notes[i].Octave()*12+uint8(notes[i].Semitone()) < notes[j].Octave()*12+uint8(notes[j].Semitone())
 	})
 
-	chordStructure := Structure{}
 	root := notes[0]
-	bass := root
+
+	chordStructure := Structure{}
 	chordStructure = append(chordStructure, intervals.PerfectUnison)
+	chordInversion := intervals.PerfectUnison
 	for _, note := range notes[1:] {
 		chordStructure = append(chordStructure, intervals.New(root.Distance(note).Position(), root.Distance(note).Semitone()))
 	}
 
+	// first try to match a general structure
 	structures := Structures()
-
 	for _, refStructure := range structures {
-		if !chordStructure.Equivalent(refStructure) {
-			inversion := refStructure.Inversion(chordStructure)
-			if inversion == nil {
-				continue
+		if chordStructure.Equivalent(refStructure) {
+			return Chord{
+				root:      root,
+				structure: refStructure,
+				inversion: chordInversion,
 			}
-			root = *root.Interval(inversion.Relative())
 		}
+	}
 
+	// none found, try matching inversions
+	for _, refStructure := range structures {
+		inversionInterval := refStructure.Inversion(chordStructure)
+		if inversionInterval == nil {
+			continue
+		}
+		root = *root.Interval(inversionInterval.Relative())
+		chordInversion = *inversionInterval
 		chordStructure = refStructure
 		break
 	}
@@ -1024,7 +1037,7 @@ func FromNotes(notes []notes.Note) Chord {
 	return Chord{
 		root:      root,
 		structure: chordStructure,
-		bass:      bass,
+		inversion: chordInversion,
 	}
 }
 
@@ -1034,22 +1047,22 @@ func (chord *Chord) Relative() *Chord {
 	if structure[1] == intervals.MinorThird {
 		structure[1] = intervals.MajorThird
 		root := *chord.root.Interval(intervals.MinorThird)
-		root.SetOctave(chord.bass.Octave())
+		root.SetOctave(root.Interval(chord.inversion).Octave())
 		ret := &Chord{
 			root:      root,
 			structure: structure,
-			bass:      root,
+			inversion: intervals.PerfectUnison,
 		}
 		return ret
 
 	} else if structure[1] == intervals.MajorThird {
 		structure[1] = intervals.MinorThird
 		root := *chord.root.Interval(intervals.MajorSixth)
-		root.SetOctave(chord.bass.Octave())
+		root.SetOctave(root.Interval(chord.inversion).Octave())
 		ret := &Chord{
 			root:      root,
 			structure: structure,
-			bass:      root,
+			inversion: intervals.PerfectUnison,
 		}
 		return ret
 	}

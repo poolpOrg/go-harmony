@@ -39,6 +39,11 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Println(n.OctaveName(), "=", n.Frequency())
+		fmt.Println()
+
+		for _, interval := range intervals.Intervals() {
+			fmt.Printf("%5s: %s\n", interval.Name(), n.Interval(interval).Name())
+		}
 
 		fmt.Println()
 		structures := chords.Structures()
@@ -60,7 +65,7 @@ func main() {
 		}
 		fmt.Printf("%-20s", c.Name()+":")
 		for _, n := range c.Notes() {
-			fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.Name())
+			fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.OctaveName())
 		}
 		fmt.Println()
 		fmt.Println()
@@ -73,14 +78,12 @@ func main() {
 				}
 				fmt.Printf("%-20s", fmt.Sprintf("%d inversion:", i))
 				for _, n := range inversion.Notes() {
-					//fmt.Println(n.OctaveName())
 					fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.Name())
 				}
 				fmt.Println()
 			}
 			fmt.Println()
 		}
-
 		if c.Relative() != nil {
 
 			fmt.Printf("%-20s", fmt.Sprintf("relative %s:", c.Relative().Name()))
@@ -110,7 +113,6 @@ func main() {
 			}
 			fmt.Println()
 		}
-
 	}
 
 	if opt_scale != "" {
@@ -139,21 +141,13 @@ func main() {
 		notes := s.Notes()
 		fmt.Printf("%-20s", notes[0].Name()+" "+s.Name()+" scale:")
 		for offset, n := range notes[0 : len(notes)-1] {
-			fmt.Printf(colors[offset], n.Name())
+			fmt.Printf(colors[offset], n.OctaveName())
 		}
 		fmt.Println()
 
 		if len(s.Notes()) >= 7 {
 			fmt.Printf("%-20s", "diatonic triads:")
 			for offset, c := range s.Triads() {
-				/*
-
-					case int(scales.Dominant):
-						fallthrough
-					case int(scales.LeadingTone):
-						fmt.Printf("\tD  ")
-					}
-				*/
 				fmt.Printf(colors[offset], c.Name())
 			}
 			fmt.Println()
@@ -172,8 +166,8 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Println(c.Name())
-		for _, n := range c.Notes() {
-			fmt.Println("  ", n.Name(), n.Frequency())
+		for offset, n := range c.Notes() {
+			fmt.Printf("%8s %3s %.02f\n", c.Structure()[offset].Name(), n.OctaveName(), n.Frequency())
 		}
 	}
 

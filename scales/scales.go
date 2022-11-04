@@ -346,7 +346,18 @@ func (scale *Scale) Triads() []chords.Chord {
 	scaleNotes := scale.Notes()[0 : len(scale.Notes())-1]
 	ret := make([]chords.Chord, 0)
 	for i := 0; i < len(scaleNotes); i++ {
-		chord := chords.FromNotes([]notes.Note{scaleNotes[i], scaleNotes[(i+2)%len(scaleNotes)], scaleNotes[(i+4)%len(scaleNotes)]})
+		root := scaleNotes[i]
+		third := scaleNotes[(i+2)%len(scaleNotes)]
+		fifth := scaleNotes[(i+4)%len(scaleNotes)]
+
+		if third.Position() < root.Position() || i+2 >= len(scaleNotes) {
+			third.SetOctave(third.Octave() + 1)
+		}
+		if fifth.Position() < root.Position() || i+4 >= len(scaleNotes) {
+			fifth.SetOctave(fifth.Octave() + 1)
+		}
+
+		chord := chords.FromNotes([]notes.Note{root, third, fifth})
 		ret = append(ret, chord)
 	}
 	return ret
@@ -358,7 +369,22 @@ func (scale *Scale) Sevenths() []chords.Chord {
 	scaleNotes := scale.Notes()[0 : len(scale.Notes())-1]
 	ret := make([]chords.Chord, 0)
 	for i := 0; i < len(scaleNotes); i++ {
-		chord := chords.FromNotes([]notes.Note{scaleNotes[i], scaleNotes[(i+2)%len(scaleNotes)], scaleNotes[(i+4)%len(scaleNotes)], scaleNotes[(i+6)%len(scaleNotes)]})
+		root := scaleNotes[i]
+		third := scaleNotes[(i+2)%len(scaleNotes)]
+		fifth := scaleNotes[(i+4)%len(scaleNotes)]
+		seventh := scaleNotes[(i+6)%len(scaleNotes)]
+
+		if third.Position() < root.Position() || i+2 >= len(scaleNotes) {
+			third.SetOctave(third.Octave() + 1)
+		}
+		if fifth.Position() < root.Position() || i+4 >= len(scaleNotes) {
+			fifth.SetOctave(fifth.Octave() + 1)
+		}
+		if seventh.Position() < root.Position() || i+6 >= len(scaleNotes) {
+			seventh.SetOctave(seventh.Octave() + 1)
+		}
+
+		chord := chords.FromNotes([]notes.Note{root, third, fifth, seventh})
 		ret = append(ret, chord)
 	}
 	return ret
@@ -368,14 +394,40 @@ func (scale *Scale) Triad(degree Degree) chords.Chord {
 	// skip octave in triads construction
 	// XXX - fix for melodic minor
 	scaleNotes := scale.Notes()[0 : len(scale.Notes())-1]
-	return chords.FromNotes([]notes.Note{scaleNotes[degree], scaleNotes[(int(degree)+2)%len(scaleNotes)], scaleNotes[(int(degree)+4)%len(scaleNotes)]})
+	root := scaleNotes[int(degree)]
+	third := scaleNotes[(int(degree)+2)%len(scaleNotes)]
+	fifth := scaleNotes[(int(degree)+4)%len(scaleNotes)]
+
+	if third.Position() < root.Position() || int(degree)+2 >= len(scaleNotes) {
+		third.SetOctave(third.Octave() + 1)
+	}
+	if fifth.Position() < root.Position() || int(degree)+4 >= len(scaleNotes) {
+		fifth.SetOctave(fifth.Octave() + 1)
+	}
+
+	return chords.FromNotes([]notes.Note{root, third, fifth})
 }
 
 func (scale *Scale) Seventh(degree Degree) chords.Chord {
 	// skip octave in seventh construction
 	// XXX - fix for melodic minor
 	scaleNotes := scale.Notes()[0 : len(scale.Notes())-1]
-	return chords.FromNotes([]notes.Note{scaleNotes[degree], scaleNotes[(int(degree)+2)%len(scaleNotes)], scaleNotes[(int(degree)+4)%len(scaleNotes)], scaleNotes[(int(degree)+6)%len(scaleNotes)]})
+	root := scaleNotes[int(degree)]
+	third := scaleNotes[(int(degree)+2)%len(scaleNotes)]
+	fifth := scaleNotes[(int(degree)+4)%len(scaleNotes)]
+	seventh := scaleNotes[(int(degree)+6)%len(scaleNotes)]
+
+	if third.Position() < root.Position() || int(degree)+2 >= len(scaleNotes) {
+		third.SetOctave(third.Octave() + 1)
+	}
+	if fifth.Position() < root.Position() || int(degree)+4 >= len(scaleNotes) {
+		fifth.SetOctave(fifth.Octave() + 1)
+	}
+	if seventh.Position() < root.Position() || int(degree)+6 >= len(scaleNotes) {
+		seventh.SetOctave(seventh.Octave() + 1)
+	}
+
+	return chords.FromNotes([]notes.Note{root, third, fifth, seventh})
 }
 
 func (scale *Scale) NotesInChord(chord chords.Chord) int {

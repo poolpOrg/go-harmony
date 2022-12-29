@@ -3,6 +3,7 @@ package instruments
 import (
 	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/intervals"
+	"github.com/poolpOrg/go-harmony/naturals"
 	"github.com/poolpOrg/go-harmony/notes"
 	"github.com/poolpOrg/go-harmony/scales"
 	"github.com/poolpOrg/go-harmony/tunings"
@@ -12,6 +13,14 @@ type Instrument struct{}
 
 func NewInstrument(tuning tunings.Tuning) Instrument {
 	return Instrument{}
+}
+
+func (instrument *Instrument) Natural(name string) (naturals.Natural, error) {
+	natural, err := naturals.Parse(name)
+	if err != nil {
+		return naturals.Natural{}, err
+	}
+	return *natural, nil
 }
 
 func (instrument *Instrument) Note(name string) (notes.Note, error) {

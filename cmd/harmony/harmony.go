@@ -14,6 +14,7 @@ import (
 )
 
 func main() {
+	var opt_natural string
 	var opt_note string
 	var opt_chord string
 	var opt_scale string
@@ -22,6 +23,7 @@ func main() {
 	var opt_progression string
 	var opt_interval string
 
+	flag.StringVar(&opt_natural, "natural", "", "natural")
 	flag.StringVar(&opt_note, "note", "", "note")
 	flag.StringVar(&opt_chord, "chord", "", "chord")
 	flag.StringVar(&opt_scale, "scale", "", "scale")
@@ -32,6 +34,17 @@ func main() {
 	flag.Parse()
 
 	instrument := instruments.NewInstrument(tunings.A440)
+
+	if opt_natural != "" {
+		n, err := instrument.Natural(opt_natural)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("name: %s, position: %d, semitones: %d\n", n.Name(), n.Position(), n.Semitones())
+		fmt.Printf("\tprev: name: %s, position: %d, semitones: %d\n", n.Previous().Name(), n.Previous().Position(), n.Previous().Semitones())
+		fmt.Printf("\tnext: name: %s, position: %d, semitones: %d\n", n.Next().Name(), n.Next().Position(), n.Next().Semitones())
+		fmt.Println()
+	}
 
 	if opt_note != "" {
 		n, err := instrument.Note(opt_note)

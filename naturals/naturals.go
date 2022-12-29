@@ -6,23 +6,26 @@ import (
 
 type natural struct {
 	name      string
-	pos       int
+	position  int
 	semitones int
 }
 type Natural natural
 
+var (
+	C Natural = Natural{name: "C", position: 0, semitones: 0}
+	D Natural = Natural{name: "D", position: 1, semitones: 2}
+	E Natural = Natural{name: "E", position: 2, semitones: 4}
+	F Natural = Natural{name: "F", position: 3, semitones: 5}
+	G Natural = Natural{name: "G", position: 4, semitones: 7}
+	A Natural = Natural{name: "A", position: 5, semitones: 9}
+	B Natural = Natural{name: "B", position: 6, semitones: 11}
+)
+
 var naturals = []Natural{
-	{name: "C", pos: 0, semitones: 0},
-	{name: "D", pos: 1, semitones: 2},
-	{name: "E", pos: 2, semitones: 4},
-	{name: "F", pos: 3, semitones: 5},
-	{name: "G", pos: 4, semitones: 7},
-	{name: "A", pos: 5, semitones: 9},
-	{name: "B", pos: 6, semitones: 11},
+	C, D, E, F, G, A, B,
 }
 
 func Parse(name string) (*Natural, error) {
-
 	for _, element := range naturals {
 		if element.name == name {
 			return &element, nil
@@ -36,7 +39,7 @@ func (natural *Natural) Name() string {
 }
 
 func (natural *Natural) Position() uint {
-	return uint(natural.pos)
+	return uint(natural.position)
 }
 
 func (natural *Natural) Semitones() uint {

@@ -69,7 +69,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(n.OctaveName(), "=", n.Frequency())
+		fmt.Println(n.OctaveName(), "=", n.Frequency(), "=", n.MIDI(), "(MIDI)")
 		fmt.Println()
 
 		for _, interval := range intervals.Intervals() {

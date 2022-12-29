@@ -242,3 +242,7 @@ func (note *Note) SetOctave(position uint8) error {
 	note.octave = *octave
 	return nil
 }
+
+func (note *Note) MIDI() uint8 {
+	return uint8(note.Semitone()) + ((note.Octave() + 1) * 12)
+}

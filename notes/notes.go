@@ -142,7 +142,7 @@ func (note *Note) Distance(target Note) intervals.Interval {
 }
 
 func (note *Note) Position() uint {
-	return note.natural.Position()
+	return note.natural.Position() + uint(note.octave.Position()*12)
 }
 
 func (note *Note) Semitone() int {
@@ -150,16 +150,8 @@ func (note *Note) Semitone() int {
 }
 
 func (note *Note) Frequency() float64 {
-	tuning := tunings.A440
-	octave := note.octave
-	semitone := note.Semitone()
-	if semitone < 0 {
-		semitone = (12 + semitone) % 12
-		if octave.Position() != 0 {
-			octave = *octave.Previous()
-		}
-	}
-	return tuning.Frequency(uint(semitone), uint(octave.Position()))
+	tuner := tunings.NewTuner(tunings.EqualTemperament, tunings.A440)
+	return tuner.Frequency(uint8(note.Position()))
 }
 
 func (note *Note) Inharmonic(target Note) bool {

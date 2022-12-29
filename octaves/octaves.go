@@ -37,6 +37,15 @@ func Parse(name string) (*Octave, error) {
 	return nil, fmt.Errorf("bad name (%s): should be '0', '1', '2', '3', '4', '5', '6' or '7'", name)
 }
 
+func FromPosition(position uint8) (*Octave, error) {
+	for _, element := range octaves {
+		if element.position == position {
+			return &element, nil
+		}
+	}
+	return nil, fmt.Errorf("bad position (%d): should be '0', '1', '2', '3', '4', '5', '6' or '7'", position)
+}
+
 func (octave *Octave) Name() string {
 	return fmt.Sprintf("%d", octave.position)
 }
@@ -69,10 +78,10 @@ func (octave *Octave) Add(value uint8) *Octave {
 	}
 }
 
-func (octave *Octave) Set(value uint8) *Octave {
-	if value > C7.position {
+func (octave *Octave) Substract(value uint8) *Octave {
+	if value > octave.position {
 		return nil
 	} else {
-		return &Octave{position: value}
+		return &Octave{position: octave.position - value}
 	}
 }

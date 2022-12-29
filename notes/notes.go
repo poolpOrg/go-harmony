@@ -236,6 +236,11 @@ func (note *Note) Raise() *Note {
 }
 
 // temporarily until a more generic method is devised
-func (note *Note) SetOctave(octave uint8) {
-	note.octave = *note.octave.Set(octave)
+func (note *Note) SetOctave(position uint8) error {
+	octave, err := octaves.FromPosition(position)
+	if err != nil {
+		return err
+	}
+	note.octave = *octave
+	return nil
 }

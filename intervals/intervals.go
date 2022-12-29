@@ -68,7 +68,16 @@ var (
 	DiminishedThirteenth Interval = Interval{pos: 12, semitone: 19}
 	MinorThirteenth      Interval = Interval{pos: 12, semitone: 20}
 	MajorThirteenth      Interval = Interval{pos: 12, semitone: 21}
-	AugmentedThirteenth  Interval = Interval{pos: 12, semitone: 12}
+	AugmentedThirteenth  Interval = Interval{pos: 12, semitone: 22}
+
+	DiminishedFourteenth Interval = Interval{pos: 13, semitone: 21}
+	MinorFourteenth      Interval = Interval{pos: 13, semitone: 22}
+	MajorFourteenth      Interval = Interval{pos: 13, semitone: 23}
+	AugmentedFourteenth  Interval = Interval{pos: 13, semitone: 24}
+
+	DiminishedFifteenth Interval = Interval{pos: 14, semitone: 23}
+	PerfectFifteenth    Interval = Interval{pos: 14, semitone: 24}
+	AugmentedFifteenth  Interval = Interval{pos: 14, semitone: 25}
 )
 
 func Intervals() []Interval {
@@ -131,6 +140,15 @@ func Intervals() []Interval {
 	ret = append(ret, MinorThirteenth)
 	ret = append(ret, MajorThirteenth)
 	ret = append(ret, AugmentedThirteenth)
+
+	ret = append(ret, DiminishedFourteenth)
+	ret = append(ret, MinorFourteenth)
+	ret = append(ret, MajorFourteenth)
+	ret = append(ret, AugmentedFourteenth)
+
+	ret = append(ret, DiminishedFifteenth)
+	ret = append(ret, PerfectFifteenth)
+	ret = append(ret, AugmentedFifteenth)
 
 	return ret
 }
@@ -244,6 +262,22 @@ func (interval Interval) Name() string {
 		return "13maj"
 	case AugmentedThirteenth:
 		return "13aug"
+
+	case DiminishedFourteenth:
+		return "14dim"
+	case MinorFourteenth:
+		return "14min"
+	case MajorFourteenth:
+		return "14maj"
+	case AugmentedFourteenth:
+		return "14aug"
+
+	case DiminishedFifteenth:
+		return "15dim"
+	case PerfectFifteenth:
+		return "15"
+	case AugmentedFifteenth:
+		return "15aug"
 
 	default:
 		fmt.Println(interval)
@@ -363,6 +397,22 @@ func Parse(intervalName string) (*Interval, error) {
 		return &MajorThirteenth, nil
 	case "13aug":
 		return &AugmentedThirteenth, nil
+
+	case "14dim":
+		return &DiminishedFourteenth, nil
+	case "14min":
+		return &MinorFourteenth, nil
+	case "14maj":
+		return &MajorFourteenth, nil
+	case "14aug":
+		return &AugmentedFourteenth, nil
+
+	case "15dim":
+		return &DiminishedFifteenth, nil
+	case "15":
+		return &PerfectFifteenth, nil
+	case "15aug":
+		return &AugmentedFifteenth, nil
 
 	default:
 		return nil, fmt.Errorf("unknown interval name: %s", intervalName)

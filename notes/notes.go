@@ -23,18 +23,16 @@ func Parse(note string) (*Note, error) {
 	}
 
 	var octave octaves.Octave = octaves.C4
-	var accidentals string
+	var accidentals = note[1:]
 
 	r := rune(note[len(note)-1])
 	if r >= '0' && r <= '9' {
-		t, err := octaves.Parse(note[len(note)-1:])
+		t, err := octaves.FromName("C" + note[len(note)-1:])
 		if err != nil {
 			return nil, err
 		}
 		octave = *t
 		accidentals = note[1 : len(note)-1]
-	} else {
-		accidentals = note[1:]
 	}
 
 	var accidentalDelta int
@@ -49,7 +47,7 @@ func Parse(note string) (*Note, error) {
 		}
 	}
 
-	natural, err := naturals.Parse(note[0:1])
+	natural, err := naturals.FromName(note[0:1])
 	if err != nil {
 		return nil, err
 	}

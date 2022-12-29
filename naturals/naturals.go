@@ -29,7 +29,7 @@ func Naturals() []Natural {
 	return naturals
 }
 
-func Parse(name string) (*Natural, error) {
+func FromName(name string) (*Natural, error) {
 	for _, element := range naturals {
 		if element.name == name {
 			return &element, nil

@@ -9,12 +9,14 @@ import (
 	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/instruments"
 	"github.com/poolpOrg/go-harmony/intervals"
+	"github.com/poolpOrg/go-harmony/octaves"
 	"github.com/poolpOrg/go-harmony/scales"
 	"github.com/poolpOrg/go-harmony/tunings"
 )
 
 func main() {
 	var opt_natural string
+	var opt_octave string
 	var opt_note string
 	var opt_chord string
 	var opt_scale string
@@ -24,6 +26,7 @@ func main() {
 	var opt_interval string
 
 	flag.StringVar(&opt_natural, "natural", "", "natural")
+	flag.StringVar(&opt_octave, "octave", "", "octave")
 	flag.StringVar(&opt_note, "note", "", "note")
 	flag.StringVar(&opt_chord, "chord", "", "chord")
 	flag.StringVar(&opt_scale, "scale", "", "scale")
@@ -43,6 +46,21 @@ func main() {
 		fmt.Printf("name: %s, position: %d, semitones: %d\n", n.Name(), n.Position(), n.Semitones())
 		fmt.Printf("\tprev: name: %s, position: %d, semitones: %d\n", n.Previous().Name(), n.Previous().Position(), n.Previous().Semitones())
 		fmt.Printf("\tnext: name: %s, position: %d, semitones: %d\n", n.Next().Name(), n.Next().Position(), n.Next().Semitones())
+		fmt.Println()
+	}
+
+	if opt_octave != "" {
+		o, err := instrument.Octave(opt_octave)
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("name: %s, position: %d\n", o.Name(), o.Position())
+		if o != octaves.C0 {
+			fmt.Printf("\tprev: name: %s, position: %d\n", o.Previous().Name(), o.Previous().Position())
+		}
+		if o != octaves.C7 {
+			fmt.Printf("\tnext: name: %s, position: %d\n", o.Next().Name(), o.Next().Position())
+		}
 		fmt.Println()
 	}
 

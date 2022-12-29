@@ -37,6 +37,15 @@ func Parse(name string) (*Octave, error) {
 	return nil, fmt.Errorf("bad name (%s): should be '0', '1', '2', '3', '4', '5', '6' or '7'", name)
 }
 
+func FromName(name string) (*Octave, error) {
+	for _, element := range octaves {
+		if fmt.Sprintf("C%d", element.position) == name {
+			return &element, nil
+		}
+	}
+	return nil, fmt.Errorf("bad name (%s): should be 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6' or 'C7'", name)
+}
+
 func FromPosition(position uint8) (*Octave, error) {
 	for _, element := range octaves {
 		if element.position == position {
@@ -47,7 +56,7 @@ func FromPosition(position uint8) (*Octave, error) {
 }
 
 func (octave *Octave) Name() string {
-	return fmt.Sprintf("%d", octave.position)
+	return fmt.Sprintf("C%d", octave.position)
 }
 
 func (octave *Octave) Position() uint8 {

@@ -5,6 +5,7 @@ import (
 	"github.com/poolpOrg/go-harmony/intervals"
 	"github.com/poolpOrg/go-harmony/naturals"
 	"github.com/poolpOrg/go-harmony/notes"
+	"github.com/poolpOrg/go-harmony/octaves"
 	"github.com/poolpOrg/go-harmony/scales"
 	"github.com/poolpOrg/go-harmony/tunings"
 )
@@ -16,11 +17,19 @@ func NewInstrument(tuning tunings.Tuning) Instrument {
 }
 
 func (instrument *Instrument) Natural(name string) (naturals.Natural, error) {
-	natural, err := naturals.Parse(name)
+	natural, err := naturals.FromName(name)
 	if err != nil {
 		return naturals.Natural{}, err
 	}
 	return *natural, nil
+}
+
+func (instrument *Instrument) Octave(name string) (octaves.Octave, error) {
+	octave, err := octaves.FromName(name)
+	if err != nil {
+		return octaves.Octave{}, err
+	}
+	return *octave, nil
 }
 
 func (instrument *Instrument) Note(name string) (notes.Note, error) {

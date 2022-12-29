@@ -2,18 +2,18 @@ package notes
 
 import (
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/poolpOrg/go-harmony/intervals"
 	"github.com/poolpOrg/go-harmony/naturals"
+	"github.com/poolpOrg/go-harmony/octaves"
 	"github.com/poolpOrg/go-harmony/tunings"
 )
 
 type note struct {
 	natural     naturals.Natural
 	accidentals int
-	octave      uint8
+	octave      octaves.Octave
 }
 type Note note
 
@@ -22,22 +22,18 @@ func Parse(note string) (*Note, error) {
 		return nil, fmt.Errorf("empty note")
 	}
 
-	var octave uint8
+	var octave octaves.Octave = octaves.C4
 	var accidentals string
 
 	r := rune(note[len(note)-1])
 	if r >= '0' && r <= '9' {
-		value, err := strconv.ParseUint(note[len(note)-1:], 10, 8)
+		t, err := octaves.Parse(note[len(note)-1:])
 		if err != nil {
 			return nil, err
 		}
-		if value > 8 {
-			return nil, fmt.Errorf("bad octave (%d): should be 0 <= n <= 8)", value)
-		}
-		octave = uint8(value)
+		octave = *t
 		accidentals = note[1 : len(note)-1]
 	} else {
-		octave = uint8(4)
 		accidentals = note[1:]
 	}
 
@@ -89,16 +85,16 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 	// interval aligned on an octave
 	if interval.Semitone()%12 == 0 {
 		targetNote := *note
-		targetNote.octave += uint8(interval.Semitone() / 12)
+		targetNote.octave = *targetNote.octave.Add(uint8(interval.Semitone() / 12))
 		return &targetNote
 	}
 
 	target := naturals.Naturals()[(int(note.natural.Position())+int(interval.Position()))%len(naturals.Naturals())]
 	sourceSemitone := int(note.natural.Semitones()) + note.accidentals
 
-	targetOctave := note.octave + uint8(interval.Semitone()/12)
+	targetOctave := note.octave.Add(uint8(interval.Semitone() / 12))
 	if target.Position() < note.natural.Position() {
-		targetOctave++
+		targetOctave = targetOctave.Next()
 	}
 
 	targetSemitone := target.Semitones() + uint(note.accidentals)
@@ -115,7 +111,7 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 	return &Note{
 		natural:     target,
 		accidentals: targetAccidentals,
-		octave:      targetOctave,
+		octave:      *targetOctave,
 	}
 }
 
@@ -123,8 +119,8 @@ func (note *Note) Distance(target Note) intervals.Interval {
 	var origin Note
 	var destination Note
 
-	offset1 := note.octave*12 + uint8(note.Semitone())
-	offset2 := target.octave*12 + uint8(target.Semitone())
+	offset1 := note.octave.Position()*12 + uint8(note.Semitone())
+	offset2 := target.octave.Position()*12 + uint8(target.Semitone())
 	if offset1 < offset2 {
 		origin = *note
 		destination = target
@@ -161,11 +157,11 @@ func (note *Note) Frequency() float64 {
 	semitone := note.Semitone()
 	if semitone < 0 {
 		semitone = (12 + semitone) % 12
-		if octave != 0 {
-			octave -= 1
+		if octave.Position() != 0 {
+			octave = *octave.Previous()
 		}
 	}
-	return tuning.Frequency(uint(semitone), uint(octave))
+	return tuning.Frequency(uint(semitone), uint(octave.Position()))
 }
 
 func (note *Note) Inharmonic(target Note) bool {
@@ -173,13 +169,13 @@ func (note *Note) Inharmonic(target Note) bool {
 }
 
 func (note *Note) Octave() uint8 {
-	return note.octave
+	return note.octave.Position()
 }
 
 func (note *Note) Previous() *Note {
 	n := *note.Interval(intervals.MajorSeventh)
 	if note.natural.Name() == "C" {
-		n.octave -= 1
+		n.octave = *n.octave.Previous()
 	}
 	return &n
 }
@@ -187,7 +183,7 @@ func (note *Note) Previous() *Note {
 func (note *Note) Next() *Note {
 	n := *note.Interval(intervals.MinorSecond)
 	if note.natural.Name() == "B" {
-		n.octave += 1
+		n.octave = *n.octave.Next()
 	}
 	return &n
 }
@@ -241,5 +237,5 @@ func (note *Note) Raise() *Note {
 
 // temporarily until a more generic method is devised
 func (note *Note) SetOctave(octave uint8) {
-	note.octave = octave
+	note.octave = *note.octave.Set(octave)
 }

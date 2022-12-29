@@ -5,7 +5,7 @@ import (
 )
 
 type octave struct {
-	position uint
+	position uint8
 }
 type Octave octave
 
@@ -41,8 +41,8 @@ func (octave *Octave) Name() string {
 	return fmt.Sprintf("%d", octave.position)
 }
 
-func (octave *Octave) Position() uint {
-	return uint(octave.position)
+func (octave *Octave) Position() uint8 {
+	return octave.position
 }
 
 func (octave *Octave) Previous() *Octave {
@@ -54,9 +54,25 @@ func (octave *Octave) Previous() *Octave {
 }
 
 func (octave *Octave) Next() *Octave {
-	if octave.position == uint(len(octaves)-1) {
+	if octave.position == uint8(len(octaves)-1) {
 		return nil
 	} else {
 		return &Octave{position: octave.position + 1}
+	}
+}
+
+func (octave *Octave) Add(value uint8) *Octave {
+	if octave.position+value > uint8(len(octaves)-1) {
+		return nil
+	} else {
+		return &Octave{position: octave.position + value}
+	}
+}
+
+func (octave *Octave) Set(value uint8) *Octave {
+	if value > C7.position {
+		return nil
+	} else {
+		return &Octave{position: value}
 	}
 }

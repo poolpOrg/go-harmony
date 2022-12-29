@@ -6,29 +6,12 @@ import (
 	"strings"
 
 	"github.com/poolpOrg/go-harmony/intervals"
+	"github.com/poolpOrg/go-harmony/naturals"
 	"github.com/poolpOrg/go-harmony/tunings"
 )
 
-type natural struct {
-	name     string
-	pos      int
-	semitone int
-}
-
-var naturals = []natural{
-	{name: "C", pos: 0, semitone: 0},
-	{name: "D", pos: 1, semitone: 2},
-	{name: "E", pos: 2, semitone: 4},
-	{name: "F", pos: 3, semitone: 5},
-	{name: "G", pos: 4, semitone: 7},
-	{name: "A", pos: 5, semitone: 9},
-	{name: "B", pos: 6, semitone: 11},
-}
-
 type note struct {
-	name        string
-	pos         int
-	semitone    int
+	natural     naturals.Natural
 	accidentals int
 	octave      uint8
 }
@@ -70,39 +53,13 @@ func Parse(note string) (*Note, error) {
 		}
 	}
 
-	name := note[0:1]
-	var pos int
-	var semitone int
-	switch name {
-	case "C":
-		pos = 0
-		semitone = 0
-	case "D":
-		pos = 1
-		semitone = 2
-	case "E":
-		pos = 2
-		semitone = 4
-	case "F":
-		pos = 3
-		semitone = 5
-	case "G":
-		pos = 4
-		semitone = 7
-	case "A":
-		pos = 5
-		semitone = 9
-	case "B":
-		pos = 6
-		semitone = 11
-	default:
-		return nil, fmt.Errorf("bad note (%s): should be 'C', 'D', 'E', 'F', 'G', 'A' or 'B'", name)
+	natural, err := naturals.Parse(note[0:1])
+	if err != nil {
+		return nil, err
 	}
 
 	return &Note{
-		name:        name,
-		pos:         pos,
-		semitone:    semitone,
+		natural:     *natural,
 		accidentals: accidentalDelta,
 		octave:      octave,
 	}, nil
@@ -110,21 +67,21 @@ func Parse(note string) (*Note, error) {
 
 func (note *Note) Name() string {
 	if note.accidentals == 0 {
-		return note.name
+		return note.natural.Name()
 	} else if note.accidentals < 0 {
-		return note.name + strings.Repeat("b", -note.accidentals)
+		return note.natural.Name() + strings.Repeat("b", -note.accidentals)
 	} else {
-		return note.name + strings.Repeat("#", note.accidentals)
+		return note.natural.Name() + strings.Repeat("#", note.accidentals)
 	}
 }
 
 func (note *Note) OctaveName() string {
 	if note.accidentals == 0 {
-		return fmt.Sprintf("%s%d", note.name, note.Octave())
+		return fmt.Sprintf("%s%d", note.natural.Name(), note.Octave())
 	} else if note.accidentals < 0 {
-		return fmt.Sprintf("%s%d", note.name+strings.Repeat("b", -note.accidentals), note.Octave())
+		return fmt.Sprintf("%s%d", note.natural.Name()+strings.Repeat("b", -note.accidentals), note.Octave())
 	} else {
-		return fmt.Sprintf("%s%d", note.name+strings.Repeat("#", note.accidentals), note.Octave())
+		return fmt.Sprintf("%s%d", note.natural.Name()+strings.Repeat("#", note.accidentals), note.Octave())
 	}
 }
 
@@ -136,29 +93,27 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 		return &targetNote
 	}
 
-	target := naturals[(note.pos+int(interval.Position()))%len(naturals)]
-	sourceSemitone := note.semitone + note.accidentals
+	target := naturals.Naturals()[(int(note.natural.Position())+int(interval.Position()))%len(naturals.Naturals())]
+	sourceSemitone := int(note.natural.Semitones()) + note.accidentals
 
 	targetOctave := note.octave + uint8(interval.Semitone()/12)
-	if target.pos < note.pos {
+	if target.Position() < note.natural.Position() {
 		targetOctave++
 	}
 
-	targetSemitone := target.semitone + note.accidentals
+	targetSemitone := target.Semitones() + uint(note.accidentals)
 	targetAccidentals := note.accidentals
-	if targetSemitone < note.semitone {
+	if targetSemitone < note.natural.Semitones() {
 		targetSemitone += 12
 	}
 
-	distance := targetSemitone - (int(interval.Semitone()%12) + sourceSemitone)
+	distance := int(targetSemitone) - (int(interval.Semitone()%12) + sourceSemitone)
 	targetAccidentals += -distance
 	//	targetOctave += uint8(targetAccidentals / 12)
 	targetAccidentals = targetAccidentals % 12
 
 	return &Note{
-		name:        target.name,
-		pos:         target.pos,
-		semitone:    target.semitone,
+		natural:     target,
 		accidentals: targetAccidentals,
 		octave:      targetOctave,
 	}
@@ -193,11 +148,11 @@ func (note *Note) Distance(target Note) intervals.Interval {
 }
 
 func (note *Note) Position() uint {
-	return uint(note.pos)
+	return note.natural.Position()
 }
 
 func (note *Note) Semitone() int {
-	return note.semitone + note.accidentals
+	return int(note.natural.Semitones()) + note.accidentals
 }
 
 func (note *Note) Frequency() float64 {
@@ -223,7 +178,7 @@ func (note *Note) Octave() uint8 {
 
 func (note *Note) Previous() *Note {
 	n := *note.Interval(intervals.MajorSeventh)
-	if note.name == "C" {
+	if note.natural.Name() == "C" {
 		n.octave -= 1
 	}
 	return &n
@@ -231,7 +186,7 @@ func (note *Note) Previous() *Note {
 
 func (note *Note) Next() *Note {
 	n := *note.Interval(intervals.MinorSecond)
-	if note.name == "B" {
+	if note.natural.Name() == "B" {
 		n.octave += 1
 	}
 	return &n

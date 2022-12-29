@@ -25,6 +25,10 @@ var naturals = []Natural{
 	C, D, E, F, G, A, B,
 }
 
+func Naturals() []Natural {
+	return naturals
+}
+
 func Parse(name string) (*Natural, error) {
 	for _, element := range naturals {
 		if element.name == name {

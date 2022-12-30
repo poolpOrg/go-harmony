@@ -284,7 +284,7 @@ func main() {
 	}
 
 	if opt_interval != "" {
-		interval, err := intervals.Parse(opt_interval)
+		interval, err := intervals.FromName(opt_interval)
 		if err != nil {
 			panic(err)
 		}

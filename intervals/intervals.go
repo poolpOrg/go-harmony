@@ -297,7 +297,7 @@ func (interval Interval) Relative() Interval {
 	return Interval{pos: 7 - interval.pos, semitone: 12 - interval.semitone}
 }
 
-func Parse(intervalName string) (*Interval, error) {
+func FromName(intervalName string) (*Interval, error) {
 	switch intervalName {
 	case "1":
 		return &PerfectUnison, nil

@@ -9,6 +9,7 @@ import (
 	"github.com/poolpOrg/go-harmony/chords"
 	"github.com/poolpOrg/go-harmony/instruments"
 	"github.com/poolpOrg/go-harmony/intervals"
+	"github.com/poolpOrg/go-harmony/notes"
 	"github.com/poolpOrg/go-harmony/octaves"
 	"github.com/poolpOrg/go-harmony/scales"
 	"github.com/poolpOrg/go-harmony/tunings"
@@ -284,11 +285,26 @@ func main() {
 	}
 
 	if opt_interval != "" {
-		interval, err := intervals.FromName(opt_interval)
-		if err != nil {
-			panic(err)
+		atoms := strings.Split(opt_interval, ":")
+		if len(atoms) == 1 {
+			interval, err := intervals.FromName(opt_interval)
+			if err != nil {
+				panic(err)
+			}
+			fmt.Println(interval.Name(), "semitones", interval.Semitone())
+		} else if len(atoms) == 2 {
+			note, err := notes.Parse(atoms[0])
+			if err != nil {
+				panic(err)
+			}
+
+			interval, err := intervals.FromName(atoms[1])
+			if err != nil {
+				panic(err)
+			}
+
+			fmt.Println(note.Name(), interval.Name(), "=", note.Interval(*interval).Name(), interval.Position(), interval.Semitone())
 		}
-		fmt.Println(interval.Name(), interval)
 	}
 
 }

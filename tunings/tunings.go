@@ -44,7 +44,7 @@ var (
 	A438 Tuning = Tuning{name: "A438", reference: 438.}
 	A440 Tuning = Tuning{name: "A440", reference: 440.}
 	A442 Tuning = Tuning{name: "A442", reference: 442.}
-	A444 Tuning = Tuning{name: "A444", reference: 443.}
+	A444 Tuning = Tuning{name: "A444", reference: 444.}
 	A446 Tuning = Tuning{name: "A446", reference: 446.}
 )
 

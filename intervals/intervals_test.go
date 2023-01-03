@@ -328,3 +328,12 @@ func TestIntervals_Relative(t *testing.T) {
 		}
 	}
 }
+
+func TestIntervals_Name_Unknown(t *testing.T) {
+	defer func() { _ = recover() }()
+	interval := PerfectUnison
+	interval.pos = 30
+	interval.Name()
+
+	t.Errorf("did not panic")
+}

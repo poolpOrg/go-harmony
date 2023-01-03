@@ -1015,7 +1015,7 @@ func FromNotes(notes []notes.Note) Chord {
 	chordStructure = append(chordStructure, intervals.PerfectUnison)
 	chordInversion := intervals.PerfectUnison
 	for _, note := range notes[1:] {
-		chordStructure = append(chordStructure, intervals.New(root.Distance(note).Position(), root.Distance(note).Semitones()))
+		chordStructure = append(chordStructure, *intervals.New(root.Distance(note).Position(), root.Distance(note).Semitones()))
 	}
 
 	// first try to match a general structure

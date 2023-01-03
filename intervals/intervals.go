@@ -137,9 +137,13 @@ func Intervals() []Interval {
 	}
 }
 
-func New(pos uint, semitone uint) Interval {
-	return Interval{pos: pos, semitones: semitone}
-
+func New(pos uint, semitones uint) *Interval {
+	for _, interval := range Intervals() {
+		if interval.Position() == pos && interval.Semitones() == semitones {
+			return &interval
+		}
+	}
+	return nil
 }
 
 func (interval Interval) Name() string {
@@ -278,7 +282,14 @@ func (interval Interval) Semitones() uint {
 }
 
 func (interval Interval) Relative() Interval {
-	return Interval{pos: 7 - interval.pos, semitones: 12 - interval.semitones}
+	if interval == Octave || interval == PerfectFifteenth {
+		return PerfectUnison
+	} else if interval == AugmentedSeventh || interval == AugmentedFourteenth {
+		return DiminishedSecond
+	} else if interval == DiminishedOctave || interval == DiminishedFifteenth {
+		return AugmentedUnison
+	}
+	return Interval{pos: 7 - (interval.pos % 7), semitones: 12 - (interval.semitones % 12)}
 }
 
 func FromName(intervalName string) (*Interval, error) {

@@ -155,7 +155,7 @@ func (note *Note) Distance(target Note) intervals.Interval {
 		targetPosition += 7
 		targetSemitone += 12
 	}
-	return intervals.New(targetPosition, uint(targetSemitone))
+	return *intervals.New(targetPosition, uint(targetSemitone))
 }
 
 func (note *Note) Position() uint {

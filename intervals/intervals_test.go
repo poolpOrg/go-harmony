@@ -197,6 +197,61 @@ var semitones = map[string]uint{
 	"15aug": 25,
 }
 
+var relativesMap = map[Interval]Interval{
+	PerfectUnison:        Octave,
+	AugmentedUnison:      DiminishedOctave,
+	DiminishedSecond:     AugmentedSeventh,
+	MinorSecond:          MajorSeventh,
+	MajorSecond:          MinorSeventh,
+	AugmentedSecond:      DiminishedSeventh,
+	DiminishedThird:      AugmentedSixth,
+	MinorThird:           MajorSixth,
+	MajorThird:           MinorSixth,
+	AugmentedThird:       DiminishedSixth,
+	DiminishedFourth:     AugmentedFifth,
+	PerfectFourth:        PerfectFifth,
+	AugmentedFourth:      DiminishedFifth,
+	DiminishedFifth:      AugmentedFourth,
+	PerfectFifth:         PerfectFourth,
+	AugmentedFifth:       DiminishedFourth,
+	DiminishedSixth:      AugmentedThird,
+	MinorSixth:           MajorThird,
+	MajorSixth:           MinorThird,
+	AugmentedSixth:       DiminishedThird,
+	DiminishedSeventh:    AugmentedSecond,
+	MinorSeventh:         MajorSecond,
+	MajorSeventh:         MinorSecond,
+	AugmentedSeventh:     DiminishedSecond,
+	DiminishedOctave:     AugmentedUnison,
+	Octave:               PerfectUnison,
+	AugmentedOctave:      DiminishedOctave,
+	DiminishedNinth:      AugmentedSeventh,
+	MinorNinth:           MajorSeventh,
+	MajorNinth:           MinorSeventh,
+	AugmentedNinth:       DiminishedSeventh,
+	DiminishedTenth:      AugmentedSixth,
+	MinorTenth:           MajorSixth,
+	MajorTenth:           MinorSixth,
+	AugmentedTenth:       DiminishedSixth,
+	DiminishedEleventh:   AugmentedFifth,
+	PerfectEleventh:      PerfectFifth,
+	AugmentedEleventh:    DiminishedFifth,
+	DiminishedTwelfth:    AugmentedFourth,
+	PerfectTwelfth:       PerfectFourth,
+	AugmentedTwelfth:     DiminishedFourth,
+	DiminishedThirteenth: AugmentedThird,
+	MinorThirteenth:      MajorThird,
+	MajorThirteenth:      MinorThird,
+	AugmentedThirteenth:  DiminishedThird,
+	DiminishedFourteenth: AugmentedSecond,
+	MinorFourteenth:      MajorSecond,
+	MajorFourteenth:      MinorSecond,
+	AugmentedFourteenth:  DiminishedSecond,
+	DiminishedFifteenth:  AugmentedUnison,
+	PerfectFifteenth:     PerfectUnison,
+	AugmentedFifteenth:   DiminishedOctave,
+}
+
 func TestIntervals_length(t *testing.T) {
 	intervalsList := Intervals()
 	got := len(intervalsList)
@@ -254,18 +309,22 @@ func TestIntervals_Semitones(t *testing.T) {
 
 func TestIntervals_New(t *testing.T) {
 	for _, interval := range Intervals() {
-		if New(interval.Position(), interval.Semitones()) != interval {
+		if *New(interval.Position(), interval.Semitones()) != interval {
 			t.Fatalf(`intervals.New(%d, %d) does not produce correct interval`,
 				interval.Position(), interval.Semitones())
 		}
+	}
+	if New(0, 127) != nil {
+		t.Fatalf(`intervals.New(%d, %d) produces invalid intervals`, 0, 127)
 	}
 }
 
 func TestIntervals_Relative(t *testing.T) {
 	for _, interval := range Intervals() {
-		if interval.Relative() != New(7-interval.Position(), 12-interval.Semitones()) {
-			t.Fatalf(`intervals.Relative(%d, %d) does not produce correct interval`,
-				interval.Position(), interval.Semitones())
+		n := interval.Relative()
+		if relativesMap[interval] != n {
+			t.Fatalf(`intervals.Relative(%d, %d) does not produce correct Relative: %v, %v`,
+				interval.Position(), interval.Semitones(), n, relativesMap[interval])
 		}
 	}
 }

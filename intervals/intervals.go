@@ -5,79 +5,79 @@ import (
 )
 
 type interval struct {
-	pos      uint
-	semitone uint
+	pos       uint
+	semitones uint
 }
 
 type Interval interval
 
 var (
-	PerfectUnison   Interval = Interval{pos: 0, semitone: 0}
-	AugmentedUnison Interval = Interval{pos: 0, semitone: 1}
+	PerfectUnison   Interval = Interval{pos: 0, semitones: 0}
+	AugmentedUnison Interval = Interval{pos: 0, semitones: 1}
 
-	DiminishedSecond Interval = Interval{pos: 1, semitone: 0}
-	MinorSecond      Interval = Interval{pos: 1, semitone: 1}
-	MajorSecond      Interval = Interval{pos: 1, semitone: 2}
-	AugmentedSecond  Interval = Interval{pos: 1, semitone: 3}
+	DiminishedSecond Interval = Interval{pos: 1, semitones: 0}
+	MinorSecond      Interval = Interval{pos: 1, semitones: 1}
+	MajorSecond      Interval = Interval{pos: 1, semitones: 2}
+	AugmentedSecond  Interval = Interval{pos: 1, semitones: 3}
 
-	DiminishedThird Interval = Interval{pos: 2, semitone: 2}
-	MinorThird      Interval = Interval{pos: 2, semitone: 3}
-	MajorThird      Interval = Interval{pos: 2, semitone: 4}
-	AugmentedThird  Interval = Interval{pos: 2, semitone: 5}
+	DiminishedThird Interval = Interval{pos: 2, semitones: 2}
+	MinorThird      Interval = Interval{pos: 2, semitones: 3}
+	MajorThird      Interval = Interval{pos: 2, semitones: 4}
+	AugmentedThird  Interval = Interval{pos: 2, semitones: 5}
 
-	DiminishedFourth Interval = Interval{pos: 3, semitone: 4}
-	PerfectFourth    Interval = Interval{pos: 3, semitone: 5}
-	AugmentedFourth  Interval = Interval{pos: 3, semitone: 6}
+	DiminishedFourth Interval = Interval{pos: 3, semitones: 4}
+	PerfectFourth    Interval = Interval{pos: 3, semitones: 5}
+	AugmentedFourth  Interval = Interval{pos: 3, semitones: 6}
 
-	DiminishedFifth Interval = Interval{pos: 4, semitone: 6}
-	PerfectFifth    Interval = Interval{pos: 4, semitone: 7}
-	AugmentedFifth  Interval = Interval{pos: 4, semitone: 8}
+	DiminishedFifth Interval = Interval{pos: 4, semitones: 6}
+	PerfectFifth    Interval = Interval{pos: 4, semitones: 7}
+	AugmentedFifth  Interval = Interval{pos: 4, semitones: 8}
 
-	DiminishedSixth Interval = Interval{pos: 5, semitone: 7}
-	MinorSixth      Interval = Interval{pos: 5, semitone: 8}
-	MajorSixth      Interval = Interval{pos: 5, semitone: 9}
-	AugmentedSixth  Interval = Interval{pos: 5, semitone: 10}
+	DiminishedSixth Interval = Interval{pos: 5, semitones: 7}
+	MinorSixth      Interval = Interval{pos: 5, semitones: 8}
+	MajorSixth      Interval = Interval{pos: 5, semitones: 9}
+	AugmentedSixth  Interval = Interval{pos: 5, semitones: 10}
 
-	DiminishedSeventh Interval = Interval{pos: 6, semitone: 9}
-	MinorSeventh      Interval = Interval{pos: 6, semitone: 10}
-	MajorSeventh      Interval = Interval{pos: 6, semitone: 11}
-	AugmentedSeventh  Interval = Interval{pos: 6, semitone: 12}
+	DiminishedSeventh Interval = Interval{pos: 6, semitones: 9}
+	MinorSeventh      Interval = Interval{pos: 6, semitones: 10}
+	MajorSeventh      Interval = Interval{pos: 6, semitones: 11}
+	AugmentedSeventh  Interval = Interval{pos: 6, semitones: 12}
 
-	DiminishedOctave Interval = Interval{pos: 7, semitone: 11}
-	Octave           Interval = Interval{pos: 7, semitone: 12}
-	AugmentedOctave  Interval = Interval{pos: 7, semitone: 13}
+	DiminishedOctave Interval = Interval{pos: 7, semitones: 11}
+	Octave           Interval = Interval{pos: 7, semitones: 12}
+	AugmentedOctave  Interval = Interval{pos: 7, semitones: 13}
 
-	DiminishedNinth Interval = Interval{pos: 8, semitone: 12}
-	MinorNinth      Interval = Interval{pos: 8, semitone: 13}
-	MajorNinth      Interval = Interval{pos: 8, semitone: 14}
-	AugmentedNinth  Interval = Interval{pos: 8, semitone: 15}
+	DiminishedNinth Interval = Interval{pos: 8, semitones: 12}
+	MinorNinth      Interval = Interval{pos: 8, semitones: 13}
+	MajorNinth      Interval = Interval{pos: 8, semitones: 14}
+	AugmentedNinth  Interval = Interval{pos: 8, semitones: 15}
 
-	DiminishedTenth Interval = Interval{pos: 9, semitone: 14}
-	MinorTenth      Interval = Interval{pos: 9, semitone: 15}
-	MajorTenth      Interval = Interval{pos: 9, semitone: 16}
-	AugmentedTenth  Interval = Interval{pos: 9, semitone: 17}
+	DiminishedTenth Interval = Interval{pos: 9, semitones: 14}
+	MinorTenth      Interval = Interval{pos: 9, semitones: 15}
+	MajorTenth      Interval = Interval{pos: 9, semitones: 16}
+	AugmentedTenth  Interval = Interval{pos: 9, semitones: 17}
 
-	DiminishedEleventh Interval = Interval{pos: 10, semitone: 16}
-	PerfectEleventh    Interval = Interval{pos: 10, semitone: 17}
-	AugmentedEleventh  Interval = Interval{pos: 10, semitone: 18}
+	DiminishedEleventh Interval = Interval{pos: 10, semitones: 16}
+	PerfectEleventh    Interval = Interval{pos: 10, semitones: 17}
+	AugmentedEleventh  Interval = Interval{pos: 10, semitones: 18}
 
-	DiminishedTwelfth Interval = Interval{pos: 11, semitone: 18}
-	PerfectTwelfth    Interval = Interval{pos: 11, semitone: 19}
-	AugmentedTwelfth  Interval = Interval{pos: 11, semitone: 20}
+	DiminishedTwelfth Interval = Interval{pos: 11, semitones: 18}
+	PerfectTwelfth    Interval = Interval{pos: 11, semitones: 19}
+	AugmentedTwelfth  Interval = Interval{pos: 11, semitones: 20}
 
-	DiminishedThirteenth Interval = Interval{pos: 12, semitone: 19}
-	MinorThirteenth      Interval = Interval{pos: 12, semitone: 20}
-	MajorThirteenth      Interval = Interval{pos: 12, semitone: 21}
-	AugmentedThirteenth  Interval = Interval{pos: 12, semitone: 22}
+	DiminishedThirteenth Interval = Interval{pos: 12, semitones: 19}
+	MinorThirteenth      Interval = Interval{pos: 12, semitones: 20}
+	MajorThirteenth      Interval = Interval{pos: 12, semitones: 21}
+	AugmentedThirteenth  Interval = Interval{pos: 12, semitones: 22}
 
-	DiminishedFourteenth Interval = Interval{pos: 13, semitone: 21}
-	MinorFourteenth      Interval = Interval{pos: 13, semitone: 22}
-	MajorFourteenth      Interval = Interval{pos: 13, semitone: 23}
-	AugmentedFourteenth  Interval = Interval{pos: 13, semitone: 24}
+	DiminishedFourteenth Interval = Interval{pos: 13, semitones: 21}
+	MinorFourteenth      Interval = Interval{pos: 13, semitones: 22}
+	MajorFourteenth      Interval = Interval{pos: 13, semitones: 23}
+	AugmentedFourteenth  Interval = Interval{pos: 13, semitones: 24}
 
-	DiminishedFifteenth Interval = Interval{pos: 14, semitone: 23}
-	PerfectFifteenth    Interval = Interval{pos: 14, semitone: 24}
-	AugmentedFifteenth  Interval = Interval{pos: 14, semitone: 25}
+	DiminishedFifteenth Interval = Interval{pos: 14, semitones: 23}
+	PerfectFifteenth    Interval = Interval{pos: 14, semitones: 24}
+	AugmentedFifteenth  Interval = Interval{pos: 14, semitones: 25}
 )
 
 func Intervals() []Interval {
@@ -154,7 +154,7 @@ func Intervals() []Interval {
 }
 
 func New(pos uint, semitone uint) Interval {
-	return Interval{pos: pos, semitone: semitone}
+	return Interval{pos: pos, semitones: semitone}
 
 }
 
@@ -290,11 +290,11 @@ func (interval Interval) Position() uint {
 }
 
 func (interval Interval) Semitone() uint {
-	return interval.semitone
+	return interval.semitones
 }
 
 func (interval Interval) Relative() Interval {
-	return Interval{pos: 7 - interval.pos, semitone: 12 - interval.semitone}
+	return Interval{pos: 7 - interval.pos, semitones: 12 - interval.semitones}
 }
 
 func FromName(intervalName string) (*Interval, error) {

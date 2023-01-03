@@ -4,10 +4,6 @@ import (
 	"testing"
 )
 
-type tuningsTestCase struct {
-	tuning Tuning
-}
-
 type tuningNameTestCase struct {
 	tuning Tuning
 	want   string
@@ -74,6 +70,22 @@ func TestTuning_Tuning_Reference(t *testing.T) {
 	for _, testCase := range testCases {
 		if testCase.tuning.Reference() != testCase.want {
 			t.Fatalf(`Tuning<%s>.Name() = %f, want %f`, testCase.tuning.Name(), testCase.tuning.Reference(), testCase.want)
+		}
+	}
+}
+
+func TestTuning_Systems(t *testing.T) {
+	var testCases = []TuningSystem{
+		EqualTemperament,
+	}
+
+	tuningSystems := Systems()
+	if len(testCases) != len(tuningSystems) {
+		t.Fatalf(`testCases length != tunings length, got %d, want %d`, len(tuningSystems), len(testCases))
+	}
+	for offset, testCase := range testCases {
+		if tuningSystems[offset].Name() != testCase.Name() {
+			t.Fatalf(`Tuning<%s>.Name() = %s, want %s`, testCase.Name(), testCase.Name(), tuningSystems[offset].Name())
 		}
 	}
 }

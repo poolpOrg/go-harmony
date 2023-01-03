@@ -31,6 +31,10 @@ func Systems() []TuningSystem {
 	return tuningSystems
 }
 
+func (tuningSystem *TuningSystem) Name() string {
+	return tuningSystem.name
+}
+
 type tuning struct {
 	name      string
 	reference float64

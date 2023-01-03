@@ -370,10 +370,14 @@ func FromName(intervalName string) (*Interval, error) {
 	case "9aug":
 		return &AugmentedNinth, nil
 
+	case "10dim":
+		return &DiminishedTenth, nil
 	case "10min":
 		return &MinorTenth, nil
 	case "10maj":
 		return &MajorTenth, nil
+	case "10aug":
+		return &AugmentedTenth, nil
 
 	case "11dim":
 		return &DiminishedEleventh, nil

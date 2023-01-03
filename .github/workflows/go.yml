@@ -26,3 +26,6 @@ jobs:
 
     - name: Test
       run: go test -v ./...
+
+    - name: Go Coverage Badge
+      uses: tj-actions/coverage-badge-go@v2.1

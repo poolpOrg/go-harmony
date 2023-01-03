@@ -15,7 +15,7 @@ type scale struct {
 }
 type Scale scale
 
-type Degree uint
+type Degree uint8
 
 var (
 	Tonic       Degree = 0
@@ -26,6 +26,26 @@ var (
 	Submediant  Degree = 5
 	LeadingTone Degree = 6
 )
+
+func (degree *Degree) Name() string {
+	switch *degree {
+	case Tonic:
+		return "Tonic"
+	case Supertonic:
+		return "Supertonic"
+	case Mediant:
+		return "Mediant"
+	case Subdominant:
+		return "Subdominant"
+	case Dominant:
+		return "Dominant"
+	case Submediant:
+		return "Submediant"
+	case LeadingTone:
+		return "LeadingTone"
+	}
+	panic("unsupported degree")
+}
 
 var Ionian = []intervals.Interval{
 	intervals.PerfectUnison,
@@ -434,7 +454,7 @@ func (scale *Scale) NotesInChord(chord chords.Chord) int {
 	count := 0
 	for _, chordNote := range chord.Notes() {
 		for _, scaleNote := range scale.Notes() {
-			if chordNote.Inharmonic(scaleNote) {
+			if chordNote.Enharmonic(scaleNote) {
 				count++
 				break
 			}
@@ -456,7 +476,7 @@ func FromChord(chord chords.Chord) []Scale {
 		count := 0
 		for _, chordNote := range chord.Notes() {
 			for _, scaleNote := range scale.Notes() {
-				if chordNote.Inharmonic(scaleNote) {
+				if chordNote.Enharmonic(scaleNote) {
 					count++
 					break
 				}

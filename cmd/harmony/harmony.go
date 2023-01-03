@@ -133,7 +133,7 @@ func main() {
 				found := false
 				for _, chordNote := range c.Notes() {
 					//\033[1;36m%s\033[0m"
-					if chordNote.Inharmonic(scaleNote) {
+					if chordNote.Enharmonic(scaleNote) {
 						fmt.Printf("\033[1;32m%s\033[0m\t", chordNote.Name())
 						found = true
 						break

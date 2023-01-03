@@ -171,7 +171,7 @@ func (note *Note) Frequency() float64 {
 	return tuner.Frequency(uint8(note.Position()))
 }
 
-func (note *Note) Inharmonic(target Note) bool {
+func (note *Note) Enharmonic(target Note) bool {
 	return note.Semitone()%12 == target.Semitone()%12
 }
 

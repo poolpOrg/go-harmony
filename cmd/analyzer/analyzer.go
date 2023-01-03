@@ -12,6 +12,9 @@ import (
 )
 
 func main() {
+	var opt_track int
+
+	flag.IntVar(&opt_track, "track", 0, "track to follow")
 	flag.Parse()
 
 	for _, filename := range flag.Args() {
@@ -21,8 +24,11 @@ func main() {
 				if _, exists := channels[te.TrackNo]; !exists {
 					channels[te.TrackNo] = make(map[int64]map[string]uint8)
 				}
-				if te.TrackNo != 2 {
-					return
+
+				if opt_track != 0 {
+					if opt_track != te.TrackNo {
+						return
+					}
 				}
 
 				if te.Message.IsMeta() {

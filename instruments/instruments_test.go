@@ -49,12 +49,40 @@ func TestInstruments_Octave(t *testing.T) {
 }
 
 func TestInstruments_Note(t *testing.T) {
+	instrument := NewInstrument(tunings.A440)
+
+	naturalsList := naturals.Naturals()
+	for _, natural := range naturalsList {
+		got, err := instrument.Note(natural.Name())
+		if err != nil {
+			if err != nil {
+				t.Fatalf(`instrument.Note(%s) = error(%s)`, natural.Name(), err)
+			}
+			if got.Name() != "C" {
+				t.Fatalf(`instrument.Note(%s) = %s, want %s`, natural.Name(), got.Name(), natural.Name())
+			}
+		}
+	}
 }
 
 func TestInstruments_Notes(t *testing.T) {
 }
 
 func TestInstruments_Chord(t *testing.T) {
+	instrument := NewInstrument(tunings.A440)
+
+	naturalsList := naturals.Naturals()
+	for _, natural := range naturalsList {
+		got, err := instrument.Chord(natural.Name())
+		if err != nil {
+			if err != nil {
+				t.Fatalf(`instrument.Chord(%s) = error(%s)`, natural.Name(), err)
+			}
+			if got.Name() != "C" {
+				t.Fatalf(`instrument.Chord(%s) = %s, want %s`, natural.Name(), got.Name(), natural.Name())
+			}
+		}
+	}
 }
 
 func TestInstruments_Scale(t *testing.T) {

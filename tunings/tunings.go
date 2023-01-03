@@ -31,11 +31,23 @@ func Systems() []TuningSystem {
 	return tuningSystems
 }
 
+func (tuningSystem *TuningSystem) Name() string {
+	return tuningSystem.name
+}
+
 type tuning struct {
 	name      string
 	reference float64
 }
 type Tuning tuning
+
+func (tuning *Tuning) Name() string {
+	return tuning.name
+}
+
+func (tuning *Tuning) Reference() float64 {
+	return tuning.reference
+}
 
 var (
 	A432 Tuning = Tuning{name: "A432", reference: 432.}
@@ -47,6 +59,12 @@ var (
 	A444 Tuning = Tuning{name: "A444", reference: 444.}
 	A446 Tuning = Tuning{name: "A446", reference: 446.}
 )
+
+func Tunings() []Tuning {
+	return []Tuning{
+		A432, A434, A436, A438, A440, A442, A444, A446,
+	}
+}
 
 type Tuner struct {
 	system TuningSystem

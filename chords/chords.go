@@ -300,7 +300,7 @@ func (structure Structure) Equivalent(target Structure) bool {
 	targetSemitonesStructure := make([]uint8, 0)
 
 	for _, interval := range structure {
-		wrapped := uint8(interval.Semitone()) % 12
+		wrapped := uint8(interval.Semitones()) % 12
 		if _, exists := originSemitones[wrapped]; !exists {
 			originSemitones[wrapped] = true
 			originSemitonesStructure = append(originSemitonesStructure, wrapped)
@@ -308,7 +308,7 @@ func (structure Structure) Equivalent(target Structure) bool {
 	}
 
 	for _, interval := range target {
-		wrapped := uint8(interval.Semitone()) % 12
+		wrapped := uint8(interval.Semitones()) % 12
 		if _, exists := targetSemitones[wrapped]; !exists {
 			targetSemitones[wrapped] = true
 			targetSemitonesStructure = append(targetSemitonesStructure, wrapped)
@@ -1015,7 +1015,7 @@ func FromNotes(notes []notes.Note) Chord {
 	chordStructure = append(chordStructure, intervals.PerfectUnison)
 	chordInversion := intervals.PerfectUnison
 	for _, note := range notes[1:] {
-		chordStructure = append(chordStructure, intervals.New(root.Distance(note).Position(), root.Distance(note).Semitone()))
+		chordStructure = append(chordStructure, intervals.New(root.Distance(note).Position(), root.Distance(note).Semitones()))
 	}
 
 	// first try to match a general structure

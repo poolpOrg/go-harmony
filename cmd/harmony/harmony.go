@@ -291,7 +291,7 @@ func main() {
 			if err != nil {
 				panic(err)
 			}
-			fmt.Println(interval.Name(), "semitones", interval.Semitone())
+			fmt.Println(interval.Name(), "semitones", interval.Semitones())
 		} else if len(atoms) == 2 {
 			note, err := notes.Parse(atoms[0])
 			if err != nil {
@@ -303,7 +303,7 @@ func main() {
 				panic(err)
 			}
 
-			fmt.Println(note.Name(), interval.Name(), "=", note.Interval(*interval).Name(), interval.Position(), interval.Semitone())
+			fmt.Println(note.Name(), interval.Name(), "=", note.Interval(*interval).Name(), interval.Position(), interval.Semitones())
 		}
 	}
 

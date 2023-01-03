@@ -289,7 +289,7 @@ func (interval Interval) Position() uint {
 	return interval.pos
 }
 
-func (interval Interval) Semitone() uint {
+func (interval Interval) Semitones() uint {
 	return interval.semitones
 }
 

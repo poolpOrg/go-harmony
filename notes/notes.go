@@ -80,16 +80,16 @@ func (note *Note) OctaveName() string {
 }
 
 func (note *Note) Interval(interval intervals.Interval) *Note {
-	if interval.Position()%7 == 0 && interval.Semitone()%12 == 0 {
+	if interval.Position()%7 == 0 && interval.Semitones()%12 == 0 {
 		targetNote := *note
-		targetNote.octave = *targetNote.octave.Add(uint8(interval.Semitone() / 12))
+		targetNote.octave = *targetNote.octave.Add(uint8(interval.Semitones() / 12))
 		return &targetNote
 	}
 
 	target := naturals.Naturals()[(int(note.natural.Position())+int(interval.Position()))%len(naturals.Naturals())]
 	sourceSemitone := int(note.natural.Semitones()) + note.accidentals
 
-	targetOctave := note.octave.Add(uint8(interval.Semitone() / 12))
+	targetOctave := note.octave.Add(uint8(interval.Semitones() / 12))
 	if target.Position() < note.natural.Position() {
 		targetOctave = targetOctave.Next()
 	}
@@ -100,7 +100,7 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 		targetSemitone += 12
 	}
 
-	distance := int(targetSemitone) - (int(interval.Semitone()%12) + sourceSemitone)
+	distance := int(targetSemitone) - (int(interval.Semitones()%12) + sourceSemitone)
 	targetAccidentals += -distance
 	//	targetOctave += uint8(targetAccidentals / 12)
 	targetAccidentals = targetAccidentals % 12

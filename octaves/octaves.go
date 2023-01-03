@@ -28,15 +28,6 @@ func Octaves() []Octave {
 	return octaves
 }
 
-func Parse(name string) (*Octave, error) {
-	for _, element := range octaves {
-		if fmt.Sprintf("%d", element.position) == name {
-			return &element, nil
-		}
-	}
-	return nil, fmt.Errorf("bad name (%s): should be '0', '1', '2', '3', '4', '5', '6' or '7'", name)
-}
-
 func FromName(name string) (*Octave, error) {
 	for _, element := range octaves {
 		if fmt.Sprintf("C%d", element.position) == name {

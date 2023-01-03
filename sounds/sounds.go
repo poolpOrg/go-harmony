@@ -1,4 +1,4 @@
-package sound
+package sounds
 
 type sound struct {
 	frequency float64

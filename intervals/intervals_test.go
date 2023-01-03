@@ -1,10 +1,146 @@
 package intervals
 
 import (
-	"strconv"
-	"strings"
 	"testing"
 )
+
+var positions = map[string]uint{
+	"1":    0,
+	"1aug": 0,
+
+	"2dim": 1,
+	"2min": 1,
+	"2maj": 1,
+	"2aug": 1,
+
+	"3dim": 2,
+	"3min": 2,
+	"3maj": 2,
+	"3aug": 2,
+
+	"4dim": 3,
+	"4":    3,
+	"4aug": 3,
+
+	"5dim": 4,
+	"5":    4,
+	"5aug": 4,
+
+	"6dim": 5,
+	"6min": 5,
+	"6maj": 5,
+	"6aug": 5,
+
+	"7dim": 6,
+	"7min": 6,
+	"7maj": 6,
+	"7aug": 6,
+
+	"8dim": 7,
+	"8":    7,
+	"8aug": 7,
+
+	"9dim": 8,
+	"9min": 8,
+	"9maj": 8,
+	"9aug": 8,
+
+	"10dim": 9,
+	"10min": 9,
+	"10maj": 9,
+	"10aug": 9,
+
+	"11dim": 10,
+	"11":    10,
+	"11aug": 10,
+
+	"12dim": 11,
+	"12":    11,
+	"12aug": 11,
+
+	"13dim": 12,
+	"13min": 12,
+	"13maj": 12,
+	"13aug": 12,
+
+	"14dim": 13,
+	"14min": 13,
+	"14maj": 13,
+	"14aug": 13,
+
+	"15dim": 14,
+	"15":    14,
+	"15aug": 14,
+}
+
+var semitones = map[string]uint{
+	"1":    0,
+	"1aug": 1,
+
+	"2dim": 0,
+	"2min": 1,
+	"2maj": 2,
+	"2aug": 3,
+
+	"3dim": 2,
+	"3min": 3,
+	"3maj": 4,
+	"3aug": 5,
+
+	"4dim": 4,
+	"4":    5,
+	"4aug": 6,
+
+	"5dim": 6,
+	"5":    7,
+	"5aug": 8,
+
+	"6dim": 7,
+	"6min": 8,
+	"6maj": 9,
+	"6aug": 10,
+
+	"7dim": 9,
+	"7min": 10,
+	"7maj": 11,
+	"7aug": 12,
+
+	"8dim": 11,
+	"8":    12,
+	"8aug": 13,
+
+	"9dim": 12,
+	"9min": 13,
+	"9maj": 14,
+	"9aug": 15,
+
+	"10dim": 14,
+	"10min": 15,
+	"10maj": 16,
+	"10aug": 17,
+
+	"11dim": 16,
+	"11":    17,
+	"11aug": 18,
+
+	"12dim": 18,
+	"12":    19,
+	"12aug": 20,
+
+	"13dim": 19,
+	"13min": 20,
+	"13maj": 21,
+	"13aug": 22,
+
+	"14dim": 21,
+	"14min": 22,
+	"14maj": 23,
+	"14aug": 24,
+
+	"15dim": 23,
+	"15":    24,
+	"15aug": 25,
+}
 
 func TestIntervals_length(t *testing.T) {
 	intervalsList := Intervals()
@@ -12,26 +148,6 @@ func TestIntervals_length(t *testing.T) {
 	want := 52
 	if got != want {
 		t.Fatalf(`intervals.Intervals() = %d, want %d`, got, want)
-	}
-}
-
-func TestIntervals_SortedPositionList(t *testing.T) {
-	intervalsList := Intervals()
-	last := uint(0)
-	for i := 0; i < len(intervalsList); i++ {
-		if intervalsList[i].Position() < last {
-			t.Fatalf(`intervals.Intervals()[%d]'s position is not sorted`, i)
-		}
-	}
-}
-
-func TestIntervals_SortedSemitonesList(t *testing.T) {
-	intervalsList := Intervals()
-	last := uint(0)
-	for i := 0; i < len(intervalsList); i++ {
-		if intervalsList[i].Semitones() < last {
-			t.Fatalf(`intervals.Intervals()[%d]'s semitone is not sorted`, i)
-		}
 	}
 }
 
@@ -50,198 +166,42 @@ func TestIntervals_FromName(t *testing.T) {
 
 func TestIntervals_Position(t *testing.T) {
 	for _, interval := range Intervals() {
-		intervalPositionName := strings.ReplaceAll(interval.Name(), "dim", "")
-		intervalPositionName = strings.ReplaceAll(intervalPositionName, "aug", "")
-		intervalPositionName = strings.ReplaceAll(intervalPositionName, "min", "")
-		intervalPositionName = strings.ReplaceAll(intervalPositionName, "maj", "")
-
-		p, _ := strconv.Atoi(intervalPositionName)
-		if p-1 != int(interval.Position()) {
-			t.Fatalf(`interval(%s).Position() = %d, want %d`, interval.Name(), interval.Position(), p-1)
+		if value, exists := positions[interval.Name()]; !exists {
+			t.Fatalf(`interval(%s) does not exist`, interval.Name())
+		} else {
+			if interval.Position() != value {
+				t.Fatalf(`interval(%s).Position() = %d, want %d`, interval.Name(), interval.Position(), value)
+			}
 		}
 	}
 }
 
-/*
-func TestNaturals_Name(t *testing.T) {
-	if C.Name() != "C" {
-		t.Fatalf(`naturals.C.Name() = %s, want %s`, C.Name(), "C")
-	}
-	if D.Name() != "D" {
-		t.Fatalf(`naturals.D.Name() = %s, want %s`, D.Name(), "D")
-	}
-	if E.Name() != "E" {
-		t.Fatalf(`naturals.E.Name() = %s, want %s`, E.Name(), "E")
-	}
-	if F.Name() != "F" {
-		t.Fatalf(`naturals.F.Name() = %s, want %s`, F.Name(), "F")
-	}
-	if G.Name() != "G" {
-		t.Fatalf(`naturals.G.Name() = %s, want %s`, G.Name(), "G")
-	}
-	if A.Name() != "A" {
-		t.Fatalf(`naturals.A.Name() = %s, want %s`, A.Name(), "A")
-	}
-	if B.Name() != "B" {
-		t.Fatalf(`naturals.B.Name() = %s, want %s`, B.Name(), "B")
+func TestIntervals_Semitones(t *testing.T) {
+	for _, interval := range Intervals() {
+		if value, exists := semitones[interval.Name()]; !exists {
+			t.Fatalf(`interval(%s) does not exist`, interval.Name())
+		} else {
+			if interval.Semitones() != value {
+				t.Fatalf(`interval(%s).Semitones() = %d, want %d`, interval.Name(), interval.Semitones(), value)
+			}
+		}
 	}
 }
 
-func TestNaturals_Position(t *testing.T) {
-	if C.Position() != 0 {
-		t.Fatalf(`naturals.C.Position() = %d, want %d`, C.Position(), 0)
-	}
-	if D.Position() != 1 {
-		t.Fatalf(`naturals.D.Position() = %d, want %d`, D.Position(), 1)
-	}
-	if E.Position() != 2 {
-		t.Fatalf(`naturals.E.Position() = %d, want %d`, E.Position(), 2)
-	}
-	if F.Position() != 3 {
-		t.Fatalf(`naturals.F.Position() = %d, want %d`, F.Position(), 3)
-	}
-	if G.Position() != 4 {
-		t.Fatalf(`naturals.G.Position() = %d, want %d`, G.Position(), 4)
-	}
-	if A.Position() != 5 {
-		t.Fatalf(`naturals.A.Position() = %d, want %d`, A.Position(), 5)
-	}
-	if B.Position() != 6 {
-		t.Fatalf(`naturals.B.Position() = %d, want %d`, B.Position(), 6)
+func TestIntervals_New(t *testing.T) {
+	for _, interval := range Intervals() {
+		if New(interval.Position(), interval.Semitones()) != interval {
+			t.Fatalf(`intervals.New(%d, %d) does not produce correct interval`,
+				interval.Position(), interval.Semitones())
+		}
 	}
 }
 
-func TestNaturals_Semitones(t *testing.T) {
-	if C.Semitones() != 0 {
-		t.Fatalf(`naturals.C.Semitones() = %d, want %d`, C.Semitones(), 0)
-	}
-	if D.Semitones() != 2 {
-		t.Fatalf(`naturals.D.Semitones() = %d, want %d`, D.Semitones(), 2)
-	}
-	if E.Semitones() != 4 {
-		t.Fatalf(`naturals.E.Semitones() = %d, want %d`, E.Semitones(), 4)
-	}
-	if F.Semitones() != 5 {
-		t.Fatalf(`naturals.F.Semitones() = %d, want %d`, F.Semitones(), 5)
-	}
-	if G.Semitones() != 7 {
-		t.Fatalf(`naturals.G.Semitones() = %d, want %d`, G.Semitones(), 7)
-	}
-	if A.Semitones() != 9 {
-		t.Fatalf(`naturals.A.Semitones() = %d, want %d`, A.Semitones(), 9)
-	}
-	if B.Semitones() != 11 {
-		t.Fatalf(`naturals.B.Semitones() = %d, want %d`, B.Semitones(), 11)
+func TestIntervals_Relative(t *testing.T) {
+	for _, interval := range Intervals() {
+		if interval.Relative() != New(7-interval.Position(), 12-interval.Semitones()) {
+			t.Fatalf(`intervals.Relative(%d, %d) does not produce correct interval`,
+				interval.Position(), interval.Semitones())
+		}
 	}
 }
-
-func TestNaturals_Previous(t *testing.T) {
-	if *C.Previous() != B {
-		t.Fatalf(`naturals.C.Previous() = %v, want %v`, C.Previous(), B)
-	}
-	if *D.Previous() != C {
-		t.Fatalf(`naturals.D.Previous() = %v, want %v`, D.Previous(), C)
-	}
-	if *E.Previous() != D {
-		t.Fatalf(`naturals.E.Previous() = %v, want %v`, E.Previous(), D)
-	}
-	if *F.Previous() != E {
-		t.Fatalf(`naturals.F.Previous() = %v, want %v`, F.Previous(), E)
-	}
-	if *G.Previous() != F {
-		t.Fatalf(`naturals.G.Previous() = %v, want %v`, G.Previous(), F)
-	}
-	if *A.Previous() != G {
-		t.Fatalf(`naturals.A.Previous() = %v, want %v`, A.Previous(), G)
-	}
-	if *B.Previous() != A {
-		t.Fatalf(`naturals.B.Previous() = %v, want %v`, B.Previous(), A)
-	}
-}
-
-func TestNaturals_Next(t *testing.T) {
-	if *C.Next() != D {
-		t.Fatalf(`naturals.C.Next() = %v, want %v`, C.Next(), D)
-	}
-	if *D.Next() != E {
-		t.Fatalf(`naturals.D.Next() = %v, want %v`, D.Next(), E)
-	}
-	if *E.Next() != F {
-		t.Fatalf(`naturals.E.Next() = %v, want %v`, E.Next(), F)
-	}
-	if *F.Next() != G {
-		t.Fatalf(`naturals.F.Next() = %v, want %v`, F.Next(), G)
-	}
-	if *G.Next() != A {
-		t.Fatalf(`naturals.G.Next() = %v, want %v`, G.Next(), A)
-	}
-	if *A.Next() != B {
-		t.Fatalf(`naturals.A.Next() = %v, want %v`, A.Next(), B)
-	}
-	if *B.Next() != C {
-		t.Fatalf(`naturals.B.Next() = %v, want %v`, B.Next(), C)
-	}
-}
-
-func TestNaturals_FromName(t *testing.T) {
-	if natural, err := FromName("C"); err != nil {
-		t.Fatalf(`naturals.FromName("C") = error: %s`, err)
-	} else {
-		if *natural != C {
-			t.Fatalf(`naturals.FromName("C") = %v, want %v`, natural.Name(), C.Name())
-		}
-	}
-
-	if natural, err := FromName("D"); err != nil {
-		t.Fatalf(`naturals.FromName("D") = error: %s`, err)
-	} else {
-		if *natural != D {
-			t.Fatalf(`naturals.FromName("D") = %v, want %v`, natural.Name(), D.Name())
-		}
-	}
-
-	if natural, err := FromName("E"); err != nil {
-		t.Fatalf(`naturals.FromName("E") = error: %s`, err)
-	} else {
-		if *natural != E {
-			t.Fatalf(`naturals.FromName("E") = %v, want %v`, natural.Name(), E.Name())
-		}
-	}
-
-	if natural, err := FromName("F"); err != nil {
-		t.Fatalf(`naturals.FromName("F") = error: %s`, err)
-	} else {
-		if *natural != F {
-			t.Fatalf(`naturals.FromName("F") = %v, want %v`, natural.Name(), F.Name())
-		}
-	}
-
-	if natural, err := FromName("G"); err != nil {
-		t.Fatalf(`naturals.FromName("G") = error: %s`, err)
-	} else {
-		if *natural != G {
-			t.Fatalf(`naturals.FromName("G") = %v, want %v`, natural.Name(), G.Name())
-		}
-	}
-
-	if natural, err := FromName("A"); err != nil {
-		t.Fatalf(`naturals.FromName("A") = error: %s`, err)
-	} else {
-		if *natural != A {
-			t.Fatalf(`naturals.FromName("A") = %v, want %v`, natural.Name(), A.Name())
-		}
-	}
-
-	if natural, err := FromName("B"); err != nil {
-		t.Fatalf(`naturals.FromName("B") = error: %s`, err)
-	} else {
-		if *natural != B {
-			t.Fatalf(`naturals.FromName("B") = %v, want %v`, natural.Name(), B.Name())
-		}
-	}
-
-	if natural, err := FromName("Z"); err == nil {
-		t.Fatalf(`naturals.FromName("B") = %v, want %v`, natural, nil)
-	}
-}
-*/

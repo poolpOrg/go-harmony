@@ -187,4 +187,8 @@ func TestNaturals_FromName(t *testing.T) {
 			t.Fatalf(`naturals.FromName("B") = %v, want %v`, natural.Name(), B.Name())
 		}
 	}
+
+	if natural, err := FromName("Z"); err == nil {
+		t.Fatalf(`naturals.FromName("B") = %v, want %v`, natural, nil)
+	}
 }

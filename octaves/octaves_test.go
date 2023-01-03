@@ -238,6 +238,10 @@ func TestNaturals_FromName(t *testing.T) {
 			t.Fatalf(`octaves.FromName("C7") = %v, want %v`, octave.Name(), C7.Name())
 		}
 	}
+
+	if octave, err := FromName("C8"); err == nil {
+		t.Fatalf(`octaves.FromName("C8") = %v, want %v`, octave, nil)
+	}
 }
 
 func TestNaturals_FromPosition(t *testing.T) {
@@ -303,5 +307,9 @@ func TestNaturals_FromPosition(t *testing.T) {
 		if *octave != C7 {
 			t.Fatalf(`octaves.FromPosition(7) = %v, want %v`, octave.Name(), C7.Name())
 		}
+	}
+
+	if octave, err := FromPosition(8); err == nil {
+		t.Fatalf(`octaves.FromPosition(7) = %v, want %v`, octave, nil)
 	}
 }

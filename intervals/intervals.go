@@ -81,76 +81,60 @@ var (
 )
 
 func Intervals() []Interval {
-	ret := make([]Interval, 0)
-
-	ret = append(ret, PerfectUnison)
-	ret = append(ret, AugmentedUnison)
-
-	ret = append(ret, DiminishedSecond)
-	ret = append(ret, MinorSecond)
-	ret = append(ret, MajorSecond)
-	ret = append(ret, AugmentedSecond)
-
-	ret = append(ret, DiminishedThird)
-	ret = append(ret, MinorThird)
-	ret = append(ret, MajorThird)
-	ret = append(ret, AugmentedThird)
-
-	ret = append(ret, DiminishedFourth)
-	ret = append(ret, PerfectFourth)
-	ret = append(ret, AugmentedFourth)
-
-	ret = append(ret, DiminishedFifth)
-	ret = append(ret, PerfectFifth)
-	ret = append(ret, AugmentedFifth)
-
-	ret = append(ret, DiminishedSixth)
-	ret = append(ret, MinorSixth)
-	ret = append(ret, MajorSixth)
-	ret = append(ret, AugmentedSixth)
-
-	ret = append(ret, DiminishedSeventh)
-	ret = append(ret, MinorSeventh)
-	ret = append(ret, MajorSeventh)
-	ret = append(ret, AugmentedSeventh)
-
-	ret = append(ret, DiminishedOctave)
-	ret = append(ret, Octave)
-	ret = append(ret, AugmentedOctave)
-
-	ret = append(ret, DiminishedNinth)
-	ret = append(ret, MinorNinth)
-	ret = append(ret, MajorNinth)
-	ret = append(ret, AugmentedNinth)
-
-	ret = append(ret, DiminishedTenth)
-	ret = append(ret, MinorTenth)
-	ret = append(ret, MajorTenth)
-	ret = append(ret, AugmentedTenth)
-
-	ret = append(ret, DiminishedEleventh)
-	ret = append(ret, PerfectEleventh)
-	ret = append(ret, AugmentedEleventh)
-
-	ret = append(ret, DiminishedTwelfth)
-	ret = append(ret, PerfectTwelfth)
-	ret = append(ret, AugmentedTwelfth)
-
-	ret = append(ret, DiminishedThirteenth)
-	ret = append(ret, MinorThirteenth)
-	ret = append(ret, MajorThirteenth)
-	ret = append(ret, AugmentedThirteenth)
-
-	ret = append(ret, DiminishedFourteenth)
-	ret = append(ret, MinorFourteenth)
-	ret = append(ret, MajorFourteenth)
-	ret = append(ret, AugmentedFourteenth)
-
-	ret = append(ret, DiminishedFifteenth)
-	ret = append(ret, PerfectFifteenth)
-	ret = append(ret, AugmentedFifteenth)
-
-	return ret
+	return []Interval{
+		PerfectUnison,
+		AugmentedUnison,
+		DiminishedSecond,
+		MinorSecond,
+		MajorSecond,
+		AugmentedSecond,
+		DiminishedThird,
+		MinorThird,
+		MajorThird,
+		AugmentedThird,
+		DiminishedFourth,
+		PerfectFourth,
+		AugmentedFourth,
+		DiminishedFifth,
+		PerfectFifth,
+		AugmentedFifth,
+		DiminishedSixth,
+		MinorSixth,
+		MajorSixth,
+		AugmentedSixth,
+		DiminishedSeventh,
+		MinorSeventh,
+		MajorSeventh,
+		AugmentedSeventh,
+		DiminishedOctave,
+		Octave,
+		AugmentedOctave,
+		DiminishedNinth,
+		MinorNinth,
+		MajorNinth,
+		AugmentedNinth,
+		DiminishedTenth,
+		MinorTenth,
+		MajorTenth,
+		AugmentedTenth,
+		DiminishedEleventh,
+		PerfectEleventh,
+		AugmentedEleventh,
+		DiminishedTwelfth,
+		PerfectTwelfth,
+		AugmentedTwelfth,
+		DiminishedThirteenth,
+		MinorThirteenth,
+		MajorThirteenth,
+		AugmentedThirteenth,
+		DiminishedFourteenth,
+		MinorFourteenth,
+		MajorFourteenth,
+		AugmentedFourteenth,
+		DiminishedFifteenth,
+		PerfectFifteenth,
+		AugmentedFifteenth,
+	}
 }
 
 func New(pos uint, semitone uint) Interval {

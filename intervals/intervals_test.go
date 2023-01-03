@@ -4,6 +4,61 @@ import (
 	"testing"
 )
 
+var intervalsList = []Interval{
+	PerfectUnison,
+	AugmentedUnison,
+	DiminishedSecond,
+	MinorSecond,
+	MajorSecond,
+	AugmentedSecond,
+	DiminishedThird,
+	MinorThird,
+	MajorThird,
+	AugmentedThird,
+	DiminishedFourth,
+	PerfectFourth,
+	AugmentedFourth,
+	DiminishedFifth,
+	PerfectFifth,
+	AugmentedFifth,
+	DiminishedSixth,
+	MinorSixth,
+	MajorSixth,
+	AugmentedSixth,
+	DiminishedSeventh,
+	MinorSeventh,
+	MajorSeventh,
+	AugmentedSeventh,
+	DiminishedOctave,
+	Octave,
+	AugmentedOctave,
+	DiminishedNinth,
+	MinorNinth,
+	MajorNinth,
+	AugmentedNinth,
+	DiminishedTenth,
+	MinorTenth,
+	MajorTenth,
+	AugmentedTenth,
+	DiminishedEleventh,
+	PerfectEleventh,
+	AugmentedEleventh,
+	DiminishedTwelfth,
+	PerfectTwelfth,
+	AugmentedTwelfth,
+	DiminishedThirteenth,
+	MinorThirteenth,
+	MajorThirteenth,
+	AugmentedThirteenth,
+	DiminishedFourteenth,
+	MinorFourteenth,
+	MajorFourteenth,
+	AugmentedFourteenth,
+	DiminishedFifteenth,
+	PerfectFifteenth,
+	AugmentedFifteenth,
+}
+
 var positions = map[string]uint{
 	"1":    0,
 	"1aug": 0,
@@ -148,6 +203,15 @@ func TestIntervals_length(t *testing.T) {
 	want := 52
 	if got != want {
 		t.Fatalf(`intervals.Intervals() = %d, want %d`, got, want)
+	}
+}
+
+func TestIntervals_Intervals(t *testing.T) {
+	intervalsList := Intervals()
+	for offset, value := range Intervals() {
+		if intervalsList[offset] != value {
+			t.Fatalf(`intervals.Intervals() has incorrect item at index %d`, offset)
+		}
 	}
 }
 

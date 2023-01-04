@@ -47,6 +47,10 @@ func (degree *Degree) Name() string {
 	panic("unsupported degree")
 }
 
+func Degrees() []Degree {
+	return []Degree{Tonic, Supertonic, Mediant, Subdominant, Dominant, Submediant, LeadingTone}
+}
+
 var Ionian = []intervals.Interval{
 	intervals.PerfectUnison,
 	intervals.MajorSecond,
@@ -361,51 +365,18 @@ func (scale *Scale) Notes() []notes.Note {
 }
 
 func (scale *Scale) Triads() []chords.Chord {
-	// skip octave in triads construction
-	// XXX - fix for melodic minor
-	scaleNotes := scale.Notes()[0 : len(scale.Notes())-1]
 	ret := make([]chords.Chord, 0)
-	for i := 0; i < len(scaleNotes); i++ {
-		root := scaleNotes[i]
-		third := scaleNotes[(i+2)%len(scaleNotes)]
-		fifth := scaleNotes[(i+4)%len(scaleNotes)]
-
-		if third.Position() < root.Position() || i+2 >= len(scaleNotes) {
-			third.SetOctave(third.Octave() + 1)
-		}
-		if fifth.Position() < root.Position() || i+4 >= len(scaleNotes) {
-			fifth.SetOctave(fifth.Octave() + 1)
-		}
-
-		chord := chords.FromNotes([]notes.Note{root, third, fifth})
-		ret = append(ret, chord)
+	for _, degree := range Degrees() {
+		ret = append(ret, scale.Triad(degree))
 	}
 	return ret
+
 }
 
 func (scale *Scale) Sevenths() []chords.Chord {
-	// skip octave in triads construction
-	// XXX - fix for melodic minor
-	scaleNotes := scale.Notes()[0 : len(scale.Notes())-1]
 	ret := make([]chords.Chord, 0)
-	for i := 0; i < len(scaleNotes); i++ {
-		root := scaleNotes[i]
-		third := scaleNotes[(i+2)%len(scaleNotes)]
-		fifth := scaleNotes[(i+4)%len(scaleNotes)]
-		seventh := scaleNotes[(i+6)%len(scaleNotes)]
-
-		if third.Position() < root.Position() || i+2 >= len(scaleNotes) {
-			third.SetOctave(third.Octave() + 1)
-		}
-		if fifth.Position() < root.Position() || i+4 >= len(scaleNotes) {
-			fifth.SetOctave(fifth.Octave() + 1)
-		}
-		if seventh.Position() < root.Position() || i+6 >= len(scaleNotes) {
-			seventh.SetOctave(seventh.Octave() + 1)
-		}
-
-		chord := chords.FromNotes([]notes.Note{root, third, fifth, seventh})
-		ret = append(ret, chord)
+	for _, degree := range Degrees() {
+		ret = append(ret, scale.Seventh(degree))
 	}
 	return ret
 }
@@ -419,12 +390,17 @@ func (scale *Scale) Triad(degree Degree) chords.Chord {
 	fifth := scaleNotes[(int(degree)+4)%len(scaleNotes)]
 
 	if third.Position() < root.Position() || int(degree)+2 >= len(scaleNotes) {
-		third.SetOctave(third.Octave() + 1)
+		third = *third.Interval(intervals.Octave)
 	}
 	if fifth.Position() < root.Position() || int(degree)+4 >= len(scaleNotes) {
-		fifth.SetOctave(fifth.Octave() + 1)
+		fifth = *fifth.Interval(intervals.Octave)
 	}
 
+	/*
+		fmt.Println("root", root.Name())
+		fmt.Println("third", third.Name())
+		fmt.Println("fifth", fifth.Name())
+	*/
 	return chords.FromNotes([]notes.Note{root, third, fifth})
 }
 
@@ -438,14 +414,21 @@ func (scale *Scale) Seventh(degree Degree) chords.Chord {
 	seventh := scaleNotes[(int(degree)+6)%len(scaleNotes)]
 
 	if third.Position() < root.Position() || int(degree)+2 >= len(scaleNotes) {
-		third.SetOctave(third.Octave() + 1)
+		third = *third.Interval(intervals.Octave)
 	}
 	if fifth.Position() < root.Position() || int(degree)+4 >= len(scaleNotes) {
-		fifth.SetOctave(fifth.Octave() + 1)
+		fifth = *fifth.Interval(intervals.Octave)
 	}
 	if seventh.Position() < root.Position() || int(degree)+6 >= len(scaleNotes) {
-		seventh.SetOctave(seventh.Octave() + 1)
+		seventh = *seventh.Interval(intervals.Octave)
 	}
+
+	/*
+		fmt.Println("root", root.Name())
+		fmt.Println("third", third.Name())
+		fmt.Println("fifth", fifth.Name())
+		fmt.Println("seventh", seventh.Name())
+	*/
 
 	return chords.FromNotes([]notes.Note{root, third, fifth, seventh})
 }

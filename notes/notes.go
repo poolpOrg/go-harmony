@@ -134,8 +134,8 @@ func (note *Note) Distance(target Note) intervals.Interval {
 	var origin Note
 	var destination Note
 
-	offset1 := uint8(note.Semitone())
-	offset2 := uint8(target.Semitone())
+	offset1 := uint8(note.Semitones())
+	offset2 := uint8(target.Semitones())
 
 	if offset1 < offset2 {
 		origin = *note
@@ -146,10 +146,10 @@ func (note *Note) Distance(target Note) intervals.Interval {
 	}
 
 	targetPosition := destination.Position()
-	targetSemitone := destination.Semitone()
+	targetSemitone := destination.Semitones()
 
 	targetPosition -= origin.Position()
-	targetSemitone -= origin.Semitone()
+	targetSemitone -= origin.Semitones()
 
 	if target.Octave() > note.Octave() {
 		targetPosition += 7
@@ -162,7 +162,7 @@ func (note *Note) Position() uint {
 	return note.natural.Position()
 }
 
-func (note *Note) Semitone() int {
+func (note *Note) Semitones() int {
 	return int(note.natural.Semitones()) + note.accidentals
 }
 
@@ -172,7 +172,7 @@ func (note *Note) Frequency() float64 {
 }
 
 func (note *Note) Enharmonic(target Note) bool {
-	return note.Semitone()%12 == target.Semitone()%12
+	return note.Semitones()%12 == target.Semitones()%12
 }
 
 func (note *Note) Octave() uint8 {
@@ -252,6 +252,10 @@ func (note *Note) SetOctave(position uint8) error {
 	return nil
 }
 
+func (note *Note) AbsoluteSemitones() uint8 {
+	return note.octave.Position()*12 + uint8(note.Semitones())
+}
+
 func (note *Note) MIDI() uint8 {
-	return uint8(note.Semitone()) + ((note.Octave() + 1) * 12)
+	return uint8(note.Semitones()) + ((note.Octave() + 1) * 12)
 }

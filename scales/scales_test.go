@@ -28,7 +28,35 @@ func TestScales_Parse(t *testing.T) {
 func TestScales_Name(t *testing.T) {
 }
 
+type scaleNotesTestCase struct {
+	input string
+	want  []string
+}
+
 func TestScales_Notes(t *testing.T) {
+	testCases := []scaleNotesTestCase{
+		{"Cbb", []string{"Cbb", "Dbb", "Ebb", "Fbb", "Gbb", "Abb", "Bbb"}},
+		{"Cb", []string{"Cb", "Db", "Eb", "Fb", "Gb", "Ab", "Bb"}},
+		{"C", []string{"C", "D", "E", "F", "G", "A", "B"}},
+		{"C#", []string{"C#", "D#", "E#", "F#", "G#", "A#", "B#"}},
+		{"C##", []string{"C##", "D##", "E##", "F##", "G##", "A##", "B##"}},
+
+		{"Cbbmin", []string{"Cbb", "Dbb", "Ebbb", "Fbb", "Gbb", "Abbb", "Bbbb"}},
+		{"Cbmin", []string{"Cb", "Db", "Ebb", "Fb", "Gb", "Abb", "Bbb"}},
+		{"Cmin", []string{"C", "D", "Eb", "F", "G", "Ab", "Bb"}},
+		{"C#min", []string{"C#", "D#", "E", "F#", "G#", "A", "B"}},
+		{"C##min", []string{"C##", "D##", "E#", "F##", "G##", "A#", "B#"}},
+	}
+
+	for _, testCase := range testCases {
+		scale, _ := Parse(testCase.input)
+		for degree, note := range scale.Notes() {
+			got := note.Name()
+			if testCase.want[degree] != got {
+				t.Fatalf(`Scale(%s).Notes()[%d].Name() = %s, want %s`, testCase.input, degree, got, testCase.want[degree])
+			}
+		}
+	}
 }
 
 func TestScales_Triads(t *testing.T) {

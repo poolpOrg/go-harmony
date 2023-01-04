@@ -1006,7 +1006,7 @@ func (chord *Chord) SetRoot(root notes.Note) {
 func FromNotes(notes []notes.Note) Chord {
 	// sort notes by ascending order
 	sort.SliceStable(notes, func(i, j int) bool {
-		return notes[i].MIDI() < notes[j].MIDI()
+		return notes[i].AbsoluteSemitones() < notes[j].AbsoluteSemitones()
 	})
 
 	root := notes[0]

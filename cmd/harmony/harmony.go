@@ -73,10 +73,16 @@ func main() {
 		fmt.Println(n.OctaveName(), "=", n.Frequency(), "Hz", "=", n.MIDI(), "(MIDI)")
 		fmt.Println()
 
+		lastPosition := uint(1)
 		for _, interval := range intervals.Intervals() {
-			fmt.Printf("%5s: %s\n", interval.Name(), n.Interval(interval).Name())
+			if interval.Position() != lastPosition {
+				fmt.Println()
+				fmt.Printf("%d", interval.Position()+1)
+			}
+			fmt.Printf("\t%5s: %s", interval.Name(), n.Interval(interval).Name())
+			lastPosition = interval.Position()
 		}
-
+		fmt.Println()
 		fmt.Println()
 		structures := chords.Structures()
 		chordsList := make([]string, 0)

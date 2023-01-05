@@ -312,6 +312,9 @@ func TestNotes_Position(t *testing.T) {
 	}
 }
 
+func TestNotes_Equals(t *testing.T) {
+}
+
 func TestNotes_Semitones(t *testing.T) {
 }
 
@@ -345,5 +348,90 @@ func TestNotes_Raise(t *testing.T) {
 func TestNotes_SetOctave(t *testing.T) {
 }
 
+type notesValuesTestCase struct {
+	input string
+	want  uint8
+}
+
+func TestNotes_AbsoluteSemitones(t *testing.T) {
+	testCases := []notesValuesTestCase{
+		{"C0", 0},
+		{"C#0", 1},
+		{"Db0", 1},
+		{"D0", 2},
+		{"D#0", 3},
+		{"Eb0", 3},
+		{"E0", 4},
+		{"E#0", 5},
+		{"Fb0", 4},
+		{"F0", 5},
+		{"F#0", 6},
+		{"Gb0", 6},
+		{"G0", 7},
+		{"G#0", 8},
+		{"Ab0", 8},
+		{"A0", 9},
+		{"A#0", 10},
+		{"Bb0", 10},
+		{"B0", 11},
+		{"B#0", 12},
+	}
+
+	for _, testCase := range testCases {
+		n, _ := Parse(testCase.input)
+		got := n.AbsoluteSemitones()
+		if got != testCase.want {
+			t.Fatalf(`note(%s).AbsoluteSemitones() = %d, want %d`, testCase.input, got, testCase.want)
+		}
+
+		for i := 1; i < 8; i++ {
+			n = n.Interval(intervals.Octave)
+			got := n.AbsoluteSemitones()
+			if got != testCase.want+uint8(12*i) {
+				t.Fatalf(`note(%s).AbsoluteSemitones() = %d, want %d`, n.OctaveName(), got, testCase.want+uint8(12*i))
+			}
+		}
+	}
+}
+
 func TestNotes_MIDI(t *testing.T) {
+	testCases := []notesValuesTestCase{
+		{"Cb0", 11},
+		{"C0", 12},
+		{"C#0", 13},
+		{"Db0", 13},
+		{"D0", 14},
+		{"D#0", 15},
+		{"Eb0", 15},
+		{"E0", 16},
+		{"E#0", 17},
+		{"Fb0", 16},
+		{"F0", 17},
+		{"F#0", 18},
+		{"Gb0", 18},
+		{"G0", 19},
+		{"G#0", 20},
+		{"Ab0", 20},
+		{"A0", 21},
+		{"A#0", 22},
+		{"Bb0", 22},
+		{"B0", 23},
+		{"B#0", 24},
+	}
+
+	for _, testCase := range testCases {
+		n, _ := Parse(testCase.input)
+		got := n.MIDI()
+		if got != testCase.want {
+			t.Fatalf(`note(%s).MIDI() = %d, want %d`, testCase.input, got, testCase.want)
+		}
+
+		for i := 1; i < 8; i++ {
+			n = n.Interval(intervals.Octave)
+			got := n.MIDI()
+			if got != testCase.want+uint8(12*i) {
+				t.Fatalf(`note(%s).MIDI() = %d, want %d`, n.OctaveName(), got, testCase.want+uint8(12*i))
+			}
+		}
+	}
 }

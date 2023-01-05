@@ -350,7 +350,7 @@ func TestNotes_SetOctave(t *testing.T) {
 
 type notesValuesTestCase struct {
 	input string
-	want  int8
+	want  uint8
 }
 
 func TestNotes_AbsoluteSemitones(t *testing.T) {
@@ -387,8 +387,8 @@ func TestNotes_AbsoluteSemitones(t *testing.T) {
 		for i := 1; i < 8; i++ {
 			n = n.Interval(intervals.Octave)
 			got := n.AbsoluteSemitones()
-			if got != testCase.want+int8(12*i) {
-				t.Fatalf(`note(%s).AbsoluteSemitones() = %d, want %d`, n.OctaveName(), got, testCase.want+int8(12*i))
+			if got != testCase.want+uint8(12*i) {
+				t.Fatalf(`note(%s).AbsoluteSemitones() = %d, want %d`, n.OctaveName(), got, testCase.want+uint8(12*i))
 			}
 		}
 	}
@@ -421,16 +421,16 @@ func TestNotes_MIDI(t *testing.T) {
 
 	for _, testCase := range testCases {
 		n, _ := Parse(testCase.input)
-		got := int8(n.MIDI())
+		got := n.MIDI()
 		if got != testCase.want {
 			t.Fatalf(`note(%s).MIDI() = %d, want %d`, testCase.input, got, testCase.want)
 		}
 
 		for i := 1; i < 8; i++ {
 			n = n.Interval(intervals.Octave)
-			got := int8(n.MIDI())
-			if got != testCase.want+int8(12*i) {
-				t.Fatalf(`note(%s).MIDI() = %d, want %d`, n.OctaveName(), got, testCase.want+int8(12*i))
+			got := n.MIDI()
+			if got != testCase.want+uint8(12*i) {
+				t.Fatalf(`note(%s).MIDI() = %d, want %d`, n.OctaveName(), got, testCase.want+uint8(12*i))
 			}
 		}
 	}

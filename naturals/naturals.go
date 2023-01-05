@@ -6,8 +6,8 @@ import (
 
 type natural struct {
 	name      string
-	position  int
-	semitones int
+	position  uint8
+	semitones uint8
 }
 type Natural natural
 
@@ -42,12 +42,12 @@ func (natural *Natural) Name() string {
 	return natural.name
 }
 
-func (natural *Natural) Position() uint {
-	return uint(natural.position)
+func (natural *Natural) Position() uint8 {
+	return uint8(natural.position)
 }
 
-func (natural *Natural) Semitones() uint {
-	return uint(natural.semitones)
+func (natural *Natural) Semitones() uint8 {
+	return uint8(natural.semitones)
 }
 
 func (natural *Natural) Previous() *Natural {

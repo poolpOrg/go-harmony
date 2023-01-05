@@ -12,7 +12,7 @@ import (
 
 type note struct {
 	natural     naturals.Natural
-	accidentals int
+	accidentals int8
 	octave      octaves.Octave
 }
 type Note note
@@ -35,7 +35,7 @@ func Parse(note string) (*Note, error) {
 		accidentals = note[1 : len(note)-1]
 	}
 
-	var accidentalDelta int
+	var accidentalDelta int8
 	for _, accidental := range accidentals {
 		switch accidental {
 		case 'b':
@@ -69,9 +69,9 @@ func (note *Note) Name() string {
 	if note.accidentals == 0 {
 		return note.natural.Name()
 	} else if note.accidentals < 0 {
-		return note.natural.Name() + strings.Repeat("b", -note.accidentals)
+		return note.natural.Name() + strings.Repeat("b", int(-note.accidentals))
 	} else {
-		return note.natural.Name() + strings.Repeat("#", note.accidentals)
+		return note.natural.Name() + strings.Repeat("#", int(note.accidentals))
 	}
 }
 
@@ -79,9 +79,9 @@ func (note *Note) OctaveName() string {
 	if note.accidentals == 0 {
 		return fmt.Sprintf("%s%d", note.natural.Name(), note.Octave())
 	} else if note.accidentals < 0 {
-		return fmt.Sprintf("%s%d", note.natural.Name()+strings.Repeat("b", -note.accidentals), note.Octave())
+		return fmt.Sprintf("%s%d", note.natural.Name()+strings.Repeat("b", int(-note.accidentals)), note.Octave())
 	} else {
-		return fmt.Sprintf("%s%d", note.natural.Name()+strings.Repeat("#", note.accidentals), note.Octave())
+		return fmt.Sprintf("%s%d", note.natural.Name()+strings.Repeat("#", int(note.accidentals)), note.Octave())
 	}
 }
 
@@ -110,7 +110,7 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 	}
 
 	// adjust accidentals to match the interval's semitone distance
-	distance := int(interval.Semitones()) - int(targetNote.AbsoluteSemitones()-note.AbsoluteSemitones())
+	distance := int8(interval.Semitones()) - int8(targetNote.AbsoluteSemitones()-note.AbsoluteSemitones())
 	targetNote.accidentals += distance
 
 	return targetNote
@@ -146,12 +146,12 @@ func (note *Note) Distance(target Note) intervals.Interval {
 	panic("unknown interval")
 }
 
-func (note *Note) Position() uint {
+func (note *Note) Position() uint8 {
 	return note.natural.Position()
 }
 
-func (note *Note) Semitones() int {
-	return int(note.natural.Semitones()) + note.accidentals
+func (note *Note) Semitones() uint8 {
+	return uint8(int8(note.natural.Semitones()) + note.accidentals)
 }
 
 func (note *Note) Frequency() float64 {
@@ -240,11 +240,11 @@ func (note *Note) SetOctave(position int8) error {
 	return nil
 }
 
-func (note *Note) AbsoluteSemitones() int8 {
-	return int8(note.octave.Position()*12) + int8(note.Semitones())
+func (note *Note) AbsoluteSemitones() uint8 {
+	return uint8(note.octave.Position()*12) + note.Semitones()
 }
 
 func (note *Note) MIDI() uint8 {
 	// go-harmony starts at C0, midi notes start at 0
-	return uint8(note.AbsoluteSemitones()) + 12
+	return note.AbsoluteSemitones() + 12
 }

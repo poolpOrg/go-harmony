@@ -132,30 +132,50 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 
 func (note *Note) Distance(target Note) intervals.Interval {
 	var origin Note
-	var destination Note
 
-	offset1 := uint8(note.Semitones())
-	offset2 := uint8(target.Semitones())
+	var originPosition uint8
+	var targetPosition uint8
+	var originSemitones uint8
+	var targetSemitones uint8
+	var octavesDistance uint8
+	var semitonesDistance uint8
+	var intervalPosition uint8
+	var intervalSemitones uint8
 
-	if offset1 < offset2 {
+	if note.AbsoluteSemitones() <= target.AbsoluteSemitones() {
 		origin = *note
-		destination = target
 	} else {
 		origin = target
-		destination = *note
+		target = *note
 	}
 
-	targetPosition := destination.Position()
-	targetSemitone := destination.Semitones()
+	originPosition = uint8(origin.Position())
+	originSemitones = origin.AbsoluteSemitones()
+	targetPosition = uint8(target.Position())
+	targetSemitones = target.AbsoluteSemitones()
 
-	targetPosition -= origin.Position()
-	targetSemitone -= origin.Semitones()
-
-	if target.Octave() > note.Octave() {
-		targetPosition += 7
-		targetSemitone += 12
+	semitonesDistance = targetSemitones - originSemitones
+	octavesDistance = target.Octave() - origin.Octave()
+	if target.Position() < origin.Position() {
+		octavesDistance -= 1
 	}
-	return *intervals.New(targetPosition, uint(targetSemitone))
+	if octavesDistance > 2 {
+		semitonesDistance -= (12 * (octavesDistance - 2))
+		octavesDistance = 2
+	}
+
+	if originPosition <= targetPosition {
+		intervalPosition = (targetPosition - originPosition)
+	} else {
+		intervalPosition = (7 - originPosition) + targetPosition
+	}
+
+	intervalPosition += (octavesDistance * 7)
+	intervalSemitones = semitonesDistance
+
+	fmt.Println(intervalPosition, intervalSemitones)
+
+	return *intervals.New(uint(intervalPosition), uint(intervalSemitones))
 }
 
 func (note *Note) Position() uint {
@@ -257,5 +277,6 @@ func (note *Note) AbsoluteSemitones() uint8 {
 }
 
 func (note *Note) MIDI() uint8 {
-	return uint8(note.Semitones()) + ((note.Octave() + 1) * 12)
+	// go-harmony starts at C0, midi notes start at 0
+	return note.AbsoluteSemitones() + 12
 }

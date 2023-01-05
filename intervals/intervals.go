@@ -12,6 +12,8 @@ type interval struct {
 type Interval interval
 
 var (
+	None Interval = Interval{pos: 255, semitones: 255}
+
 	PerfectUnison   Interval = Interval{pos: 0, semitones: 0}
 	AugmentedUnison Interval = Interval{pos: 0, semitones: 1}
 
@@ -148,6 +150,9 @@ func New(pos uint, semitones uint) *Interval {
 
 func (interval Interval) Name() string {
 	switch interval {
+	case None:
+		return ""
+
 	case PerfectUnison:
 		return "1"
 	case AugmentedUnison:

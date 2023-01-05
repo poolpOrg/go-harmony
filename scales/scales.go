@@ -59,7 +59,6 @@ var Ionian = []intervals.Interval{
 	intervals.PerfectFifth,
 	intervals.MajorSixth,
 	intervals.MajorSeventh,
-	intervals.Octave,
 }
 
 var Dorian = []intervals.Interval{
@@ -70,7 +69,6 @@ var Dorian = []intervals.Interval{
 	intervals.PerfectFifth,
 	intervals.MajorSixth,
 	intervals.MinorSeventh,
-	intervals.Octave,
 }
 
 var Phrygian = []intervals.Interval{
@@ -81,7 +79,6 @@ var Phrygian = []intervals.Interval{
 	intervals.PerfectFifth,
 	intervals.MinorSixth,
 	intervals.MinorSeventh,
-	intervals.Octave,
 }
 
 var Lydian = []intervals.Interval{
@@ -92,7 +89,6 @@ var Lydian = []intervals.Interval{
 	intervals.PerfectFifth,
 	intervals.MajorSixth,
 	intervals.MajorSeventh,
-	intervals.Octave,
 }
 
 var Mixolydian = []intervals.Interval{
@@ -103,7 +99,6 @@ var Mixolydian = []intervals.Interval{
 	intervals.PerfectFifth,
 	intervals.MajorSixth,
 	intervals.MinorSeventh,
-	intervals.Octave,
 }
 
 var Aeolian = []intervals.Interval{
@@ -114,7 +109,6 @@ var Aeolian = []intervals.Interval{
 	intervals.PerfectFifth,
 	intervals.MinorSixth,
 	intervals.MinorSeventh,
-	intervals.Octave,
 }
 
 var Locrian = []intervals.Interval{
@@ -125,7 +119,6 @@ var Locrian = []intervals.Interval{
 	intervals.DiminishedFifth,
 	intervals.MinorSixth,
 	intervals.MinorSeventh,
-	intervals.Octave,
 }
 
 var HarmonicMinor = []intervals.Interval{
@@ -136,25 +129,6 @@ var HarmonicMinor = []intervals.Interval{
 	intervals.PerfectFifth,
 	intervals.MinorSixth,
 	intervals.MajorSeventh,
-	intervals.Octave,
-}
-
-var MelodicMinor = []intervals.Interval{
-	intervals.PerfectUnison,
-	intervals.MajorSecond,
-	intervals.MinorThird,
-	intervals.PerfectFourth,
-	intervals.PerfectFifth,
-	intervals.MajorSixth,
-	intervals.MajorSeventh,
-	intervals.Octave,
-	intervals.MinorSeventh,
-	intervals.MinorSixth,
-	intervals.PerfectFifth,
-	intervals.PerfectFourth,
-	intervals.MinorThird,
-	intervals.MajorSecond,
-	intervals.PerfectUnison,
 }
 
 var JazzMinor = []intervals.Interval{
@@ -165,64 +139,68 @@ var JazzMinor = []intervals.Interval{
 	intervals.PerfectFifth,
 	intervals.MajorSixth,
 	intervals.MajorSeventh,
-	intervals.Octave,
 }
 
 var MajorPentatonic = []intervals.Interval{
 	intervals.PerfectUnison,
 	intervals.MajorSecond,
 	intervals.MajorThird,
+	intervals.None,
 	intervals.PerfectFifth,
 	intervals.MajorSixth,
-	intervals.Octave,
+	intervals.None,
 }
 
 var EgyptianPentatonic = []intervals.Interval{
 	intervals.PerfectUnison,
 	intervals.MajorSecond,
+	intervals.None,
 	intervals.PerfectFourth,
 	intervals.PerfectFifth,
+	intervals.None,
 	intervals.MinorSeventh,
-	intervals.Octave,
 }
 
 var BluesMinor = []intervals.Interval{
 	intervals.PerfectUnison,
+	intervals.None,
 	intervals.MinorThird,
 	intervals.PerfectFourth,
+	intervals.None,
 	intervals.MinorSixth,
 	intervals.MinorSeventh,
-	intervals.Octave,
 }
 
 var BluesMajor = []intervals.Interval{
 	intervals.PerfectUnison,
 	intervals.MajorSecond,
+	intervals.None,
 	intervals.PerfectFourth,
 	intervals.PerfectFifth,
 	intervals.MajorSixth,
-	intervals.Octave,
+	intervals.None,
 }
 
 var MinorPentatonic = []intervals.Interval{
 	intervals.PerfectUnison,
+	intervals.None,
 	intervals.MinorThird,
 	intervals.PerfectFourth,
 	intervals.PerfectFifth,
+	intervals.None,
 	intervals.MinorSeventh,
-	intervals.Octave,
 }
 
 var scales = map[string][]intervals.Interval{
-	"ionian":              Ionian,
-	"dorian":              Dorian,
-	"phyrigian":           Phrygian,
-	"lydian":              Lydian,
-	"mixolydian":          Mixolydian,
-	"aeolian":             Aeolian,
-	"locrian":             Locrian,
-	"harmonic minor":      HarmonicMinor,
-	"melodic minor":       MelodicMinor,
+	"ionian":         Ionian,
+	"dorian":         Dorian,
+	"phyrigian":      Phrygian,
+	"lydian":         Lydian,
+	"mixolydian":     Mixolydian,
+	"aeolian":        Aeolian,
+	"locrian":        Locrian,
+	"harmonic minor": HarmonicMinor,
+	//"melodic minor":       MelodicMinor,
 	"jazz minor":          JazzMinor,
 	"major pentatonic":    MajorPentatonic,
 	"egyptian pentatonic": EgyptianPentatonic,
@@ -296,10 +274,11 @@ func Parse(scale string) (*Scale, error) {
 		// harmonic minor scale
 		structure = HarmonicMinor
 
-	case "melodicMinor":
-		// melodic minor scale
-		structure = MelodicMinor
-
+		/*
+			case "melodicMinor":
+				// melodic minor scale
+				structure = MelodicMinor
+		*/
 	case "jazzMinor":
 		// jazz minor scale
 		structure = JazzMinor
@@ -356,27 +335,41 @@ func (scale *Scale) Name() string {
 	return ""
 }
 
-func (scale *Scale) Notes() []notes.Note {
-	ret := make([]notes.Note, 0)
-	for _, interval := range scale.structure {
-		ret = append(ret, *scale.root.Interval(interval))
+func (scale *Scale) Notes() []*notes.Note {
+	ret := make([]*notes.Note, 0)
+	for degree, interval := range scale.structure {
+		if scale.structure[degree] != intervals.None {
+			ret = append(ret, scale.root.Interval(interval))
+		} else {
+			ret = append(ret, nil)
+		}
 	}
 	return ret
 }
 
-func (scale *Scale) Triads() []chords.Chord {
-	ret := make([]chords.Chord, 0)
+func (scale *Scale) Triads() []*chords.Chord {
+	ret := make([]*chords.Chord, 0)
 	for _, degree := range Degrees() {
-		ret = append(ret, scale.Triad(degree))
+		if scale.structure[degree] != intervals.None {
+			chord := scale.Triad(degree)
+			ret = append(ret, &chord)
+		} else {
+			ret = append(ret, nil)
+		}
 	}
 	return ret
 
 }
 
-func (scale *Scale) Sevenths() []chords.Chord {
-	ret := make([]chords.Chord, 0)
+func (scale *Scale) Sevenths() []*chords.Chord {
+	ret := make([]*chords.Chord, 0)
 	for _, degree := range Degrees() {
-		ret = append(ret, scale.Seventh(degree))
+		if scale.structure[degree] != intervals.None {
+			chord := scale.Seventh(degree)
+			ret = append(ret, &chord)
+		} else {
+			ret = append(ret, nil)
+		}
 	}
 	return ret
 }
@@ -384,43 +377,42 @@ func (scale *Scale) Sevenths() []chords.Chord {
 func (scale *Scale) Triad(degree Degree) chords.Chord {
 	// skip octave in triads construction
 	// XXX - fix for melodic minor
-	scaleNotes := scale.Notes()[0 : len(scale.Notes())-1]
+	scaleNotes := scale.Notes()
 	root := scaleNotes[int(degree)]
 	third := scaleNotes[(int(degree)+2)%len(scaleNotes)]
 	fifth := scaleNotes[(int(degree)+4)%len(scaleNotes)]
 
 	if third.Position() < root.Position() || int(degree)+2 >= len(scaleNotes) {
-		third = *third.Interval(intervals.Octave)
+		third = third.Interval(intervals.Octave)
 	}
 	if fifth.Position() < root.Position() || int(degree)+4 >= len(scaleNotes) {
-		fifth = *fifth.Interval(intervals.Octave)
+		fifth = fifth.Interval(intervals.Octave)
 	}
 
-	/*
-		fmt.Println("root", root.Name())
-		fmt.Println("third", third.Name())
-		fmt.Println("fifth", fifth.Name())
-	*/
-	return chords.FromNotes([]notes.Note{root, third, fifth})
+	//fmt.Println("root", root.Name())
+	//fmt.Println("third", third.Name())
+	//fmt.Println("fifth", fifth.Name())
+
+	return chords.FromNotes([]notes.Note{*root, *third, *fifth})
 }
 
 func (scale *Scale) Seventh(degree Degree) chords.Chord {
 	// skip octave in seventh construction
 	// XXX - fix for melodic minor
-	scaleNotes := scale.Notes()[0 : len(scale.Notes())-1]
+	scaleNotes := scale.Notes()
 	root := scaleNotes[int(degree)]
 	third := scaleNotes[(int(degree)+2)%len(scaleNotes)]
 	fifth := scaleNotes[(int(degree)+4)%len(scaleNotes)]
 	seventh := scaleNotes[(int(degree)+6)%len(scaleNotes)]
 
 	if third.Position() < root.Position() || int(degree)+2 >= len(scaleNotes) {
-		third = *third.Interval(intervals.Octave)
+		third = third.Interval(intervals.Octave)
 	}
 	if fifth.Position() < root.Position() || int(degree)+4 >= len(scaleNotes) {
-		fifth = *fifth.Interval(intervals.Octave)
+		fifth = fifth.Interval(intervals.Octave)
 	}
 	if seventh.Position() < root.Position() || int(degree)+6 >= len(scaleNotes) {
-		seventh = *seventh.Interval(intervals.Octave)
+		seventh = seventh.Interval(intervals.Octave)
 	}
 
 	/*
@@ -430,16 +422,18 @@ func (scale *Scale) Seventh(degree Degree) chords.Chord {
 		fmt.Println("seventh", seventh.Name())
 	*/
 
-	return chords.FromNotes([]notes.Note{root, third, fifth, seventh})
+	return chords.FromNotes([]notes.Note{*root, *third, *fifth, *seventh})
 }
 
 func (scale *Scale) NotesInChord(chord chords.Chord) int {
 	count := 0
 	for _, chordNote := range chord.Notes() {
 		for _, scaleNote := range scale.Notes() {
-			if chordNote.Enharmonic(scaleNote) {
-				count++
-				break
+			if scaleNote != nil {
+				if chordNote.Enharmonic(*scaleNote) {
+					count++
+					break
+				}
 			}
 		}
 	}
@@ -459,9 +453,11 @@ func FromChord(chord chords.Chord) []Scale {
 		count := 0
 		for _, chordNote := range chord.Notes() {
 			for _, scaleNote := range scale.Notes() {
-				if chordNote.Enharmonic(scaleNote) {
-					count++
-					break
+				if scaleNote != nil {
+					if chordNote.Enharmonic(*scaleNote) {
+						count++
+						break
+					}
 				}
 			}
 		}

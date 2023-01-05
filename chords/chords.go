@@ -1049,6 +1049,54 @@ func FromNotes(notes []notes.Note) Chord {
 	}
 }
 
+/*
+func FromNotes(notes []notes.Note) Chord {
+	// sort notes by ascending order
+	sort.SliceStable(notes, func(i, j int) bool {
+		return notes[i].AbsoluteSemitones() < notes[j].AbsoluteSemitones()
+	})
+
+	root := notes[0]
+
+	chordStructure := Structure{}
+	chordStructure = append(chordStructure, intervals.PerfectUnison)
+	chordInversion := intervals.PerfectUnison
+	for _, note := range notes[1:] {
+		chordStructure = append(chordStructure, *intervals.New(root.Distance(note).Position(), root.Distance(note).Semitones()))
+	}
+
+	// first try to match a general structure
+	structures := Structures()
+	for _, refStructure := range structures {
+		if chordStructure.Equivalent(refStructure) {
+			return Chord{
+				root:      root,
+				structure: refStructure,
+				inversion: chordInversion,
+			}
+		}
+	}
+
+	// none found, try matching inversions
+	for _, refStructure := range structures {
+		inversionInterval := refStructure.Inversion(chordStructure)
+		if inversionInterval == nil {
+			continue
+		}
+		root = *root.Interval(inversionInterval.Relative())
+		chordInversion = *inversionInterval
+		chordStructure = refStructure
+		break
+	}
+
+	return Chord{
+		root:      root,
+		structure: chordStructure,
+		inversion: chordInversion,
+	}
+}
+*/
+
 func (chord *Chord) Relative() *Chord {
 	structure := make([]intervals.Interval, len(chord.structure))
 	copy(structure, chord.structure)

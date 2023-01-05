@@ -70,7 +70,10 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Println(n.OctaveName(), "=", n.Frequency(), "Hz", "=", n.MIDI(), "(MIDI)")
+		fmt.Println(n.OctaveName(), "=", n.Frequency(), "Hz")
+		fmt.Println("\tAbsolute Semitones:", n.AbsoluteSemitones())
+		fmt.Println("\tMIDI:", n.MIDI())
+
 		fmt.Println()
 
 		lastPosition := uint(1)
@@ -137,9 +140,13 @@ func main() {
 			fmt.Printf("%20s (%d)\t", scale.Name(), scale.NotesInChord(c))
 			for _, scaleNote := range scale.Notes() {
 				found := false
+				if scaleNote == nil {
+					fmt.Printf("-\t")
+					continue
+				}
 				for _, chordNote := range c.Notes() {
 					//\033[1;36m%s\033[0m"
-					if chordNote.Enharmonic(scaleNote) {
+					if chordNote.Enharmonic(*scaleNote) {
 						fmt.Printf("\033[1;32m%s\033[0m\t", chordNote.Name())
 						found = true
 						break
@@ -176,25 +183,37 @@ func main() {
 		}
 		fmt.Println()
 
+		diatonic := true
 		notes := s.Notes()
-		fmt.Printf("%-20s", notes[0].Name()+" "+s.Name()+" scale:")
-		for offset, n := range notes[0 : len(notes)-1] {
-			fmt.Printf(colors[offset], n.OctaveName())
+		fmt.Printf("%-20s", notes[0].Name()+" "+s.Name()+":")
+		for offset, n := range notes[0:] {
+			if n == nil {
+				diatonic = false
+				fmt.Printf(colors[offset], "-")
+			} else {
+				fmt.Printf(colors[offset], n.OctaveName())
+			}
 		}
 		fmt.Println()
 
-		if len(s.Notes()) >= 7 {
+		if diatonic {
 			fmt.Printf("%-20s", "diatonic triads:")
 			for offset, c := range s.Triads() {
-				fmt.Printf(colors[offset], c.Name())
+				if c == nil {
+					fmt.Printf(colors[offset], "-")
+				} else {
+					fmt.Printf(colors[offset], c.Name())
+				}
 			}
 			fmt.Println()
 
-			fmt.Printf("%-20s", "diatonic sevenths:")
-			for offset, c := range s.Sevenths() {
-				fmt.Printf(colors[offset], c.Name())
+			if len(s.Notes()) == 7 {
+				fmt.Printf("%-20s", "diatonic sevenths:")
+				for offset, c := range s.Sevenths() {
+					fmt.Printf(colors[offset], c.Name())
+				}
+				fmt.Println()
 			}
-			fmt.Println()
 		}
 	}
 

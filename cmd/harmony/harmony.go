@@ -25,6 +25,7 @@ func main() {
 	var opt_distance string
 	var opt_progression string
 	var opt_interval string
+	var opt_intervals string
 
 	flag.StringVar(&opt_natural, "natural", "", "natural")
 	flag.StringVar(&opt_octave, "octave", "", "octave")
@@ -35,6 +36,8 @@ func main() {
 	flag.StringVar(&opt_distance, "distance", "", "distance")
 	flag.StringVar(&opt_progression, "progression", "", "progression")
 	flag.StringVar(&opt_interval, "interval", "", "interval")
+	flag.StringVar(&opt_intervals, "intervals", "", "intervals")
+
 	flag.Parse()
 
 	instrument := instruments.NewInstrument(tunings.A440)
@@ -76,17 +79,6 @@ func main() {
 
 		fmt.Println()
 
-		lastPosition := uint(1)
-		for _, interval := range intervals.Intervals() {
-			if interval.Position() != lastPosition {
-				fmt.Println()
-				fmt.Printf("%d", interval.Position()+1)
-			}
-			fmt.Printf("\t%5s: %s", interval.Name(), n.Interval(interval).Name())
-			lastPosition = interval.Position()
-		}
-		fmt.Println()
-		fmt.Println()
 		structures := chords.Structures()
 		chordsList := make([]string, 0)
 		for _, structure := range structures {
@@ -332,4 +324,21 @@ func main() {
 		}
 	}
 
+	if opt_intervals != "" {
+		n, err := instrument.Note(opt_intervals)
+		if err != nil {
+			log.Fatal(err)
+		}
+		lastPosition := uint(1)
+		for _, interval := range intervals.Intervals() {
+			if interval.Position() != lastPosition {
+				fmt.Println()
+				fmt.Printf("%d", interval.Position()+1)
+			}
+			fmt.Printf("\t%5s: %s", interval.Name(), n.Interval(interval).OctaveName())
+			lastPosition = interval.Position()
+		}
+		fmt.Println()
+		fmt.Println()
+	}
 }

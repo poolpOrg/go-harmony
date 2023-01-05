@@ -86,46 +86,22 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 		return &targetNote
 	}
 
-	target := naturals.Naturals()[(int(note.natural.Position())+int(interval.Position()))%len(naturals.Naturals())]
-	sourceSemitone := int(note.natural.Semitones()) + note.accidentals
+	sourceSemitones := note.AbsoluteSemitones()
 
+	target := naturals.Naturals()[(int(note.natural.Position())+int(interval.Position()))%len(naturals.Naturals())]
 	targetOctave := note.octave.Add(uint8(interval.Semitones() / 12))
 	if target.Position() < note.natural.Position() {
 		targetOctave = targetOctave.Next()
 	}
 
-	targetSemitone := target.Semitones() + uint(note.accidentals)
-	targetAccidentals := note.accidentals
-	if targetSemitone < note.natural.Semitones() {
-		targetSemitone += 12
-	}
+	n, _ := Parse(fmt.Sprintf("%s%d", target.Name(), targetOctave.Position()))
 
-	distance := int(targetSemitone) - (int(interval.Semitones()%12) + sourceSemitone)
-	targetAccidentals += -distance
-	//	targetOctave += uint8(targetAccidentals / 12)
-	targetAccidentals = targetAccidentals % 12
+	distance := n.AbsoluteSemitones() - sourceSemitones
+	accidentals := int(interval.Semitones()) - int(distance)
 
-	if interval == intervals.AugmentedSeventh || interval == intervals.AugmentedFourteenth {
-		targetOctave = targetOctave.Previous()
-		targetAccidentals = targetAccidentals + 12
-	}
-	if interval == intervals.DiminishedOctave || interval == intervals.DiminishedFifteenth {
-		targetOctave = targetOctave.Next()
-		targetAccidentals = targetAccidentals - 12
-	}
-
-	if targetAccidentals < 0 {
-		if -targetAccidentals%12 == 0 {
-			targetAccidentals = 0
-		}
-	} else {
-		if targetAccidentals%12 == 0 {
-			targetAccidentals = 0
-		}
-	}
 	return &Note{
 		natural:     target,
-		accidentals: targetAccidentals,
+		accidentals: accidentals,
 		octave:      *targetOctave,
 	}
 }

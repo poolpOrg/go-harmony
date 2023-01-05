@@ -59,6 +59,12 @@ func Parse(note string) (*Note, error) {
 	}, nil
 }
 
+func (note *Note) Equals(target Note) bool {
+	return note.natural == target.natural &&
+		note.accidentals == target.accidentals &&
+		note.octave == target.octave
+}
+
 func (note *Note) Name() string {
 	if note.accidentals == 0 {
 		return note.natural.Name()
@@ -80,44 +86,40 @@ func (note *Note) OctaveName() string {
 }
 
 func (note *Note) Interval(interval intervals.Interval) *Note {
+	// shortcut on an octave multiplier
 	if interval.Position()%7 == 0 && interval.Semitones()%12 == 0 {
 		targetNote := *note
 		targetNote.octave = *targetNote.octave.Add(uint8(interval.Semitones() / 12))
 		return &targetNote
 	}
 
-	sourceSemitones := note.AbsoluteSemitones()
+	// locate target natural note for interval
+	targetNatural := naturals.Naturals()[(int(note.natural.Position())+int(interval.Position()))%len(naturals.Naturals())]
 
-	target := naturals.Naturals()[(int(note.natural.Position())+int(interval.Position()))%len(naturals.Naturals())]
-	targetOctave := note.octave.Add(uint8(interval.Semitones() / 12))
-	if target.Position() < note.natural.Position() {
-		targetOctave = targetOctave.Next()
+	// locate target octave taking into account interval AND natural positions
+	targetOctave := *note.octave.Add(uint8(interval.Position()) / 7)
+	if targetNatural.Position() < note.natural.Position() {
+		targetOctave = *targetOctave.Next()
 	}
 
-	n, _ := Parse(fmt.Sprintf("%s%d", target.Name(), targetOctave.Position()))
-
-	distance := n.AbsoluteSemitones() - sourceSemitones
-	accidentals := int(interval.Semitones()) - int(distance)
-
-	return &Note{
-		natural:     target,
-		accidentals: accidentals,
-		octave:      *targetOctave,
+	// build target note with accidentals offset
+	targetNote := &Note{
+		natural:     targetNatural,
+		accidentals: note.accidentals,
+		octave:      targetOctave,
 	}
+
+	// adjust accidentals to match the interval's semitone distance
+	distance := int(interval.Semitones()) - int(targetNote.AbsoluteSemitones()-note.AbsoluteSemitones())
+	targetNote.accidentals += distance
+
+	return targetNote
 }
 
 func (note *Note) Distance(target Note) intervals.Interval {
 	var origin Note
 
-	var originPosition uint8
-	var targetPosition uint8
-	var originSemitones uint8
-	var targetSemitones uint8
-	var octavesDistance uint8
-	var semitonesDistance uint8
-	var intervalPosition uint8
-	var intervalSemitones uint8
-
+	// always compute from lower to higher note regardless of current and target notes
 	if note.AbsoluteSemitones() <= target.AbsoluteSemitones() {
 		origin = *note
 	} else {
@@ -125,33 +127,23 @@ func (note *Note) Distance(target Note) intervals.Interval {
 		target = *note
 	}
 
-	originPosition = uint8(origin.Position())
-	originSemitones = origin.AbsoluteSemitones()
-	targetPosition = uint8(target.Position())
-	targetSemitones = target.AbsoluteSemitones()
-
-	semitonesDistance = targetSemitones - originSemitones
-	octavesDistance = target.Octave() - origin.Octave()
+	// ie: B4 -> C5 = 1 semitone, <1 octave of distance, wrap
 	if target.Position() < origin.Position() {
-		octavesDistance -= 1
-	}
-	if octavesDistance > 2 {
-		semitonesDistance -= (12 * (octavesDistance - 2))
-		octavesDistance = 2
+		target.octave.Previous()
 	}
 
-	if originPosition <= targetPosition {
-		intervalPosition = (targetPosition - originPosition)
-	} else {
-		intervalPosition = (7 - originPosition) + targetPosition
+	// because C1->C3, C1->C4, C1->C5 are all fifteenth intervals, wrap target to origin octave+2
+	if target.Octave()-note.Octave() > 2 {
+		target.octave = *note.octave.Add(2)
 	}
 
-	intervalPosition += (octavesDistance * 7)
-	intervalSemitones = semitonesDistance
-
-	//fmt.Println(intervalPosition, intervalSemitones)
-
-	return *intervals.New(uint(intervalPosition), uint(intervalSemitones))
+	// scan for an interval that would produce target
+	for _, interval := range intervals.Intervals() {
+		if note.Interval(interval).Equals(target) {
+			return interval
+		}
+	}
+	panic("unknown interval")
 }
 
 func (note *Note) Position() uint {

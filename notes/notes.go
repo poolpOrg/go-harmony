@@ -89,7 +89,7 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 	// shortcut on an octave multiplier
 	if interval.Position()%7 == 0 && interval.Semitones()%12 == 0 {
 		targetNote := *note
-		targetNote.octave = *targetNote.octave.Add(uint8(interval.Semitones() / 12))
+		targetNote.octave = *targetNote.octave.Add(int8(interval.Semitones() / 12))
 		return &targetNote
 	}
 
@@ -97,7 +97,7 @@ func (note *Note) Interval(interval intervals.Interval) *Note {
 	targetNatural := naturals.Naturals()[(int(note.natural.Position())+int(interval.Position()))%len(naturals.Naturals())]
 
 	// locate target octave taking into account interval AND natural positions
-	targetOctave := *note.octave.Add(uint8(interval.Position()) / 7)
+	targetOctave := *note.octave.Add(int8(interval.Position()) / 7)
 	if targetNatural.Position() < note.natural.Position() {
 		targetOctave = *targetOctave.Next()
 	}
@@ -163,7 +163,7 @@ func (note *Note) Enharmonic(target Note) bool {
 	return note.Semitones()%12 == target.Semitones()%12
 }
 
-func (note *Note) Octave() uint8 {
+func (note *Note) Octave() int8 {
 	return note.octave.Position()
 }
 
@@ -231,7 +231,7 @@ func (note *Note) Raise() *Note {
 }
 
 // temporarily until a more generic method is devised
-func (note *Note) SetOctave(position uint8) error {
+func (note *Note) SetOctave(position int8) error {
 	octave, err := octaves.FromPosition(position)
 	if err != nil {
 		return err
@@ -240,11 +240,11 @@ func (note *Note) SetOctave(position uint8) error {
 	return nil
 }
 
-func (note *Note) AbsoluteSemitones() uint8 {
-	return note.octave.Position()*12 + uint8(note.Semitones())
+func (note *Note) AbsoluteSemitones() int8 {
+	return int8(note.octave.Position()*12) + int8(note.Semitones())
 }
 
 func (note *Note) MIDI() uint8 {
 	// go-harmony starts at C0, midi notes start at 0
-	return note.AbsoluteSemitones() + 12
+	return uint8(note.AbsoluteSemitones()) + 12
 }

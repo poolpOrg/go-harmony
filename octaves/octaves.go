@@ -5,7 +5,7 @@ import (
 )
 
 type octave struct {
-	position uint8
+	position int8
 }
 type Octave octave
 
@@ -37,7 +37,7 @@ func FromName(name string) (*Octave, error) {
 	return nil, fmt.Errorf("bad name (%s): should be 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6' or 'C7'", name)
 }
 
-func FromPosition(position uint8) (*Octave, error) {
+func FromPosition(position int8) (*Octave, error) {
 	for _, element := range octaves {
 		if element.position == position {
 			return &element, nil
@@ -50,7 +50,7 @@ func (octave *Octave) Name() string {
 	return fmt.Sprintf("C%d", octave.position)
 }
 
-func (octave *Octave) Position() uint8 {
+func (octave *Octave) Position() int8 {
 	return octave.position
 }
 
@@ -63,22 +63,22 @@ func (octave *Octave) Previous() *Octave {
 }
 
 func (octave *Octave) Next() *Octave {
-	if octave.position == uint8(len(octaves)-1) {
+	if octave.position == int8(len(octaves)-1) {
 		return nil
 	} else {
 		return &Octave{position: octave.position + 1}
 	}
 }
 
-func (octave *Octave) Add(value uint8) *Octave {
-	if octave.position+value > uint8(len(octaves)-1) {
+func (octave *Octave) Add(value int8) *Octave {
+	if octave.position+value > int8(len(octaves)-1) {
 		return nil
 	} else {
 		return &Octave{position: octave.position + value}
 	}
 }
 
-func (octave *Octave) Substract(value uint8) *Octave {
+func (octave *Octave) Substract(value int8) *Octave {
 	if value > octave.position {
 		return nil
 	} else {

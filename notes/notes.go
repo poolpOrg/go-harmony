@@ -173,7 +173,7 @@ func (note *Note) Distance(target Note) intervals.Interval {
 	intervalPosition += (octavesDistance * 7)
 	intervalSemitones = semitonesDistance
 
-	fmt.Println(intervalPosition, intervalSemitones)
+	//fmt.Println(intervalPosition, intervalSemitones)
 
 	return *intervals.New(uint(intervalPosition), uint(intervalSemitones))
 }

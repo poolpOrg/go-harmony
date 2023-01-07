@@ -96,6 +96,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
+
 		fmt.Printf("%-20s", c.Name()+":")
 		for _, n := range c.Notes() {
 			fmt.Printf("%8s: %-3s", c.Root().Distance(n).Name(), n.OctaveName())

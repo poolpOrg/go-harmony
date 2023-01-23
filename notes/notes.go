@@ -156,7 +156,7 @@ func (note *Note) Semitones() uint8 {
 
 func (note *Note) Frequency() float64 {
 	tuner := tunings.NewTuner(tunings.EqualTemperament, tunings.A440)
-	return tuner.Frequency(uint8(note.Position()))
+	return tuner.Frequency(uint8(note.AbsoluteSemitones()) - 4)
 }
 
 func (note *Note) Enharmonic(target Note) bool {

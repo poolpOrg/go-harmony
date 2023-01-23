@@ -389,10 +389,6 @@ func (scale *Scale) Triad(degree Degree) chords.Chord {
 		fifth = fifth.Interval(intervals.Octave)
 	}
 
-	//fmt.Println("root", root.Name())
-	//fmt.Println("third", third.Name())
-	//fmt.Println("fifth", fifth.Name())
-
 	return chords.FromNotes([]notes.Note{*root, *third, *fifth})
 }
 
@@ -414,13 +410,6 @@ func (scale *Scale) Seventh(degree Degree) chords.Chord {
 	if seventh.Position() < root.Position() || int(degree)+6 >= len(scaleNotes) {
 		seventh = seventh.Interval(intervals.Octave)
 	}
-
-	/*
-		fmt.Println("root", root.Name())
-		fmt.Println("third", third.Name())
-		fmt.Println("fifth", fifth.Name())
-		fmt.Println("seventh", seventh.Name())
-	*/
 
 	return chords.FromNotes([]notes.Note{*root, *third, *fifth, *seventh})
 }

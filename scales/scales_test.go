@@ -2,6 +2,8 @@ package scales
 
 import (
 	"testing"
+
+	"github.com/poolpOrg/go-harmony/intervals"
 )
 
 var degrees = map[Degree]uint8{
@@ -22,7 +24,47 @@ func TestScales_Degrees(t *testing.T) {
 	}
 }
 
+func TestScales_DegreeName(t *testing.T) {
+	testCases := []string{"Tonic", "Supertonic", "Mediant", "Subdominant", "Dominant", "Submediant", "LeadingTone"}
+	for degree, value := range degrees {
+		if degree.Name() != testCases[value] {
+			t.Fatalf(`Degree %v has invalid name, want %s, got %s`, uint8(degree), testCases[value], degree.Name())
+		}
+	}
+}
+
 func TestScales_Parse(t *testing.T) {
+	scales := map[string][]intervals.Interval{
+		"":                Ionian,
+		"M":               Ionian,
+		"ionian":          Ionian,
+		"maj":             Ionian,
+		"dorian":          Dorian,
+		"phrygian":        Phrygian,
+		"lydian":          Lydian,
+		"mixolydian":      Mixolydian,
+		"aeolian":         Aeolian,
+		"m":               Aeolian,
+		"min":             Aeolian,
+		"locrian":         Locrian,
+		"harmonicMinor":   HarmonicMinor,
+		"harmonicMajor":   HarmonicMajor,
+		"jazzMinor":       JazzMinor,
+		"majorPentatonic": MajorPentatonic,
+		"egyptian":        EgyptianPentatonic,
+		"BluesMinor":      BluesMinor,
+		"BluesMajor":      BluesMajor,
+		"minorPentatonic": MinorPentatonic,
+	}
+	for name, _ := range scales {
+		_, err := Parse("C" + name)
+		if err != nil {
+			t.Fatalf(`could not parse scale name %s`, "C"+name)
+		}
+		//if s.structure != structure {
+		//	t.Fatalf(`could not parse scale name %s`, "C"+name)
+		//}
+	}
 }
 
 func TestScales_Name(t *testing.T) {

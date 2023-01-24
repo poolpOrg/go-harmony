@@ -131,6 +131,16 @@ var HarmonicMinor = []intervals.Interval{
 	intervals.MajorSeventh,
 }
 
+var HarmonicMajor = []intervals.Interval{
+	intervals.PerfectUnison,
+	intervals.MajorSecond,
+	intervals.MajorThird,
+	intervals.PerfectFourth,
+	intervals.PerfectFifth,
+	intervals.MinorSixth,
+	intervals.MajorSeventh,
+}
+
 var JazzMinor = []intervals.Interval{
 	intervals.PerfectUnison,
 	intervals.MajorSecond,
@@ -200,6 +210,7 @@ var scales = map[string][]intervals.Interval{
 	"aeolian":        Aeolian,
 	"locrian":        Locrian,
 	"harmonic minor": HarmonicMinor,
+	"harmonic major": HarmonicMajor,
 	//"melodic minor":       MelodicMinor,
 	"jazz minor":          JazzMinor,
 	"major pentatonic":    MajorPentatonic,
@@ -273,6 +284,10 @@ func Parse(scale string) (*Scale, error) {
 	case "harmonicMinor":
 		// harmonic minor scale
 		structure = HarmonicMinor
+
+	case "harmonicMajor":
+		// harmonic major scale
+		structure = HarmonicMajor
 
 		/*
 			case "melodicMinor":
